@@ -1,8 +1,11 @@
 package com.example.smartslate.repository;
 import com.example.smartslate.model.User;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
+
 import java.sql.*;
 
+@Repository
 public class SmartSlateRepository {
     @Value("${spring.datasource.url}")
     String url;

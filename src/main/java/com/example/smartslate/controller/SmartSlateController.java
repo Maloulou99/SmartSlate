@@ -2,12 +2,13 @@ package com.example.smartslate.controller;
 
 import com.example.smartslate.model.User;
 import com.example.smartslate.repository.SmartSlateRepository;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-
+@Controller
 public class SmartSlateController {
     private SmartSlateRepository smartSlateRepository;
 
@@ -19,7 +20,7 @@ public class SmartSlateController {
     public String createUser(Model model){
         User newUser = new User();
         model.addAttribute("newUser", newUser);
-        return "";
+        return "cuser";
     }
 
     @PostMapping("/adduser")
@@ -30,7 +31,7 @@ public class SmartSlateController {
         model.addAttribute("email",newUser.getEmail());
         model.addAttribute("password",newUser.getPassword());
         model.addAttribute("userId", userId);
-        return "";
+        return "cuser";
     }
 
 
