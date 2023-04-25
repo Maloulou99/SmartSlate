@@ -2,11 +2,9 @@ package com.example.smartslate.controller;
 
 import com.example.smartslate.model.User;
 import com.example.smartslate.repository.SmartSlateRepository;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
