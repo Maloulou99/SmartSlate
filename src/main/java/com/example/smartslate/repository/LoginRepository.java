@@ -14,7 +14,7 @@ public class LoginRepository {
     @Value("${spring.datasource.password}")
     String user_pwd;
 
-    public User loginUser(String email, String password) {
+    public User checkUser(String email, String password) {
         User user = null;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
             String SQL = "SELECT * FROM users WHERE email = ? AND user_password = ?;";
@@ -34,7 +34,7 @@ public class LoginRepository {
         }
         return user;
     }
-    public Employee loginEmployee(String username, String password) {
+    public Employee checkEmployee(String username, String password) {
         Employee employee = null;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
             String SQL = "SELECT * FROM employees WHERE username = ? AND employee_password = ?;";
