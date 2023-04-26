@@ -2,6 +2,9 @@ package com.example.smartslate.controller;
 
 import com.example.smartslate.model.Employee;
 import com.example.smartslate.model.User;
+import com.example.smartslate.repository.LoginRepository;
+import com.example.smartslate.repository.ProjectRepository;
+import com.example.smartslate.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,12 +15,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RequestMapping("/")
 @Controller
-public class LoginRepository {
-    private com.example.smartslate.repository.LoginRepository loginRepository;
+public class LoginController {
+    private LoginRepository loginRepository;
+    private ProjectRepository projectRepository;
+    private UserRepository userRepository;
     private int currentUser;
 
-    public LoginRepository(com.example.smartslate.repository.LoginRepository loginRepository) {
+    public LoginController(LoginRepository loginRepository, ProjectRepository projectRepository, UserRepository userRepository) {
         this.loginRepository = loginRepository;
+        this.projectRepository = projectRepository;
+        this.userRepository = userRepository;
     }
 
     protected boolean isLoggedIn(HttpSession session, int uid) {

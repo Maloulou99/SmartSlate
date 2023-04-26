@@ -57,11 +57,13 @@ CREATE TABLE Tasks
 
 CREATE TABLE Employees
 (
-    EmployeeID INT PRIMARY KEY,
-    FirstName  VARCHAR(255) NOT NULL,
-    LastName   VARCHAR(255) NOT NULL,
-    Email      VARCHAR(255),
-    Phone      VARCHAR(20)
+    EmployeeID        INT PRIMARY KEY,
+    UserName          VARCHAR(255) NOT NULL,
+    FirstName         VARCHAR(255) NOT NULL,
+    LastName          VARCHAR(255) NOT NULL,
+    employee_password VARCHAR(255) NOT NULL,
+    Email             VARCHAR(255),
+    Phone             VARCHAR(20)
 );
 
 CREATE TABLE EmployeeTasks
@@ -70,7 +72,7 @@ CREATE TABLE EmployeeTasks
     TaskID     INT NOT NULL,
     CONSTRAINT pk_employee_task PRIMARY KEY (EmployeeID, TaskID),
     CONSTRAINT fk_employee
-    FOREIGN KEY (EmployeeID) REFERENCES Employees (EmployeeID) ON DELETE CASCADE,
+        FOREIGN KEY (EmployeeID) REFERENCES Employees (EmployeeID) ON DELETE CASCADE,
     CONSTRAINT fk_task
-    FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID) ON DELETE CASCADE
+        FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID) ON DELETE CASCADE
 );
