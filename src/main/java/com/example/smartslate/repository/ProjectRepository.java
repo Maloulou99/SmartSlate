@@ -17,6 +17,27 @@ public class ProjectRepository {
     @Value("${spring.datasource.password}")
     String user_pwd;
 
+    // Create a project
+    public void createProject(Project project) {
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "INSERT INTO Projects (ProjectID, UserID, Name, Description, StartDate, EndDate, Budget, Status) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, project.getProjectId());
+            pstmt.setInt(2, project.getUserId());
+            pstmt.setString(3, project.getProjectName());
+            pstmt.setString(4, project.getDescription());
+            pstmt.setDate(5, Date.valueOf(project.getStartDate()));
+            pstmt.setDate(6, project.getEndDate() != null ? Date.valueOf(project.getEndDate()) : null);
+            pstmt.setDouble(7, project.getBudget());
+            pstmt.setString(8, project.getStatus());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //Read
     //Denne metode henter en liste over alle projekter, der er tilknyttet en bestemt bruger (userId).
     public List<Project> getProjectsByUserId(int userId) {
         List<Project> projects = new ArrayList<>();
@@ -31,7 +52,7 @@ public class ProjectRepository {
                 Project project = new Project();
                 project.setProjectId(rs.getInt("project_id"));
                 project.setUserId(rs.getInt("user_id"));
-                project.setTitle(rs.getString("title"));
+                project.setProjectName(rs.getString("title"));
                 project.setDescription(rs.getString("description"));
                 project.setStartDate(rs.getDate("start_date").toLocalDate());
                 project.setEndDate(rs.getDate("end_date").toLocalDate());
@@ -43,6 +64,36 @@ public class ProjectRepository {
         }
 
         return projects;
+    }
+
+    // Update
+    public void updateProject(Project project) {
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "UPDATE Projects SET Name = ?, Description = ?, StartDate = ?, EndDate = ?, Budget = ?, Status = ? "
+                    + "WHERE ProjectID = ?";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setString(1, project.getProjectName());
+            pstmt.setString(2, project.getDescription());
+            pstmt.setDate(3, Date.valueOf(project.getStartDate()));
+            pstmt.setDate(4, project.getEndDate() != null ? Date.valueOf(project.getEndDate()) : null);
+            pstmt.setDouble(5, project.getBudget());
+            pstmt.setString(6, project.getStatus());
+            pstmt.setInt(7, project.getProjectId());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    // Delete
+    public void deleteProject(int projectId) {
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "DELETE FROM Projects WHERE ProjectID = ?";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, projectId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
