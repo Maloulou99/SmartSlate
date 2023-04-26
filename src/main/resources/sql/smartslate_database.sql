@@ -4,6 +4,7 @@ CREATE DATABASE IF NOT EXISTS smartslate_database;
 -- Use database
 USE smartslate_database;
 
+
 -- Drop tables if they exist
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS projects;
