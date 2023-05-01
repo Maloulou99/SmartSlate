@@ -107,6 +107,8 @@ public class UserRepository {
                 user.setUserName(rs.getString("Username"));
                 user.setPassword(rs.getString("Password"));
                 user.setEmail(rs.getString("Email"));
+                user.setPhoneNumber(rs.getString("PhoneNumber"));
+                user.setRole(rs.getString("Role"));
                 user.setFirstName(rs.getString("FirstName"));
                 user.setLastName(rs.getString("LastName"));
                 user.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime().toLocalDate());

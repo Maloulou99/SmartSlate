@@ -8,15 +8,17 @@ public class Task {
     private Date startDate;
     private Date endDate;
     private boolean completed;
+    private String status;
     private int projectId;
     private int userId; // Fremmednøgle til User-tabellen
 
-    public Task(int taskId, String taskName, Date startDate, Date endDate, boolean completed, int projectId, int userId) {
+    public Task(int taskId, String taskName, Date startDate, Date endDate, boolean completed, String status, int projectId, int userId) {
         this.taskId = taskId;
         this.taskName = taskName;
         this.startDate = startDate;
         this.endDate = endDate;
         this.completed = completed;
+        this.status = status;
         this.projectId = projectId;
         this.userId = userId;
     }
@@ -76,4 +78,11 @@ public class Task {
         this.userId = userId;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

@@ -3,31 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <title>Create Your User</title>
-    <link rel="stylesheet" th:href="@{/createu.css}">
 </head>
 <body>
-<h1>Create user account!</h1>
+<h1>Create User Account!</h1>
 <div>
-    <form th:action="@{/smartslate/create}" th:object="${newUser}" method="post">
+    <form th:action="@{/adduser}" th:object="${newUser}" method="post">
         <label>
-            <input type="text" th:field="*{firstName}" placeholder="type firstname">
+            <input type="text" name="userName" th:field="*{userName}" placeholder="Type username">
         </label>
 
         <label>
-            <input type="text" th:field="*{lastName}" placeholder="type lastname">
+            <input type="text" name="firstName" th:field="*{firstName}" placeholder="Type firstname">
         </label>
 
         <label>
-            <input type="email" th:field="*{email}" placeholder="type email">
+            <input type="text" name="lastName" th:field="*{lastName}" placeholder="Type lastname">
         </label>
 
         <label>
-            <input type="password" th:field="*{password}" placeholder="type password">
+            <input type="password" name="password" th:field="*{password}" placeholder="Type password">
         </label>
+
+        <label>
+            <input type="email" name="email" th:field="*{email}" placeholder="Type email">
+        </label>
+
+        <label>
+            <input type="tel" name="phoneNumber" th:field="*{phoneNumber}" placeholder="Type phone-number">
+        </label>
+
+        <label for="role">Role:</label>
+        <select id="role" name="role" th:field="*{role}">
+            <option value="Customer">Customer</option>
+            <option value="Employee">Employee</option>
+        </select>
+
 
         <button type="submit">Submit</button>
         <button type="reset">reset</button>
     </form>
+</div>
+
+<!-- Viser information om den oprettede brugeren -->
+<div>
+    <p>UserId: [[${userId}]]</p>
+    <p>CreatedAt: [[${createdAt}]]</p>
+    <p>UpdatedAt: [[${updatedAt}]]</p>
 </div>
 </body>
 </html>
