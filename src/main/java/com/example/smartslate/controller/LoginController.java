@@ -39,7 +39,7 @@ public class LoginController {
     // User login
     @GetMapping("/user/login")
     public String showUserLogin() {
-        return "user_login";
+        return "user-login";
     }
 
     @PostMapping("/user/login")
@@ -52,7 +52,7 @@ public class LoginController {
             return "redirect:/wishlist/mainpage/" + currentUser;
         }
         model.addAttribute("wrongCredentials", true);
-        return "user_login";
+        return "user-login";
     }
 
 
