@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
 <head>
   <meta charset="UTF-8">
+  <link th:href="@{/style.css}" href="/style.css" rel="stylesheet" type="text/css" />
   <title>My Website</title>
 </head>
 <body>
@@ -10,15 +11,12 @@
 
 <nav>
   <ul>
-    <li><a th:href="@{/smartslate/create}">Login</a></li>
+    <li><a th:href="@{/smartslate/create}">Create a login</a></li>
+  </ul>
+  <ul>
+    <li><a th:href="@{/user/login}">Login</a></li>
   </ul>
 </nav>
-
-
-<main>
-  <h1>Welcome to My Website</h1>
-  <p></p>
-</main>
 
 
 <footer>
