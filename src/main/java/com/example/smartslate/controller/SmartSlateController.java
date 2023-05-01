@@ -69,5 +69,28 @@ public class SmartSlateController {
         return "create-user";
     }
 
+    @GetMapping("/create")
+    public String createProject(Model model) {
+        Project newProject = new Project();
+        model.addAttribute("newProject", newProject);
+        return "Create project";
+    }
 
+    @PostMapping("/addProject")
+    public String addProject(@ModelAttribute Project newProject, Model model) {
+        int projectId = projectRepository.createProject(newProject);
+        model.addAttribute("project", newProject);
+        model.addAttribute("projectId", projectId);
+        model.addAttribute("startDate", newProject.getStartDate());
+        model.addAttribute("endDate", newProject.getEndDate());
+        model.addAttribute("projectName", newProject.getProjectName());
+        model.addAttribute("tasks", newProject.getTasks());
+        model.addAttribute("description", newProject.getDescription());
+        model.addAttribute("budget", newProject.getBudget());
+        model.addAttribute("userId", newProject.getUserId());
+        model.addAttribute("status", newProject.getStatus());
+        return "create-Project";
+
+
+    }
 }
