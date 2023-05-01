@@ -1,5 +1,4 @@
 package com.example.smartslate.repository;
-import com.example.smartslate.model.Employee;
 import com.example.smartslate.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -34,30 +33,5 @@ public class LoginRepository {
         }
         return user;
     }
-    public Employee checkEmployee(String username, String password) {
-        Employee employee = null;
-        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT * FROM employees WHERE username = ? AND employee_password = ?;";
-            PreparedStatement pstmt = con.prepareStatement(SQL);
-            pstmt.setString(1, username);
-            pstmt.setString(2, password);
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                employee = new Employee();
-                employee.setEmployeeId(rs.getInt("employee_id"));
-                employee.setUsername(rs.getString("username"));
-                employee.setPassword(rs.getString("employee_password"));
-                employee.setFirstName(rs.getString("first_name"));
-                employee.setLastName(rs.getString("last_name"));
-                employee.setEmail(rs.getString("email"));
-                employee.setPhoneNumber(rs.getString("phone_number"));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return employee;
-    }
-
 
 }

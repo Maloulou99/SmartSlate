@@ -10,9 +10,8 @@ public class Task {
     private boolean completed;
     private int projectId;
     private int userId; // Fremmednøgle til User-tabellen
-    private int employeeId; // Fremmednøgle til Employee-tabellen
 
-    public Task(int taskId, String taskName, Date startDate, Date endDate, boolean completed, int projectId, int userId, int employeeId) {
+    public Task(int taskId, String taskName, Date startDate, Date endDate, boolean completed, int projectId, int userId) {
         this.taskId = taskId;
         this.taskName = taskName;
         this.startDate = startDate;
@@ -20,7 +19,6 @@ public class Task {
         this.completed = completed;
         this.projectId = projectId;
         this.userId = userId;
-        this.employeeId = employeeId;
     }
     public int getTaskId() {
         return taskId;
@@ -78,11 +76,4 @@ public class Task {
         this.userId = userId;
     }
 
-    public int getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setEmployeeId(int employeeId) {
-        this.employeeId = employeeId;
-    }
 }

@@ -1,6 +1,5 @@
 package com.example.smartslate.controller;
 
-import com.example.smartslate.model.Employee;
 import com.example.smartslate.model.User;
 import com.example.smartslate.repository.LoginRepository;
 import com.example.smartslate.repository.ProjectRepository;
@@ -54,25 +53,6 @@ public class LoginController {
         }
         model.addAttribute("wrongCredentials", true);
         return "user_login";
-    }
-
-    // Employee login
-    @GetMapping("/employee/login")
-    public String showEmployeeLogin() {
-        return "employee_login";
-    }
-
-    @PostMapping("/employee/login")
-    public String employeeLogin(@RequestParam("username") String username, @RequestParam("password") String password, HttpSession session, Model model) {
-        Employee employee = loginRepository.checkEmployee(username, password);
-        if (employee != null && employee.getPassword().equals(password)) {
-            session.setAttribute("employee", employee);
-            currentUser = employee.getEmployeeId();
-            session.setMaxInactiveInterval(30);
-            return "redirect:/employee/dashboard/" + currentUser;
-        }
-        model.addAttribute("wrongCredentials", true);
-        return "employee_login";
     }
 
 

@@ -9,8 +9,39 @@ public class User {
     private String lastName;
     private String email;
     private String password;
+    private String phoneNumber;
+    private String role;
     private LocalDate createdAt;
     private LocalDate updatedAt;
+
+    public User(int userId, String userName, String firstName, String lastName, String email, String password, String phoneNumber, String role, LocalDate createdAt, LocalDate updatedAt) {
+        this.userId = userId;
+        this.userName = userName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.role = role;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public User(int userId, String userName, String firstName, String lastName, String email, String password, LocalDate createdAt, LocalDate updatedAt) {
         this.userId = userId;

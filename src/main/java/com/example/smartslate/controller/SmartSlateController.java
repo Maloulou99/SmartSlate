@@ -49,19 +49,31 @@ public class SmartSlateController {
     public String createUser(Model model) {
         User newUser = new User();
         model.addAttribute("newUser", newUser);
-        return "cuser";
+        return "create-user";
     }
 
     @PostMapping("/adduser")
     public String addUser(@ModelAttribute User newUser, Model model) {
         int userId = userRepository.createUser(newUser);
+        model.addAttribute("UserID", newUser.getUserId());
         model.addAttribute("firstName", newUser.getFirstName());
         model.addAttribute("lastName", newUser.getLastName());
         model.addAttribute("email", newUser.getEmail());
         model.addAttribute("password", newUser.getPassword());
         model.addAttribute("userId", userId);
-        return "cuser";
+        return "create-user";
     }
+
+    // this.userId = userId;
+    //        this.userName = userName;
+    //        this.firstName = firstName;
+    //        this.lastName = lastName;
+    //        this.email = email;
+    //        this.password = password;
+    //        this.phoneNumber = phoneNumber;
+    //        this.role = role;
+    //        this.createdAt = createdAt;
+    //        this.updatedAt = updatedAt;
 
 
 }

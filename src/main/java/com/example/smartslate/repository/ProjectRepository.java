@@ -1,6 +1,7 @@
 package com.example.smartslate.repository;
 
 import com.example.smartslate.model.Project;
+import com.example.smartslate.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -94,6 +95,33 @@ public class ProjectRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<Project> getAllProjects() {
+        List<Project> projects = new ArrayList<>();
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "SELECT * FROM projects;";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Project project = new Project();
+                project.setProjectId(rs.getInt("projectId"));
+                project.setUserId(rs.getInt("UserID"));
+                project.setProjectName(rs.getString("Name"));
+                project.setDescription(rs.getString("Description"));
+                project.setStartDate(rs.getTimestamp("StartDate").toLocalDateTime().toLocalDate());
+                project.setEndDate(rs.getTimestamp("EndDate").toLocalDateTime().toLocalDate());
+                project.setBudget(rs.getDouble("Budget"));
+                project.setStatus(rs.getString("Status"));
+                projects.add(project);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return projects;
     }
 
 }
