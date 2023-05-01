@@ -91,7 +91,5 @@ public class SmartSlateController {
         model.addAttribute("status", newProject.getStatus());
         return "create-Project";
 
-
-
     }
 }
