@@ -73,7 +73,7 @@ public class SmartSlateController {
     public String createProject(Model model) {
         Project newProject = new Project();
         model.addAttribute("newProject", newProject);
-        return "Create-project";
+        return "create-project";
     }
 
     @PostMapping("/addProject")
