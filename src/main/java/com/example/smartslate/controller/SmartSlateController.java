@@ -45,7 +45,7 @@ public class SmartSlateController {
     }
 
 
-    @GetMapping("/create")
+    @GetMapping("/create/user")
     public String createUser(Model model) {
         User newUser = new User();
         model.addAttribute("newUser", newUser);
@@ -69,7 +69,7 @@ public class SmartSlateController {
         return "create-user";
     }
 
-    @GetMapping("/create")
+    @GetMapping("/create/project")
     public String createProject(Model model) {
         Project newProject = new Project();
         model.addAttribute("newProject", newProject);
@@ -89,6 +89,6 @@ public class SmartSlateController {
         model.addAttribute("budget", newProject.getBudget());
         model.addAttribute("userId", newProject.getUserId());
         model.addAttribute("status", newProject.getStatus());
-        return "create-Project";
+        return "create-project";
     }
 }
