@@ -19,7 +19,8 @@ public class ProjectRepository {
     String user_pwd;
 
     // Create a project
-    public void createProject(Project project) {
+    public int createProject(Project project) {
+        int projectId = 0;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
             String SQL = "INSERT INTO Projects (ProjectID, UserID, Name, Description, StartDate, EndDate, Budget, Status) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -35,7 +36,7 @@ public class ProjectRepository {
             pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
+        } return projectId;
     }
 
     //Read
