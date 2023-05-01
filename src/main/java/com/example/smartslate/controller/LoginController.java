@@ -43,9 +43,9 @@ public class LoginController {
     }
 
     @PostMapping("/user/login")
-    public String userLogin(@RequestParam("email") String email, @RequestParam("password") String password, HttpSession session, Model model) {
+    public String userLogin(@RequestParam("email") String email, @RequestParam("password") String password, String userName, HttpSession session, Model model) {
         User user = loginRepository.checkUser(email, password);
-        if (user != null && user.getPassword().equals(password)) {
+        if (user != null && user.getPassword().equals(password) || user != null && user.getUserName().equals(userName)) {
             session.setAttribute("user", user);
             currentUser = user.getUserId();
             session.setMaxInactiveInterval(30);
