@@ -2,15 +2,11 @@ package com.example.smartslate.controller;
 
 import com.example.smartslate.model.Project;
 import com.example.smartslate.model.User;
-import com.example.smartslate.service.LoginService;
 import com.example.smartslate.service.ProjectService;
 import com.example.smartslate.service.UserService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequestMapping("smartslate")
 @Controller
@@ -44,8 +40,16 @@ public class SmartSlateController {
         model.addAttribute("password", newUser.getPassword());
         model.addAttribute("phoneNumber", newUser.getPhoneNumber());
         model.addAttribute("role", newUser.getRole());
-        return "create-user";
+        return "redirect:/user-frontsite";
     }
+
+    @GetMapping("/user/{userId}")
+    public String getUser(@PathVariable int userId, Model model) {
+        User user = userService.getUser(userId);
+        model.addAttribute("user", user);
+        return "user-page";
+    }
+
 
     @GetMapping("/create/project")
     public String createProject(Model model) {
