@@ -43,6 +43,7 @@ public class ProjectRepository {
     public List<Project> getProjectsByUserId(int userId) {
         List<Project> projects = new ArrayList<>();
 
+
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
             String SQL = "SELECT * FROM Projects WHERE UserID = ?;";
             PreparedStatement pstmt = con.prepareStatement(SQL);
