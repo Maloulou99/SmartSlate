@@ -1,15 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>Create your project</title>
+    <title>Create Project</title>
 </head>
 <body>
-<h1>Create Your Project!</h1>
-
-
-
-
-
+<h1>Create Project</h1>
+<form method="POST" action="/addProject">
+    <label for="projectName">Project Name:</label><br>
+    <input type="text" id="projectName" name="projectName"><br>
+    <label for="description">Description:</label><br>
+    <textarea id="description" name="description"></textarea><br>
+    <label for="budget">Budget:</label><br>
+    <input type="number" id="budget" name="budget"><br>
+    <label for="userId">User ID:</label><br>
+    <input type="number" id="userId" name="userId"><br>
+    <label for="status">Status:</label><br>
+    <input type="text" id="status" name="status"><br>
+    <label for="startDate">Start Date:</label><br>
+    <input type="date" id="startDate" name="startDate"><br>
+    <label for="endDate">End Date:</label><br>
+    <input type="date" id="endDate" name="endDate"><br>
+    <input type="submit" value="Create Project">
+</form>
 </body>
 </html>

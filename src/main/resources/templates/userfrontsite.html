@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <link th:href="@{/frontsite.css}" href="/frontsite.css" rel="stylesheet" type="text/css" />
+  <title>User Front Site</title>
+</head>
+<body>
+<h1>Welcome to User Front Site!</h1>
+<p>Dear [[${firstName}]] [[${lastName}]],</p>
+<p>Thank you for creating an account with us. You can now log in to access your account information and manage your projects.</p>
+<p>Best regards,</p>
+<p>SmartSlate - The smarter way to work together</p>
+
+
+<a th:href="@{/create-project}"><button type="submit">Submit</button></a>
+
+
+</body>
+</html>

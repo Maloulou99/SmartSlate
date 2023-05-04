@@ -4,6 +4,9 @@ import com.example.smartslate.model.User;
 import com.example.smartslate.repository.LoginRepository;
 import com.example.smartslate.repository.ProjectRepository;
 import com.example.smartslate.repository.UserRepository;
+import com.example.smartslate.service.LoginService;
+import com.example.smartslate.service.ProjectService;
+import com.example.smartslate.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,15 +18,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/")
 @Controller
 public class LoginController {
-    private LoginRepository loginRepository;
-    private ProjectRepository projectRepository;
-    private UserRepository userRepository;
+    private LoginService loginService;
+    private ProjectService projectService;
+    private UserService userService;
     private int currentUser;
 
-    public LoginController(LoginRepository loginRepository, ProjectRepository projectRepository, UserRepository userRepository) {
-        this.loginRepository = loginRepository;
-        this.projectRepository = projectRepository;
-        this.userRepository = userRepository;
+    public LoginController(LoginService loginService, ProjectService projectService, UserService userService) {
+        this.loginService = loginService;
+        this.projectService = projectService;
+        this.userService = userService;
     }
 
     protected boolean isLoggedIn(HttpSession session, int uid) {
@@ -43,8 +46,24 @@ public class LoginController {
     }
 
     @PostMapping("/user/login")
+    public String login(@RequestParam String usernameOrEmail, @RequestParam String password, HttpSession session) {
+        User user = null;
+        if (usernameOrEmail.contains("@")) {
+            user = loginService.findByUsernameAndPassword(usernameOrEmail, password);
+        } else {
+            user = loginService.findByEmailAndPassword(usernameOrEmail, password);
+        }
+        if (user != null) {
+            session.setAttribute("userId", user.getUserId());
+            return "redirect:/main-page/" + user.getUserId();
+        } else {
+            return "user-login";
+        }
+    }
+
+   /* @PostMapping("/user/login")
     public String userLogin(@RequestParam("email") String email, @RequestParam("password") String password, String userName, HttpSession session, Model model) {
-        User user = loginRepository.checkUser(email, password);
+        User user = loginService.checkUser(email, password);
         if (user != null && user.getPassword().equals(password) || user != null && user.getUserName().equals(userName)) {
             session.setAttribute("user", user);
             currentUser = user.getUserId();
@@ -53,7 +72,7 @@ public class LoginController {
         }
         model.addAttribute("wrongCredentials", true);
         return "user-login";
-    }
+    }*/
 
 
     // Logout
@@ -63,5 +82,7 @@ public class LoginController {
         model.addAttribute("loggedIn", false);
         return "index";
     }
+
+
 }
 
