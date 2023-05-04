@@ -1,4 +1,4 @@
-package com.example.smartslate.repository;
+package com.example.smartslate.utility;
 
 import java.io.File;
 import java.io.IOException;
