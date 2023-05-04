@@ -16,12 +16,10 @@ import java.util.List;
 @Controller
 public class SmartSlateController {
     private UserService userService;
-    private LoginService loginService;
     private ProjectService projectService;
 
-    public SmartSlateController(UserService userService, LoginService loginService, ProjectService projectService) {
+    public SmartSlateController(UserService userService, ProjectService projectService) {
         this.userService = userService;
-        this.loginService = loginService;
         this.projectService = projectService;
     }
 

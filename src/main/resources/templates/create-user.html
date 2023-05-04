@@ -38,7 +38,12 @@
             <option value="Employee">Employee</option>
         </select>
 
-        <a th:href="@{/userfrontsite}"><button type="submit">Submit</button></a>
+        <form th:action="@{/adduser}" th:object="${newUser}" method="post">
+            <!-- Opret input-felter her -->
+            <input type="submit" value="Submit">
+            <button type="reset">reset</button>
+        </form>
+
 
         <button type="reset">reset</button>
     </form>
