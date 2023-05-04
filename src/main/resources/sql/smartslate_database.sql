@@ -1,8 +1,10 @@
 -- Create database if no one exist
-CREATE DATABASE IF NOT EXISTS smartslate_database;
+CREATE
+DATABASE IF NOT EXISTS smartslate_database;
 
 -- Use databaase
-USE smartslate_database;
+USE
+smartslate_database;
 
 -- Drop tables if they exist
 DROP TABLE IF EXISTS employeeTasks;

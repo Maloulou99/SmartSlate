@@ -11,14 +11,11 @@ public class UserService {
     private UserRepository userRepository;
 
     public int createUser(User newUser){
-
         return userRepository.createUser(newUser);
     }
 
-
     public User getUser(int uid){
         return userRepository.getUser(uid);
-
     }
 
     public void updateUser(User updatedUser){

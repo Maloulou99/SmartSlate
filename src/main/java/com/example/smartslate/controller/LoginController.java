@@ -61,21 +61,6 @@ public class LoginController {
         }
     }
 
-   /* @PostMapping("/user/login")
-    public String userLogin(@RequestParam("email") String email, @RequestParam("password") String password, String userName, HttpSession session, Model model) {
-        User user = loginService.checkUser(email, password);
-        if (user != null && user.getPassword().equals(password) || user != null && user.getUserName().equals(userName)) {
-            session.setAttribute("user", user);
-            currentUser = user.getUserId();
-            session.setMaxInactiveInterval(30);
-            return "redirect:/wishlist/mainpage/" + currentUser;
-        }
-        model.addAttribute("wrongCredentials", true);
-        return "user-login";
-    }*/
-
-
-    // Logout
     @GetMapping("/logout")
     public String logout(HttpSession session, Model model) {
         session.invalidate();
