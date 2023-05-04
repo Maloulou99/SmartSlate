@@ -4,8 +4,6 @@ import com.example.smartslate.model.Project;
 import com.example.smartslate.repository.ProjectRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class ProjectService {
     private ProjectRepository projectRepository;
@@ -17,9 +15,13 @@ public class ProjectService {
 
     }
 
-    public List<Project> getProjectsByUserId(int userId){
-        return projectRepository.getProjectsByUserId(userId);
+    public void updateProject(Project project){
+        projectRepository.updateProject(project);
     }
+    public void deleteProject (int projectId){
+        projectRepository.deleteProject(projectId);
+    }
+
 
 
 
