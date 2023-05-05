@@ -75,14 +75,14 @@ public class SmartSlateController {
         model.addAttribute("password", newUser.getPassword());
         model.addAttribute("phoneNumber", newUser.getPhoneNumber());
         model.addAttribute("role", newUser.getRole());
-        return "redirect:/user-frontsite";
+        return "redirect:/user-page";
     }
 
     @GetMapping("/user/{userId}")
     public String getUser(@PathVariable int userId, Model model) {
         User user = userService.getUser(userId);
         model.addAttribute("user", user);
-        return "user-page";
+        return "user-frontsite";
     }
 
 
