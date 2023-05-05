@@ -30,7 +30,6 @@ public class Project {
     }
 
     public Project(){
-
     }
 
     public int getProjectId() {
