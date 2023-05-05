@@ -20,25 +20,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class LoginController {
     private LoginService loginService;
-    private ProjectService projectService;
-    private UserService userService;
     private int currentUser;
 
-    public LoginController(LoginService loginService, ProjectService projectService, UserService userService) {
+    public LoginController(LoginService loginService) {
         this.loginService = loginService;
-        this.projectService = projectService;
-        this.userService = userService;
     }
 
     protected boolean isLoggedIn(HttpSession session, int uid) {
-        return session.getAttribute("user") != null && currentUser == uid;
+        return session.getAttribute("userId") != null && currentUser == uid;
     }
 
-    @GetMapping()
+    @GetMapping("/")
     public String landingPage(Model model) {
         model.addAttribute("loggedIn", true);
         return "index";
     }
+
 
 
     @GetMapping("/login")
