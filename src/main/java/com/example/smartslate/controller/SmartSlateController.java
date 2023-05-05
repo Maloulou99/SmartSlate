@@ -20,9 +20,10 @@ public class SmartSlateController {
     private ProjectService projectService;
     private LoginController loginController;
 
-    public SmartSlateController(UserService userService, ProjectService projectService) {
+    public SmartSlateController(UserService userService, ProjectService projectService, LoginController loginController) {
         this.userService = userService;
         this.projectService = projectService;
+        this.loginController = loginController;
     }
 
     @GetMapping("/mainpage/{uid}")
@@ -31,7 +32,7 @@ public class SmartSlateController {
 
         if (user == null) {
             // Hvis der ikke er nogen bruger med det angivne id, send brugeren til login-siden
-            return "redirect:/login";
+            return "redirect:/user-login";
         }
 
         model.addAttribute("userId", user.getUserId());
@@ -42,7 +43,7 @@ public class SmartSlateController {
         if (loginController.isLoggedIn(session, uid)) {
             return "main-page"; // Hvis brugeren er logget ind, vis hovedsiden
         } else {
-            return "redirect:/login"; // Hvis brugeren ikke er logget ind, send brugeren til login-siden
+            return "redirect:/user-login"; // Hvis brugeren ikke er logget ind, send brugeren til login-siden
         }
     }
 

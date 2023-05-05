@@ -1,5 +1,6 @@
 package com.example.smartslate.repository;
 import com.example.smartslate.model.User;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -76,5 +77,14 @@ public class LoginRepository {
         return user;
     }
 
+    public boolean isLoggedIn(HttpSession session, int userId) {
+        // Tjek om der er en bruger i sessionen
+        User user = (User) session.getAttribute("user");
+        if (user != null && user.getUserId() == userId) {
+            return true; // Brugeren i sessionen matcher den angivne bruger-id
+        } else {
+            return false; // Brugeren i sessionen matcher ikke den angivne bruger-id
+        }
+    }
 
 }

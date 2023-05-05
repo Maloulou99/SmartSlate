@@ -2,6 +2,7 @@ package com.example.smartslate.service;
 
 import com.example.smartslate.model.User;
 import com.example.smartslate.repository.LoginRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,6 +18,10 @@ public class LoginService {
     }
     public User findByUsernameAndPassword(String username, String password){
         return loginRepository.findByUsernameAndPassword(username, password);
+    }
+
+    public boolean isLoggedIn(HttpSession session, int userId){
+        return loginRepository.isLoggedIn(session, userId);
     }
 
 

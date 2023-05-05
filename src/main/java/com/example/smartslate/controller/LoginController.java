@@ -17,17 +17,9 @@ public class LoginController {
         this.loginService = loginService;
     }
 
-
-    public boolean isLoggedIn(HttpSession session, int userId) {
-        // Tjek om der er en bruger i sessionen
-        User user = (User) session.getAttribute("user");
-        if (user != null && user.getUserId() == userId) {
-            return true; // Brugeren i sessionen matcher den angivne bruger-id
-        } else {
-            return false; // Brugeren i sessionen matcher ikke den angivne bruger-id
-        }
+    public boolean isLoggedIn(HttpSession session, int userId){
+        return loginService.isLoggedIn(session, userId);
     }
-
 
     @GetMapping("/login")
     public String showLoginForm() {
