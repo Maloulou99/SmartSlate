@@ -2,7 +2,7 @@
 CREATE
 DATABASE IF NOT EXISTS smartslate_database;
 
--- Use databaase
+-- Use database
 USE
 smartslate_database;
 
