@@ -1,12 +1,16 @@
 package com.example.smartslate.controller;
 
 import com.example.smartslate.model.Project;
+import com.example.smartslate.model.Task;
 import com.example.smartslate.model.User;
 import com.example.smartslate.service.ProjectService;
 import com.example.smartslate.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @RequestMapping("smartslate")
 @Controller
@@ -59,17 +63,30 @@ public class SmartSlateController {
     }
 
     @PostMapping("/addProject")
-    public String addProject(@ModelAttribute Project newProject, Model model) {
+    public String addProject(@RequestParam int userId, @RequestParam String projectName, @RequestParam String description, @RequestParam LocalDate startDate,
+                             @RequestParam LocalDate endDate, @RequestParam double budget, @RequestParam String status, @ModelAttribute("tasks") List<Task> tasks, Model model) {
+        Project newProject = new Project();
+        newProject.setUserId(userId);
+        newProject.setProjectName(projectName);
+        newProject.setDescription(description);
+        newProject.setStartDate(startDate);
+        newProject.setEndDate(endDate);
+        newProject.setBudget(budget);
+        newProject.setStatus(status);
+        newProject.setTasks(tasks);
+
         int projectId = projectService.createProject(newProject);
+
         model.addAttribute("project", newProject);
         model.addAttribute("projectId", projectId);
-        model.addAttribute("startDate", newProject.getStartDate());
-        model.addAttribute("endDate", newProject.getEndDate());
-        model.addAttribute("name", newProject.getProjectName());
-        model.addAttribute("description", newProject.getDescription());
-        model.addAttribute("budget", newProject.getBudget());
-        model.addAttribute("userId", newProject.getUserId());
-        model.addAttribute("status", newProject.getStatus());
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+        model.addAttribute("name", projectName);
+        model.addAttribute("description", description);
+        model.addAttribute("budget", budget);
+        model.addAttribute("userId", userId);
+        model.addAttribute("status", status);
+
         return "create-project";
     }
 

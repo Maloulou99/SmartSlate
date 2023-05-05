@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class LoginController {
-    private final LoginService loginService;
+    private LoginService loginService;
 
     public LoginController(LoginService loginService) {
         this.loginService = loginService;
@@ -39,7 +39,6 @@ public class LoginController {
             return "user-login";
         }
     }
-
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
