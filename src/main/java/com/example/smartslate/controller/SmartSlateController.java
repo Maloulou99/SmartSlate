@@ -5,6 +5,7 @@ import com.example.smartslate.model.Task;
 import com.example.smartslate.model.User;
 import com.example.smartslate.service.ProjectService;
 import com.example.smartslate.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +18,34 @@ import java.util.List;
 public class SmartSlateController {
     private UserService userService;
     private ProjectService projectService;
+    private LoginController loginController;
 
     public SmartSlateController(UserService userService, ProjectService projectService) {
         this.userService = userService;
         this.projectService = projectService;
     }
+
+    @GetMapping("/mainpage/{uid}")
+    public String mainPage(@PathVariable int uid, Model model, HttpSession session) {
+        User user = userService.getUser(uid);
+
+        if (user == null) {
+            // Hvis der ikke er nogen bruger med det angivne id, send brugeren til login-siden
+            return "redirect:/login";
+        }
+
+        model.addAttribute("userId", user.getUserId());
+        model.addAttribute("firstName", user.getFirstName());
+        model.addAttribute("lastName", user.getLastName());
+
+        // Tjek om brugeren er logget ind
+        if (loginController.isLoggedIn(session, uid)) {
+            return "main-page"; // Hvis brugeren er logget ind, vis hovedsiden
+        } else {
+            return "redirect:/login"; // Hvis brugeren ikke er logget ind, send brugeren til login-siden
+        }
+    }
+
 
     @GetMapping("/create/user")
     public String createUser(Model model) {

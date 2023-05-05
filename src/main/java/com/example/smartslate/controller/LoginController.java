@@ -17,6 +17,18 @@ public class LoginController {
         this.loginService = loginService;
     }
 
+
+    public boolean isLoggedIn(HttpSession session, int userId) {
+        // Tjek om der er en bruger i sessionen
+        User user = (User) session.getAttribute("user");
+        if (user != null && user.getUserId() == userId) {
+            return true; // Brugeren i sessionen matcher den angivne bruger-id
+        } else {
+            return false; // Brugeren i sessionen matcher ikke den angivne bruger-id
+        }
+    }
+
+
     @GetMapping("/login")
     public String showLoginForm() {
         return "user-login";
@@ -33,7 +45,7 @@ public class LoginController {
 
         if (user != null) {
             session.setAttribute("userId", user.getUserId());
-            return "redirect:/dashboard";
+            return "redirect:/user-frontsite";
         } else {
             model.addAttribute("error", "Invalid login credentials");
             return "user-login";
