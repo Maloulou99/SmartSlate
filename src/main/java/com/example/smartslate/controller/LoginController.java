@@ -36,8 +36,6 @@ public class LoginController {
         return "index";
     }
 
-
-
     @GetMapping("/login")
     public String showLoginForm() {
         return "user-login";
