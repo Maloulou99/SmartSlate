@@ -18,7 +18,7 @@ public class LoginRepository {
     public User checkUser(String email, String password) {
         User user = null;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT * FROM users WHERE email = ? AND user_password = ?;";
+            String SQL = "SELECT * FROM users WHERE Email = ? AND Password = ?;";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setString(1, email);
             pstmt.setString(2, password);
@@ -26,9 +26,9 @@ public class LoginRepository {
 
             if (rs.next()) {
                 user = new User();
-                user.setUserId(rs.getInt("user_id"));
-                user.setEmail(rs.getString("email"));
-                user.setPassword(rs.getString("user_password"));
+                user.setUserId(rs.getInt("UserID"));
+                user.setEmail(rs.getString("Email"));
+                user.setPassword(rs.getString("Password"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -39,7 +39,7 @@ public class LoginRepository {
     public User findByEmailAndPassword(String email, String password) {
         User user = null;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT * FROM users WHERE email = ? AND user_password = ?;";
+            String SQL = "SELECT * FROM users WHERE Email = ? AND Password = ?;";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setString(1, email);
             pstmt.setString(2, password);
@@ -47,9 +47,9 @@ public class LoginRepository {
 
             if (rs.next()) {
                 user = new User();
-                user.setUserId(rs.getInt("user_id"));
-                user.setEmail(rs.getString("email"));
-                user.setPassword(rs.getString("user_password"));
+                user.setUserId(rs.getInt("UserID"));
+                user.setEmail(rs.getString("Email"));
+                user.setPassword(rs.getString("Password"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -60,7 +60,7 @@ public class LoginRepository {
     public User findByUsernameAndPassword(String username, String password) {
         User user = null;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT * FROM users WHERE username = ? AND user_password = ?;";
+            String SQL = "SELECT * FROM users WHERE username = ? AND Password = ?;";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setString(1, username);
             pstmt.setString(2, password);
@@ -68,9 +68,9 @@ public class LoginRepository {
 
             if (rs.next()) {
                 user = new User();
-                user.setUserId(rs.getInt("user_id"));
-                user.setUserName(rs.getString("username"));
-                user.setPassword(rs.getString("user_password"));
+                user.setUserId(rs.getInt("UserID"));
+                user.setUserName(rs.getString("Username"));
+                user.setPassword(rs.getString("Password"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

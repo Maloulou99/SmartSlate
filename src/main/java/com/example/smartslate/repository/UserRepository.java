@@ -22,7 +22,7 @@ public class UserRepository {
     public int createUser(User newUser) {
         int userId = 0;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "INSERT INTO users (first_name, last_name, user_email, user_password) values (?,?,?,?);";
+            String SQL = "INSERT INTO users (FirstName, Lastname, Email, Password) values (?,?,?,?);";
             PreparedStatement pstmt = con.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, newUser.getFirstName());
             pstmt.setString(2, newUser.getLastName());
@@ -44,17 +44,17 @@ public class UserRepository {
     public User getUser(int uid) {
         User user = new User();
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT * FROM users WHERE user_id = ?;";
+            String SQL = "SELECT * FROM users WHERE UserID = ?;";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setInt(1, uid);
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                user.setUserId(rs.getInt("user_id"));
-                user.setFirstName(rs.getString("first_name"));
-                user.setLastName(rs.getString("last_name"));
-                user.setEmail(rs.getString("user_email"));
-                user.setPassword(rs.getString("user_password"));
+                user.setUserId(rs.getInt("UserID"));
+                user.setFirstName(rs.getString("Firstname"));
+                user.setLastName(rs.getString("Lastname"));
+                user.setEmail(rs.getString("Email"));
+                user.setPassword(rs.getString("Password"));
             }
 
             return user;

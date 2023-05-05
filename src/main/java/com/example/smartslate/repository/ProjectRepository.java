@@ -52,12 +52,12 @@ public class ProjectRepository {
 
             while (rs.next()) {
                 Project project = new Project();
-                project.setProjectId(rs.getInt("project_id"));
-                project.setUserId(rs.getInt("user_id"));
-                project.setProjectName(rs.getString("title"));
-                project.setDescription(rs.getString("description"));
-                project.setStartDate(rs.getDate("start_date").toLocalDate());
-                project.setEndDate(rs.getDate("end_date").toLocalDate());
+                project.setProjectId(rs.getInt("ProjectID"));
+                project.setUserId(rs.getInt("UserID"));
+                project.setProjectName(rs.getString("Name"));
+                project.setDescription(rs.getString("Description"));
+                project.setStartDate(rs.getDate("StartDate").toLocalDate());
+                project.setEndDate(rs.getDate("EndDate").toLocalDate());
                 projects.add(project);
             }
 
