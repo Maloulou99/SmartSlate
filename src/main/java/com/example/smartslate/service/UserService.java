@@ -10,6 +10,9 @@ import java.util.List;
 public class UserService {
     private UserRepository userRepository;
 
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public int createUser(User newUser){
         return userRepository.createUser(newUser);

@@ -10,6 +10,10 @@ import java.util.List;
 public class ProjectService {
     private ProjectRepository projectRepository;
 
+    public ProjectService(ProjectRepository projectRepository) {
+        this.projectRepository = projectRepository;
+    }
+
     public int createProject(Project project) {
         return projectRepository.createProject(project);
     }

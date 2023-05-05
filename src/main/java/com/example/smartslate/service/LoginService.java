@@ -9,6 +9,10 @@ import org.springframework.stereotype.Service;
 public class LoginService {
     private LoginRepository loginRepository;
 
+    public LoginService(LoginRepository loginRepository) {
+        this.loginRepository = loginRepository;
+    }
+
     public User checkUser(String email, String password) {
         return loginRepository.checkUser(email, password);
     }
