@@ -22,7 +22,7 @@ public class UserRepository {
     public int createUser(User newUser) {
         int userId = 0;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "INSERT INTO user (first_name, last_name, user_email, user_password) values (?,?,?,?);";
+            String SQL = "INSERT INTO users (first_name, last_name, user_email, user_password) values (?,?,?,?);";
             PreparedStatement pstmt = con.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, newUser.getFirstName());
             pstmt.setString(2, newUser.getLastName());
@@ -44,7 +44,7 @@ public class UserRepository {
     public User getUser(int uid) {
         User user = new User();
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT * FROM user WHERE user_id = ?;";
+            String SQL = "SELECT * FROM users WHERE user_id = ?;";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setInt(1, uid);
             ResultSet rs = pstmt.executeQuery();
