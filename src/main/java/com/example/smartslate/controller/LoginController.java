@@ -1,12 +1,7 @@
 package com.example.smartslate.controller;
 
 import com.example.smartslate.model.User;
-import com.example.smartslate.repository.LoginRepository;
-import com.example.smartslate.repository.ProjectRepository;
-import com.example.smartslate.repository.UserRepository;
 import com.example.smartslate.service.LoginService;
-import com.example.smartslate.service.ProjectService;
-import com.example.smartslate.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 
 @RequestMapping("/")
 @Controller
@@ -59,7 +53,8 @@ public class LoginController {
         }
     }
 
-    @GetMapping("/logout")
+
+        @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/user-login";

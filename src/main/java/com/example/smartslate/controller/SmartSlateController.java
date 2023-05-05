@@ -26,6 +26,11 @@ public class SmartSlateController {
         this.loginController = loginController;
     }
 
+    @GetMapping("")
+    public String home() {
+        return "index";
+    }
+
     @GetMapping("/mainpage/{uid}")
     public String mainPage(@PathVariable int uid, Model model, HttpSession session) {
         User user = userService.getUser(uid);
