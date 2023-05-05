@@ -20,10 +20,6 @@ public class LoginService {
         return loginRepository.findByUsernameAndPassword(username, password);
     }
 
-    public boolean isLoggedIn(HttpSession session, int userId){
-        return loginRepository.isLoggedIn(session, userId);
-    }
-
 
 
 }

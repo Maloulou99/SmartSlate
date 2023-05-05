@@ -14,6 +14,7 @@ public class LoginRepository {
     @Value("${spring.datasource.password}")
     String user_pwd;
 
+
     public User checkUser(String email, String password) {
         User user = null;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
@@ -77,14 +78,7 @@ public class LoginRepository {
         return user;
     }
 
-    public boolean isLoggedIn(HttpSession session, int userId) {
-        // Tjek om der er en bruger i sessionen
-        User user = (User) session.getAttribute("user");
-        if (user != null && user.getUserId() == userId) {
-            return true; // Brugeren i sessionen matcher den angivne bruger-id
-        } else {
-            return false; // Brugeren i sessionen matcher ikke den angivne bruger-id
-        }
-    }
+
+
 
 }

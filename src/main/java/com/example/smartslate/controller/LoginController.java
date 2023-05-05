@@ -12,13 +12,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class LoginController {
     private LoginService loginService;
+    private int current_userId;
 
     public LoginController(LoginService loginService) {
         this.loginService = loginService;
     }
 
-    public boolean isLoggedIn(HttpSession session, int userId){
-        return loginService.isLoggedIn(session, userId);
+    protected boolean isLoggedIn(HttpSession session, int uid) {
+        return session.getAttribute("user") != null && current_userId == uid;
     }
 
     @GetMapping("/login")

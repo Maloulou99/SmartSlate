@@ -41,7 +41,7 @@ public class SmartSlateController {
 
         // Tjek om brugeren er logget ind
         if (loginController.isLoggedIn(session, uid)) {
-            return "main-page"; // Hvis brugeren er logget ind, vis hovedsiden
+            return "index"; // Hvis brugeren er logget ind, vis hovedsiden
         } else {
             return "redirect:/user-login"; // Hvis brugeren ikke er logget ind, send brugeren til login-siden
         }
