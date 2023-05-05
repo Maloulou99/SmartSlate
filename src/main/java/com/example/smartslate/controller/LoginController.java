@@ -27,7 +27,7 @@ public class LoginController {
     @GetMapping("/")
     public String landingPage(Model model) {
         model.addAttribute("loggedIn", true);
-        return "index";
+        return "user-frontsite";
     }
 
     @GetMapping("/login")

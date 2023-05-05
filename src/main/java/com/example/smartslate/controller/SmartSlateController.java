@@ -46,7 +46,7 @@ public class SmartSlateController {
 
         // Tjek om brugeren er logget ind
         if (loginController.isLoggedIn(session, uid)) {
-            return "index"; // Hvis brugeren er logget ind, vis hovedsiden
+            return "redirect:/user-fontsite"; // Hvis brugeren er logget ind, vis hovedsiden
         } else {
             return "redirect:/user-login"; // Hvis brugeren ikke er logget ind, send brugeren til login-siden
         }
@@ -117,7 +117,8 @@ public class SmartSlateController {
         model.addAttribute("userId", userId);
         model.addAttribute("status", status);
 
-        return "create-project";
+        return "redirect:/user-frontsite/" + userId; // redirect to the user frontsite with the user id
+
     }
 
 }
