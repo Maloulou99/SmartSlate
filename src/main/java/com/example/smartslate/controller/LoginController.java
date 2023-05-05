@@ -24,12 +24,6 @@ public class LoginController {
         return session.getAttribute("userId") != null && currentUser == uid;
     }
 
-    @GetMapping("/")
-    public String landingPage(Model model) {
-        model.addAttribute("loggedIn", true);
-        return "user-frontsite";
-    }
-
     @GetMapping("/login")
     public String showLoginForm() {
         return "user-login";

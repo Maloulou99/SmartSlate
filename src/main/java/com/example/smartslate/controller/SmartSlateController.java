@@ -26,8 +26,9 @@ public class SmartSlateController {
         this.loginController = loginController;
     }
 
-    @GetMapping("")
-    public String home() {
+    @GetMapping("/")
+    public String landingPage(Model model) {
+        model.addAttribute("loggedIn", true);
         return "index";
     }
 
