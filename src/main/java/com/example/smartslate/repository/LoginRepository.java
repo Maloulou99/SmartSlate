@@ -14,7 +14,6 @@ public class LoginRepository {
     @Value("${spring.datasource.password}")
     String user_pwd;
 
-
     public User checkUser(String email, String password) {
         User user = null;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
@@ -77,8 +76,5 @@ public class LoginRepository {
         }
         return user;
     }
-
-
-
 
 }

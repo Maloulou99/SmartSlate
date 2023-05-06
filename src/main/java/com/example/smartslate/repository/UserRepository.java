@@ -22,12 +22,15 @@ public class UserRepository {
     public int createUser(User newUser) {
         int userId = 0;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "INSERT INTO users (FirstName, Lastname, Email, Password) values (?,?,?,?);";
+            String SQL = "INSERT INTO users (username, FirstName, Lastname, Email, Password, phonenumber, role) values (?,?,?,?,?, ?,?);";
             PreparedStatement pstmt = con.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setString(1, newUser.getFirstName());
-            pstmt.setString(2, newUser.getLastName());
-            pstmt.setString(3, newUser.getEmail());
-            pstmt.setString(4, newUser.getPassword());
+            pstmt.setString(1, newUser.getUserName());
+            pstmt.setString(2, newUser.getFirstName());
+            pstmt.setString(3, newUser.getLastName());
+            pstmt.setString(4, newUser.getEmail());
+            pstmt.setString(5, newUser.getPassword());
+            pstmt.setString(6, newUser.getPhoneNumber());
+            pstmt.setString(7, newUser.getRole());
             pstmt.executeUpdate();
 
             ResultSet rs = pstmt.getGeneratedKeys();
@@ -51,10 +54,13 @@ public class UserRepository {
 
             if (rs.next()) {
                 user.setUserId(rs.getInt("UserID"));
+                user.setUserName(rs.getString("UserName"));
                 user.setFirstName(rs.getString("Firstname"));
                 user.setLastName(rs.getString("Lastname"));
                 user.setEmail(rs.getString("Email"));
                 user.setPassword(rs.getString("Password"));
+                user.setPhoneNumber(rs.getString("PhoneNumber"));
+                user.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime().toLocalDate());
             }
 
             return user;
@@ -68,14 +74,15 @@ public class UserRepository {
     public void updateUser(User updatedUser) {
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
             String SQL = "UPDATE Users SET Username = ?, Password = ?, Email = ?, FirstName = ?, " +
-                    "LastName = ?, UpdatedAt = CURRENT_TIMESTAMP WHERE UserID = ?;";
+                    "LastName = ?, PhoneNumber = ?, UpdatedAt = CURRENT_TIMESTAMP WHERE UserID = ?;";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setString(1, updatedUser.getUserName());
             pstmt.setString(2, updatedUser.getPassword());
             pstmt.setString(3, updatedUser.getEmail());
             pstmt.setString(4, updatedUser.getFirstName());
             pstmt.setString(5, updatedUser.getLastName());
-            pstmt.setInt(6, updatedUser.getUserId());
+            pstmt.setString(6, updatedUser.getPhoneNumber());
+            pstmt.setInt(7, updatedUser.getUserId());
             pstmt.executeUpdate();
 
         } catch (SQLException e) {

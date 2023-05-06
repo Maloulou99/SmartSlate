@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
+    <title>User Created</title>
+</head>
+<body>
+<h1>User Created</h1>
+<p>The user has been created successfully.</p>
+
+<label>#UserID:</label>
+<span th:text="${userId}"></span> <br/>
+
+<label>UserName:</label>
+<span th:text="${username}"></span> <br/>
+
+<label>First name:</label>
+<span th:text="${firstName}"></span> <br/>
+
+<label>Last name:</label>
+<span th:text="${lastName}"></span> <br/>
+
+<label>Email:</label>
+<span th:text="${email}"></span><br/>
+
+<label>Password:</label>
+<span th:text="${password}"></span><br/>
+
+<label>Phone Number:</label>
+<span th:text="${phoneNumber}"></span> <br/>
+
+<label>Role:</label>
+<span th:text="${role}"></span> <br/>
+
+<a th:href="@{/smartslate/user/{userId}(userId=${userId})}">Go to User Page</a>
+
+</body>
+</html>

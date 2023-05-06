@@ -26,12 +26,35 @@ public class SmartSlateController {
         this.loginController = loginController;
     }
 
-    @GetMapping("/")
-    public String landingPage(Model model) {
-        model.addAttribute("loggedIn", true);
-        return "index";
+    @GetMapping("/create/user")
+    public String createUser(Model model) {
+        User newUser = new User();
+        model.addAttribute("newUser", newUser);
+        return "create-user";
     }
 
+    @PostMapping("/adduser")
+    public String addUser(@ModelAttribute User newUser, Model model) {
+        int userId = userService.createUser(newUser);
+        model.addAttribute("user", newUser);
+        model.addAttribute("userId", userId);
+        model.addAttribute("createdAt", newUser.getCreatedAt());
+        model.addAttribute("username", newUser.getUserName());
+        model.addAttribute("firstName", newUser.getFirstName());
+        model.addAttribute("lastName", newUser.getLastName());
+        model.addAttribute("email", newUser.getEmail());
+        model.addAttribute("password", newUser.getPassword());
+        model.addAttribute("phoneNumber", newUser.getPhoneNumber());
+        model.addAttribute("role", newUser.getRole());
+        return "user-created";
+    }
+
+    @GetMapping("/user/{userId}")
+    public String getUser(@PathVariable int userId, Model model) {
+        User user = userService.getUser(userId);
+        model.addAttribute("user", user);
+        return "user-frontsite";
+    }
     @GetMapping("/mainpage/{uid}")
     public String mainPage(@PathVariable int uid, Model model, HttpSession session) {
         User user = userService.getUser(uid);
@@ -52,39 +75,6 @@ public class SmartSlateController {
             return "redirect:/user-login"; // Hvis brugeren ikke er logget ind, send brugeren til login-siden
         }
     }
-
-
-    @GetMapping("/create/user")
-    public String createUser(Model model) {
-        User newUser = new User();
-        model.addAttribute("newUser", newUser);
-        return "create-user";
-    }
-
-    @PostMapping("/adduser")
-    public String addUser(@ModelAttribute User newUser, Model model) {
-        int userId = userService.createUser(newUser);
-        model.addAttribute("user", newUser);
-        model.addAttribute("userId", userId);
-        model.addAttribute("createdAt", newUser.getCreatedAt());
-        model.addAttribute("updatedAt", newUser.getUpdatedAt());
-        model.addAttribute("username", newUser.getUserName());
-        model.addAttribute("firstName", newUser.getFirstName());
-        model.addAttribute("lastName", newUser.getLastName());
-        model.addAttribute("email", newUser.getEmail());
-        model.addAttribute("password", newUser.getPassword());
-        model.addAttribute("phoneNumber", newUser.getPhoneNumber());
-        model.addAttribute("role", newUser.getRole());
-        return "redirect:/user-page";
-    }
-
-    @GetMapping("/user/{userId}")
-    public String getUser(@PathVariable int userId, Model model) {
-        User user = userService.getUser(userId);
-        model.addAttribute("user", user);
-        return "user-frontsite";
-    }
-
 
     @GetMapping("/create/project")
     public String createProject(Model model) {

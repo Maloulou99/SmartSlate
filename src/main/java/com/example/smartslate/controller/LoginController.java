@@ -23,6 +23,11 @@ public class LoginController {
     protected boolean isLoggedIn(HttpSession session, int uid) {
         return session.getAttribute("userId") != null && currentUser == uid;
     }
+    @GetMapping("")
+    public String landingPage(Model model) {
+        model.addAttribute("loggedIn", true);
+        return "index";
+    }
 
     @GetMapping("/login")
     public String showLoginForm() {
@@ -40,7 +45,7 @@ public class LoginController {
 
         if (user != null) {
             session.setAttribute("userId", user.getUserId());
-            return "redirect:/user-frontsite";
+            return "/user-frontsite";
         } else {
             model.addAttribute("error", "Invalid login credentials");
             return "user-login";
