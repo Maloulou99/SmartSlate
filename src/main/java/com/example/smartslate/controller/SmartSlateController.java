@@ -4,6 +4,7 @@ import com.example.smartslate.model.Project;
 import com.example.smartslate.model.Task;
 import com.example.smartslate.model.User;
 import com.example.smartslate.service.ProjectService;
+import com.example.smartslate.service.TaskService;
 import com.example.smartslate.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RequestMapping("smartslate")
@@ -19,22 +21,31 @@ import java.util.List;
 public class SmartSlateController {
     private UserService userService;
     private ProjectService projectService;
-    private LoginController loginController;
+    private TaskService taskService;
 
-    public SmartSlateController(UserService userService, ProjectService projectService, LoginController loginController) {
+    public SmartSlateController(UserService userService, ProjectService projectService, TaskService taskService) {
         this.userService = userService;
         this.projectService = projectService;
-        this.loginController = loginController;
+        this.taskService = taskService;
+    }
+    @GetMapping("/create/user")
+    public String createUser(Model model) {
+        User newUser = new User();
+        model.addAttribute("newUser", newUser);
+        return "create-user";
     }
 
     @GetMapping("/user/{userId}")
     public String getUser(@PathVariable int userId, Model model) {
         User user = userService.getUser(userId);
         List<Project> projects = projectService.getProjectByUserId(userId);
+        List<Task> tasks = taskService.getTasksByAssignedUser(user.getUserName());
         model.addAttribute("user", user);
         model.addAttribute("projects", projects);
+        model.addAttribute("tasks", tasks);
         return "user-frontsite";
     }
+
 
 
     @PostMapping("/adduser")
@@ -104,6 +115,46 @@ public class SmartSlateController {
 
         return "redirect:/user-frontsite/" + userId; // redirect to the user frontsite with the user id
     }
+    @PostMapping("/addTask")
+    public String addTask(@RequestParam("description") String description, @RequestParam("deadline") Date deadline,
+                          @RequestParam("assignedTo") String assignedTo, @RequestParam("status") String status,
+                          @ModelAttribute("newProject") Project newProject, Model model) {
+
+        Task newTask = new Task();
+        newTask.setDescription(description);
+        newTask.setDeadline(deadline);
+        newTask.setAssignedTo(assignedTo);
+        newTask.setStatus(status);
+
+        List<Task> tasks = newProject.getTasks();
+        tasks.add(newTask);
+        newProject.setTasks(tasks);
+
+        model.addAttribute("newTask", new Task()); // initialize empty Task object for form
+        model.addAttribute("tasks", tasks); // add updated list of tasks to the model
+
+        return "create-project"; // return to the create-project page
+    }
+
+    @PostMapping("/projects/{projectId}/createTask")
+    public String createTask(@PathVariable int projectId, @ModelAttribute Task task) {
+        Project project = projectService.getProject(projectId);
+        task.setProject(project);
+        taskService.createTask(task);
+        return "redirect:/projects/" + projectId;
+    }
+
+    @GetMapping("/user/frontsite")
+    public String getUserFrontsite(Model model) {
+        List<Project> projects = projectService.getAllProjects();
+        model.addAttribute("projects", projects);
+
+        List<Task> tasks = taskService.getAllTasks();
+        model.addAttribute("tasks", tasks);
+
+        return "user-frontsite";
+    }
+
 
 
 

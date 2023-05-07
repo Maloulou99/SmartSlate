@@ -15,16 +15,16 @@ DROP TABLE IF EXISTS users;
 -- Create new tables
 CREATE TABLE Users
 (
-    UserID      INTEGER      NOT NULL AUTO_INCREMENT,
+    UserID      INTEGER             NOT NULL AUTO_INCREMENT,
     Username    VARCHAR(255) UNIQUE NOT NULL,
-    Password    VARCHAR(255) NOT NULL,
-    Email       VARCHAR(255),
+    Password    VARCHAR(255)        NOT NULL,
+    Email       VARCHAR(255) UNIQUE,
     FirstName   VARCHAR(255),
     LastName    VARCHAR(255),
     Role        VARCHAR(30),
     PhoneNumber VARCHAR(20),
-    CreatedAt   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    UpdatedAt   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CreatedAt   DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt   DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (UserID)
 );
 
@@ -33,7 +33,7 @@ CREATE TABLE Projects
 (
     ProjectID   INTEGER      NOT NULL AUTO_INCREMENT,
     UserID      INTEGER      NOT NULL,
-    Name        VARCHAR(255) NOT NULL,
+    titel       VARCHAR(255) NOT NULL,
     Description VARCHAR(1000),
     StartDate   DATE         NOT NULL,
     EndDate     DATE,
@@ -48,16 +48,14 @@ CREATE TABLE Projects
 -- vil alle de tilknyttede rækker i den tilknyttede tabel også blive slettet automatisk.
 CREATE TABLE Tasks
 (
-    TaskID      INTEGER      NOT NULL AUTO_INCREMENT,
-    ProjectID   INTEGER      NOT NULL,
-    Name        VARCHAR(255) NOT NULL,
-    Description VARCHAR(1000),
-    StartDate   DATE         NOT NULL,
-    EndDate     DATE,
-    Budget      DECIMAL(10, 2),
-    Status      VARCHAR(20)  NOT NULL,
+    TaskID      INTEGER       NOT NULL AUTO_INCREMENT,
+    ProjectID   INTEGER       NOT NULL,
+    Description VARCHAR(1000) NOT NULL,
+    Deadline    DATE,
+    AssignedTo  VARCHAR(255),
+    Status      VARCHAR(20)   NOT NULL,
     PRIMARY KEY (TaskID),
-    CONSTRAINT fk_project FOREIGN KEY (ProjectID) REFERENCES Projects (ProjectID) ON DELETE CASCADE
+    FOREIGN KEY (ProjectID) REFERENCES Projects (ProjectID)
 );
 
 CREATE TABLE SubTasks
@@ -72,5 +70,16 @@ CREATE TABLE SubTasks
     Status      VARCHAR(20)  NOT NULL,
     PRIMARY KEY (SubTaskID),
     CONSTRAINT fk_task FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID) ON DELETE CASCADE
+);
+
+CREATE TABLE employeeTasks
+(
+    EmployeeTaskID INTEGER NOT NULL AUTO_INCREMENT,
+    UserID         INTEGER NOT NULL,
+    TaskID         INTEGER NOT NULL,
+    Hours          DECIMAL(10, 2),
+    PRIMARY KEY (EmployeeTaskID),
+    FOREIGN KEY (UserID) REFERENCES Users (UserID),
+    FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID) ON DELETE CASCADE
 );
 

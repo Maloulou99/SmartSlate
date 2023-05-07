@@ -4,62 +4,44 @@ import java.util.Date;
 
 public class Task {
     private int taskId;
-    private String taskName;
-    private Date startDate;
-    private Date endDate;
-    private boolean completed;
-    private String status;
     private int projectId;
+    private String description;
+    private Date deadline;
+    private String assignedTo;
+    private String status;
+    private Project project;
+
     private int userId; // Fremmednøgle til User-tabellen
 
-    public Task(int taskId, String taskName, Date startDate, Date endDate, boolean completed, String status, int projectId, int userId) {
+    public Task(int taskId, int projectId, String description, Date deadline, String assignedTo, String status, Project project, int userId) {
         this.taskId = taskId;
-        this.taskName = taskName;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.completed = completed;
-        this.status = status;
         this.projectId = projectId;
+        this.description = description;
+        this.deadline = deadline;
+        this.assignedTo = assignedTo;
+        this.status = status;
+        this.project = project;
         this.userId = userId;
     }
+
+    public Task(){
+
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
     public int getTaskId() {
         return taskId;
     }
 
     public void setTaskId(int taskId) {
         this.taskId = taskId;
-    }
-
-    public String getTaskName() {
-        return taskName;
-    }
-
-    public void setTaskName(String taskName) {
-        this.taskName = taskName;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    public boolean isCompleted() {
-        return completed;
-    }
-
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
     }
 
     public int getProjectId() {
@@ -70,12 +52,28 @@ public class Task {
         this.projectId = projectId;
     }
 
-    public int getUserId() {
-        return userId;
+    public String getDescription() {
+        return description;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Date getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(Date deadline) {
+        this.deadline = deadline;
+    }
+
+    public String getAssignedTo() {
+        return assignedTo;
+    }
+
+    public void setAssignedTo(String assignedTo) {
+        this.assignedTo = assignedTo;
     }
 
     public String getStatus() {
@@ -84,5 +82,13 @@ public class Task {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

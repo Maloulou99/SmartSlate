@@ -10,7 +10,7 @@
 <p>The user has been created successfully.</p>
 
 <label>#UserID:</label>
-<span th:text="${userId}"></span> <br/>
+<span th:text="${user.userId}"></span> <br/>
 
 <label>UserName:</label>
 <span th:text="${username}"></span> <br/>
@@ -33,7 +33,7 @@
 <label>Role:</label>
 <span th:text="${role}"></span> <br/>
 
-<a th:href="@{/smartslate/user/{userId}(userId=${userId})}">Go to User Page</a>
+<a th:href="@{/smartslate/user/{userId}(userId=${user.userId})}">Go to User Page</a>
 
 </body>
 </html>

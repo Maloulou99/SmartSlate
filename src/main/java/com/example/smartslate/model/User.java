@@ -27,6 +27,20 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
+    public User(int userId, String userName, String firstName, String lastName, String email, String password, LocalDate createdAt, LocalDate updatedAt) {
+        this.userId = userId;
+        this.userName = userName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public User() {
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -43,19 +57,7 @@ public class User {
         this.role = role;
     }
 
-    public User(int userId, String userName, String firstName, String lastName, String email, String password, LocalDate createdAt, LocalDate updatedAt) {
-        this.userId = userId;
-        this.userName = userName;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
 
-    public User() {
-    }
     public String getUserName() {
         return userName;
     }

@@ -1,0 +1,95 @@
+/* Style for project and task tables */
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+th {
+    background-color: #dddddd;
+}
+
+/* Style for task form */
+
+.task-form {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.task-form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.task-form input[type="text"],
+.task-form textarea {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.task-form input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.task-form input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+/* Style for project details */
+
+.project-details {
+    margin-bottom: 20px;
+}
+
+.project-details h2 {
+    margin-bottom: 10px;
+}
+
+.project-details table td:first-child {
+    font-weight: bold;
+    width: 200px;
+}
+
+/* Style for task list */
+
+.task-list {
+    margin-bottom: 20px;
+}
+
+.task-list h2 {
+    margin-bottom: 10px;
+}
+
+.task-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.task-list li {
+    margin-bottom: 5px;
+}
+
+.task-list .task-name {
+    font-weight: bold;
+}
+
+.task-list .task-status {
+    font-style: italic;
+}

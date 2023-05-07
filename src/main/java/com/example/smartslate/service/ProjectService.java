@@ -33,4 +33,8 @@ public class ProjectService {
     public List<Project> getAllProjects() {
        return projectRepository.getAllProjects();
     }
+
+    public Project getProject(int projectId){
+        return projectRepository.getProject(projectId);
+    }
 }

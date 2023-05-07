@@ -35,6 +35,7 @@ public class LoginRepository {
         return user;
     }
 
+
     public User findByEmailAndPassword(String email, String password) {
         User user = null;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {

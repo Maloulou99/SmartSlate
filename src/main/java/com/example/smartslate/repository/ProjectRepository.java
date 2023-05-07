@@ -21,21 +21,26 @@ public class ProjectRepository {
     public int createProject(Project project) {
         int projectId = 0;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "INSERT INTO Projects (ProjectID, UserID, Name, Description, StartDate, EndDate, Budget, Status) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement pstmt = con.prepareStatement(SQL);
-            pstmt.setInt(1, project.getProjectId());
-            pstmt.setInt(2, project.getUserId());
-            pstmt.setString(3, project.getProjectName());
-            pstmt.setString(4, project.getDescription());
-            pstmt.setDate(5, Date.valueOf(project.getStartDate()));
-            pstmt.setDate(6, project.getEndDate() != null ? Date.valueOf(project.getEndDate()) : null);
-            pstmt.setDouble(7, project.getBudget());
-            pstmt.setString(8, project.getStatus());
+            String SQL = "INSERT INTO Projects (UserID, titel, Description, StartDate, EndDate, Budget, Status) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement pstmt = con.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
+            pstmt.setInt(1, project.getUserId());
+            pstmt.setString(2, project.getProjectName());
+            pstmt.setString(3, project.getDescription());
+            pstmt.setDate(4, Date.valueOf(project.getStartDate()));
+            pstmt.setDate(5, project.getEndDate() != null ? Date.valueOf(project.getEndDate()) : null);
+            pstmt.setDouble(6, project.getBudget());
+            pstmt.setString(7, project.getStatus());
             pstmt.executeUpdate();
+
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                projectId = rs.getInt(1);
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } return projectId;
+        }
+        return projectId;
     }
 
     //Read
@@ -54,7 +59,7 @@ public class ProjectRepository {
                 Project project = new Project();
                 project.setProjectId(rs.getInt("ProjectID"));
                 project.setUserId(rs.getInt("UserID"));
-                project.setProjectName(rs.getString("Name"));
+                project.setProjectName(rs.getString("titel"));
                 project.setDescription(rs.getString("Description"));
                 project.setStartDate(rs.getDate("StartDate").toLocalDate());
                 project.setEndDate(rs.getDate("EndDate").toLocalDate());
@@ -71,7 +76,7 @@ public class ProjectRepository {
     // Update
     public void updateProject(Project project) {
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "UPDATE Projects SET Name = ?, Description = ?, StartDate = ?, EndDate = ?, Budget = ?, Status = ? "
+            String SQL = "UPDATE Projects SET titel = ?, Description = ?, StartDate = ?, EndDate = ?, Budget = ?, Status = ? "
                     + "WHERE ProjectID = ?";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setString(1, project.getProjectName());
@@ -107,9 +112,9 @@ public class ProjectRepository {
 
             while (rs.next()) {
                 Project project = new Project();
-                project.setProjectId(rs.getInt("projectId"));
+                project.setProjectId(rs.getInt("ProjectID"));
                 project.setUserId(rs.getInt("UserID"));
-                project.setProjectName(rs.getString("Name"));
+                project.setProjectName(rs.getString("titel"));
                 project.setDescription(rs.getString("Description"));
                 project.setStartDate(rs.getTimestamp("StartDate").toLocalDateTime().toLocalDate());
                 project.setEndDate(rs.getTimestamp("EndDate").toLocalDateTime().toLocalDate());
@@ -123,6 +128,31 @@ public class ProjectRepository {
         }
 
         return projects;
+    }
+
+    public Project getProject(int projectId) {
+        Project project = null;
+
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "SELECT * FROM Projects WHERE ProjectID = ?;";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, projectId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                project = new Project();
+                project.setProjectId(rs.getInt("ProjectID"));
+                project.setUserId(rs.getInt("UserID"));
+                project.setProjectName(rs.getString("titel"));
+                project.setDescription(rs.getString("Description"));
+                project.setStartDate(rs.getDate("StartDate").toLocalDate());
+                project.setEndDate(rs.getDate("EndDate").toLocalDate());
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return project;
     }
 
 }

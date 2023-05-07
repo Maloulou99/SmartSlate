@@ -14,7 +14,7 @@ public class Project {
     private LocalDate endDate;
     private double budget;
     private String status;
-    private List<Task> tasks; // en liste over opgaver i projektet
+    private List<Task> tasks = new ArrayList<>(); // en liste over opgaver i projektet
 
 
     public Project(int projectId, int userId, String projectName, String description, LocalDate startDate, LocalDate endDate, double budget, String status, List<Task> tasks) {
@@ -29,8 +29,12 @@ public class Project {
         this.tasks = tasks;
     }
 
-    public Project(){
+
+    public Project() {
+        this.tasks = new ArrayList<>();
     }
+
+
 
     public int getProjectId() {
         return projectId;
