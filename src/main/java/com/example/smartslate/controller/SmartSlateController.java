@@ -96,8 +96,8 @@ public class SmartSlateController {
     }
     @PostMapping("/addProject")
     public String addProject(@RequestParam int userId, @RequestParam String projectName, @RequestParam String description, @RequestParam LocalDate startDate,
-                             @RequestParam LocalDate endDate, @RequestParam double budget, @RequestParam String status, @ModelAttribute("newProject") Project newProject,
-                             @ModelAttribute("tasks") List<Task> tasks, Model model) {
+                             @RequestParam LocalDate endDate, @RequestParam double budget, @RequestParam String status, Model model) {
+        Project newProject = new Project();
         newProject.setUserId(userId);
         newProject.setProjectName(projectName);
         newProject.setDescription(description);
@@ -105,7 +105,6 @@ public class SmartSlateController {
         newProject.setEndDate(endDate);
         newProject.setBudget(budget);
         newProject.setStatus(status);
-        newProject.setTasks(tasks);
 
         // Generate project ID automatically from the database
         int projectId = projectService.createProject(newProject);
@@ -115,6 +114,7 @@ public class SmartSlateController {
 
         return "redirect:/user-frontsite/" + userId; // redirect to the user frontsite with the user id
     }
+
     @PostMapping("/addTask")
     public String addTask(@RequestParam("description") String description, @RequestParam("deadline") Date deadline,
                           @RequestParam("assignedTo") String assignedTo, @RequestParam("status") String status,
@@ -126,14 +126,14 @@ public class SmartSlateController {
         newTask.setAssignedTo(assignedTo);
         newTask.setStatus(status);
 
-        List<Task> tasks = newProject.getTasks();
+        ArrayList<Task> tasks = newProject.getTasks();
         tasks.add(newTask);
         newProject.setTasks(tasks);
 
-        model.addAttribute("newTask", new Task()); // initialize empty Task object for form
-        model.addAttribute("tasks", tasks); // add updated list of tasks to the model
+        model.addAttribute("newTask", new Task()); // initialiser tomt Task-objekt til listen.
+        model.addAttribute("tasks", tasks); // Tilføj opdateret liste over opgaver til listen.
 
-        return "create-project"; // return to the create-project page
+        return "create-task";
     }
 
     @PostMapping("/projects/{projectId}/createTask")
@@ -154,9 +154,6 @@ public class SmartSlateController {
 
         return "user-frontsite";
     }
-
-
-
 
     @GetMapping("/projects")
     public String getAllProjects(Model model) {

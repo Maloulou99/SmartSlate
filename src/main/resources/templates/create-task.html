@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Task</title>
+</head>
+<body>
+
+<h2>Task Details</h2>
+
+<form method="post" th:action="@{/create-task}">
+  <table>
+    <tr>
+      <td><label for="taskName">Task Name:</label></td>
+      <td><input type="text" id="taskName" name="taskName" th:value="${newProject.projectName}"></td>
+    </tr>
+    <tr>
+      <td><label for="taskDescription">Task Description:</label></td>
+      <td><textarea id="taskDescription" name="description" th:text="${newTask.description}"></textarea></td>
+    </tr>
+    <tr>
+      <td><label for="deadline">Task Due Date:</label></td>
+      <td><input type="date" id="deadline" name="deadline" th:value="${newTask.deadline}"></td>
+    </tr>
+  </table>
+
+  <input type="hidden" id="userId" name="userId" th:value="${newProject.userId}">
+  <input type="hidden" id="projectId" name="projectId" th:value="${newProject.projectId}">
+
+  <input type="submit" value="Create Task">
+</form>
+
+</body>
+</html>

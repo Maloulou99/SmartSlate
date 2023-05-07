@@ -43,25 +43,6 @@
         </tr>
     </table>
 
-    <h2>Task Details</h2>
-    <table>
-        <tr>
-            <td><label for="taskName">Task Name:</label></td>
-            <td><input type="text" id="taskName" name="tasks[0].taskName"></td>
-        </tr>
-        <tr>
-            <td><label for="taskDescription">Task Description:</label></td>
-            <td><textarea id="taskDescription"  name="tasks[0].description" ></textarea></td>
-        </tr>
-        <tr>
-            <td><label for="taskDueDate">Task Due Date:</label></td>
-            <td><input type="date" id="taskDueDate"  name="tasks[0].dueDate"></td>
-        </tr>
-    </table>
-
-    <input type="hidden" id="userId" name="userId" th:value="${newProject.userId}">
-    <input type="hidden" id="projectId" name="projectId" th:value="${newProject.projectId}">
-
     <button type="submit" class="btn btn-primary">Add Project</button>
 </form>
 

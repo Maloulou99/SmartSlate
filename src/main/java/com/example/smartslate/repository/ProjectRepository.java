@@ -18,10 +18,11 @@ public class ProjectRepository {
     String user_pwd;
 
     // Create a project
+
     public int createProject(Project project) {
         int projectId = 0;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "INSERT INTO Projects (UserID, titel, Description, StartDate, EndDate, Budget, Status) "
+            String SQL = "INSERT INTO Projects (UserID, ProjectName, Description, StartDate, EndDate, Budget, Status) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = con.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
             pstmt.setInt(1, project.getUserId());
@@ -43,6 +44,7 @@ public class ProjectRepository {
         return projectId;
     }
 
+
     //Read
     //Denne metode henter en liste over alle projekter, der er tilknyttet en bestemt bruger (userId).
     public List<Project> getProjectsByUserId(int userId) {
@@ -59,7 +61,7 @@ public class ProjectRepository {
                 Project project = new Project();
                 project.setProjectId(rs.getInt("ProjectID"));
                 project.setUserId(rs.getInt("UserID"));
-                project.setProjectName(rs.getString("titel"));
+                project.setProjectName(rs.getString("ProjectName"));
                 project.setDescription(rs.getString("Description"));
                 project.setStartDate(rs.getDate("StartDate").toLocalDate());
                 project.setEndDate(rs.getDate("EndDate").toLocalDate());
@@ -76,7 +78,7 @@ public class ProjectRepository {
     // Update
     public void updateProject(Project project) {
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "UPDATE Projects SET titel = ?, Description = ?, StartDate = ?, EndDate = ?, Budget = ?, Status = ? "
+            String SQL = "UPDATE Projects SET ProjectName = ?, Description = ?, StartDate = ?, EndDate = ?, Budget = ?, Status = ? "
                     + "WHERE ProjectID = ?";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setString(1, project.getProjectName());
@@ -114,7 +116,7 @@ public class ProjectRepository {
                 Project project = new Project();
                 project.setProjectId(rs.getInt("ProjectID"));
                 project.setUserId(rs.getInt("UserID"));
-                project.setProjectName(rs.getString("titel"));
+                project.setProjectName(rs.getString("ProjectName"));
                 project.setDescription(rs.getString("Description"));
                 project.setStartDate(rs.getTimestamp("StartDate").toLocalDateTime().toLocalDate());
                 project.setEndDate(rs.getTimestamp("EndDate").toLocalDateTime().toLocalDate());
@@ -143,7 +145,7 @@ public class ProjectRepository {
                 project = new Project();
                 project.setProjectId(rs.getInt("ProjectID"));
                 project.setUserId(rs.getInt("UserID"));
-                project.setProjectName(rs.getString("titel"));
+                project.setProjectName(rs.getString("ProjectName"));
                 project.setDescription(rs.getString("Description"));
                 project.setStartDate(rs.getDate("StartDate").toLocalDate());
                 project.setEndDate(rs.getDate("EndDate").toLocalDate());

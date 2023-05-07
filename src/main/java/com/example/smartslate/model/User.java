@@ -1,6 +1,7 @@
 package com.example.smartslate.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class User {
     private int userId;
@@ -13,6 +14,7 @@ public class User {
     private String role;
     private LocalDate createdAt;
     private LocalDate updatedAt;
+    private ArrayList<Project> projects;
 
     public User(int userId, String userName, String firstName, String lastName, String email, String password, String phoneNumber, String role, LocalDate createdAt, LocalDate updatedAt) {
         this.userId = userId;
@@ -27,18 +29,22 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public User(int userId, String userName, String firstName, String lastName, String email, String password, LocalDate createdAt, LocalDate updatedAt) {
+    public User(int userId, String userName, String firstName, String lastName, String email, String password, String phoneNumber, String role, LocalDate createdAt, LocalDate updatedAt, ArrayList<Project> projects) {
         this.userId = userId;
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.role = role;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.projects = projects;
     }
 
     public User() {
+
     }
 
     public String getPhoneNumber() {
@@ -120,6 +126,14 @@ public class User {
 
     public void setUpdatedAt(LocalDate updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public ArrayList<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(ArrayList<Project> projects) {
+        this.projects = projects;
     }
 }
 
