@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
     <title>Create Project</title>
 </head>
 <body>
 <h1>Create Project</h1>
-<form method="POST" action="/addProject">
-    <div class="form-group">
-        <label for="userId">User ID:</label>
-        <input type="text" id="userId" name="userId">
-    </div>
+<form method="POST" action="/smartslate/addProject">
+
     <div class="form-group">
         <label for="projectName">Project Name:</label>
         <input type="text" id="projectName" name="projectName">
@@ -51,6 +49,9 @@
         <label for="taskDueDate">Task Due Date:</label>
         <input type="date" id="taskDueDate"  name="tasks[0].dueDate">
     </div>
+
+    <input type="hidden" id="userId" name="userId" th:value="${newProject.userId}">
+    <input type="hidden" id="projectId" name="projectId" th:value="${newProject.projectId}">
 
     <button type="submit" class="btn btn-primary">Add Project</button>
 </form>

@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequestMapping("smartslate")
@@ -26,18 +27,21 @@ public class SmartSlateController {
         this.loginController = loginController;
     }
 
-    @GetMapping("/create/user")
-    public String createUser(Model model) {
-        User newUser = new User();
-        model.addAttribute("newUser", newUser);
-        return "create-user";
+    @GetMapping("/user/{userId}")
+    public String getUser(@PathVariable int userId, Model model) {
+        User user = userService.getUser(userId);
+        List<Project> projects = projectService.getProjectByUserId(userId);
+        model.addAttribute("user", user);
+        model.addAttribute("projects", projects);
+        return "user-frontsite";
     }
+
 
     @PostMapping("/adduser")
     public String addUser(@ModelAttribute User newUser, Model model) {
         int userId = userService.createUser(newUser);
+        newUser.setUserId(userId);
         model.addAttribute("user", newUser);
-        model.addAttribute("userId", userId);
         model.addAttribute("createdAt", newUser.getCreatedAt());
         model.addAttribute("username", newUser.getUserName());
         model.addAttribute("firstName", newUser.getFirstName());
@@ -49,19 +53,14 @@ public class SmartSlateController {
         return "user-created";
     }
 
-    @GetMapping("/user/{userId}")
-    public String getUser(@PathVariable int userId, Model model) {
-        User user = userService.getUser(userId);
-        model.addAttribute("user", user);
-        return "user-frontsite";
-    }
+
     @GetMapping("/mainpage/{uid}")
     public String mainPage(@PathVariable int uid, Model model, HttpSession session) {
         User user = userService.getUser(uid);
 
         if (user == null) {
             // Hvis der ikke er nogen bruger med det angivne id, send brugeren til login-siden
-            return "redirect:/user-login";
+            return "redirect:/";
         }
 
         model.addAttribute("userId", user.getUserId());
@@ -69,24 +68,25 @@ public class SmartSlateController {
         model.addAttribute("lastName", user.getLastName());
 
         // Tjek om brugeren er logget ind
-        if (loginController.isLoggedIn(session, uid)) {
-            return "redirect:/user-fontsite"; // Hvis brugeren er logget ind, vis hovedsiden
+        if (session.getAttribute("loggedInUserId") != null && (int) session.getAttribute("loggedInUserId") == uid) {
+            return "user-frontsite"; // Hvis brugeren er logget ind, vis hovedsiden
         } else {
-            return "redirect:/user-login"; // Hvis brugeren ikke er logget ind, send brugeren til login-siden
+            return "redirect:/"; // Hvis brugeren ikke er logget ind, send brugeren til login-siden
         }
     }
+
 
     @GetMapping("/create/project")
     public String createProject(Model model) {
         Project newProject = new Project();
         model.addAttribute("newProject", newProject);
+        model.addAttribute("tasks", new ArrayList<Task>()); // add an empty ArrayList of tasks to the model
         return "create-project";
     }
-
     @PostMapping("/addProject")
     public String addProject(@RequestParam int userId, @RequestParam String projectName, @RequestParam String description, @RequestParam LocalDate startDate,
-                             @RequestParam LocalDate endDate, @RequestParam double budget, @RequestParam String status, @ModelAttribute("tasks") List<Task> tasks, Model model) {
-        Project newProject = new Project();
+                             @RequestParam LocalDate endDate, @RequestParam double budget, @RequestParam String status, @ModelAttribute("newProject") Project newProject,
+                             @ModelAttribute("tasks") List<Task> tasks, Model model) {
         newProject.setUserId(userId);
         newProject.setProjectName(projectName);
         newProject.setDescription(description);
@@ -96,21 +96,26 @@ public class SmartSlateController {
         newProject.setStatus(status);
         newProject.setTasks(tasks);
 
+        // Generate project ID automatically from the database
         int projectId = projectService.createProject(newProject);
+        newProject.setProjectId(projectId);
 
         model.addAttribute("project", newProject);
-        model.addAttribute("projectId", projectId);
-        model.addAttribute("startDate", startDate);
-        model.addAttribute("endDate", endDate);
-        model.addAttribute("name", projectName);
-        model.addAttribute("description", description);
-        model.addAttribute("budget", budget);
-        model.addAttribute("userId", userId);
-        model.addAttribute("status", status);
 
         return "redirect:/user-frontsite/" + userId; // redirect to the user frontsite with the user id
-
     }
+
+
+
+    @GetMapping("/projects")
+    public String getAllProjects(Model model) {
+        List<Project> projects = projectService.getAllProjects();
+        model.addAttribute("projects", projects);
+        return "user-frontsite"; // navn på din Thymeleaf visningsside for projektlisten
+    }
+
+
+
 
 }
 

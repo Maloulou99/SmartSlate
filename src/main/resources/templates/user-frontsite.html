@@ -3,10 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
+
+
   <title>User Frontsite</title>
 </head>
 <body>
-<h1>Welcome, ${firstName} ${lastName}!</h1>
+<h1>Welcome, <span th:text="${firstName}"></span> <span th:text="${lastName}"></span>!</h1>
 
 <label>#UserID:</label>
 <span th:text="${user.userId}"></span> <br/>
@@ -29,6 +31,42 @@
 <label>Role:</label>
 <span th:text="${user.role}"></span> <br/>
 
-<a href="/smartslate/create/project?userId=${userId}">Create Project</a>
+<a href="/smartslate/create/project">Create Project</a>
+
+
+<!-- Show the project details after it has been created -->
+<h2>New Project Details</h2>
+<p><b>Project ID:</b> ${project.projectId}</p>
+<p><b>User ID:</b> ${project.userId}</p>
+<p><b>Project Name:</b> ${project.projectName}</p>
+<p><b>Description:</b> ${project.description}</p>
+<p><b>Start Date:</b> ${project.startDate}</p>
+<p><b>End Date:</b> ${project.endDate}</p>
+<p><b>Budget:</b> ${project.budget}</p>
+<p><b>Status:</b> ${project.status}</p>
+
+<!-- Show the list of tasks -->
+<h2>Tasks</h2>
+<table>
+  <tr>
+    <th>Task ID</th>
+    <th>Task Name</th>
+    <th>Start Date</th>
+    <th>End Date</th>
+    <th>Assigned To</th>
+    <th>Status</th>
+  </tr>
+  <c:forEach var="task" items="${project.tasks}">
+    <tr>
+      <td>${task.taskId}</td>
+      <td>${task.taskName}</td>
+      <td>${task.startDate}</td>
+      <td>${task.endDate}</td>
+      <td>${task.assignedTo}</td>
+      <td>${task.status}</td>
+    </tr>
+  </c:forEach>
+</table>
+
 </body>
 </html>
