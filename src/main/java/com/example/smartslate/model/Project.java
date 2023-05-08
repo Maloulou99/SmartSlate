@@ -12,12 +12,32 @@ public class Project {
     private String description;
     private LocalDate startDate;
     private LocalDate endDate;
-    private double budget;
+    private String budget;
     private String status;
     private List<Task> tasks; // en liste over opgaver i projektet
 
+    private User user;
 
-    public Project(int projectId, int userId, String projectName, String description, LocalDate startDate, LocalDate endDate, double budget, String status, List<Task> tasks) {
+
+
+    public Project(int projectId, int userId, String projectName, String description, LocalDate startDate, LocalDate endDate, String budget, String status, List<Task> tasks, User user) {
+        this.projectId = projectId;
+        this.userId = userId;
+        this.projectName = projectName;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.budget = budget;
+        this.status = status;
+        this.tasks = tasks;
+        this.user = user;
+    }
+
+    public Project() {
+        this.tasks = new ArrayList<>();
+    }
+
+    public Project(int projectId, int userId, String projectName, String description, LocalDate startDate, LocalDate endDate, String budget, String status, List<Task> tasks) {
         this.projectId = projectId;
         this.userId = userId;
         this.projectName = projectName;
@@ -29,12 +49,13 @@ public class Project {
         this.tasks = tasks;
     }
 
-
-    public Project() {
-        this.tasks = new ArrayList<>();
+    public User getUser() {
+        return user;
     }
 
-
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public int getProjectId() {
         return projectId;
@@ -60,11 +81,11 @@ public class Project {
         this.projectName = projectName;
     }
 
-    public double getBudget() {
+    public String getBudget() {
         return budget;
     }
 
-    public void setBudget(double budget) {
+    public void setBudget(String budget) {
         this.budget = budget;
     }
 

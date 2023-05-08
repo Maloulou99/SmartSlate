@@ -31,7 +31,7 @@ public class ProjectRepository {
             pstmt.setString(3, project.getDescription());
             pstmt.setDate(4, Date.valueOf(project.getStartDate()));
             pstmt.setDate(5, project.getEndDate() != null ? Date.valueOf(project.getEndDate()) : null);
-            pstmt.setDouble(6, project.getBudget());
+            pstmt.setString(6, project.getBudget());
             pstmt.setString(7, project.getStatus());
             pstmt.executeUpdate();
 
@@ -87,7 +87,7 @@ public class ProjectRepository {
             pstmt.setString(2, project.getDescription());
             pstmt.setDate(3, Date.valueOf(project.getStartDate()));
             pstmt.setDate(4, project.getEndDate() != null ? Date.valueOf(project.getEndDate()) : null);
-            pstmt.setDouble(5, project.getBudget());
+            pstmt.setString(5, project.getBudget());
             pstmt.setString(6, project.getStatus());
             pstmt.setInt(7, project.getProjectId());
             pstmt.executeUpdate();
@@ -122,7 +122,7 @@ public class ProjectRepository {
                 project.setDescription(rs.getString("Description"));
                 project.setStartDate(rs.getTimestamp("StartDate").toLocalDateTime().toLocalDate());
                 project.setEndDate(rs.getTimestamp("EndDate").toLocalDateTime().toLocalDate());
-                project.setBudget(rs.getDouble("Budget"));
+                project.setBudget(rs.getString("Budget"));
                 project.setStatus(rs.getString("Status"));
                 projects.add(project);
             }
@@ -152,7 +152,7 @@ public class ProjectRepository {
                         rs.getString("Description"),
                         rs.getDate("StartDate").toLocalDate(),
                         rs.getDate("EndDate").toLocalDate(),
-                        rs.getDouble("Budget"),
+                        rs.getString("Budget"),
                         rs.getString("Status"), taskList);
             }
             return projectFound;

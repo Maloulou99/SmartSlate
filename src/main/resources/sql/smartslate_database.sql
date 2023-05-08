@@ -31,7 +31,7 @@ CREATE TABLE Projects
 (
     ProjectID   INTEGER      NOT NULL AUTO_INCREMENT,
     UserID      INTEGER      NOT NULL,
-    ProjectName       VARCHAR(255) NOT NULL,
+    ProjectName VARCHAR(255) NOT NULL,
     Description VARCHAR(1000),
     StartDate   DATE         NOT NULL,
     EndDate     DATE,
@@ -47,10 +47,11 @@ CREATE TABLE Tasks
     ProjectID   INTEGER       NOT NULL,
     Description VARCHAR(1000) NOT NULL,
     Deadline    DATE,
-    AssignedTo  VARCHAR(255),
+    AssignedTo  INTEGER,
     Status      VARCHAR(20)   NOT NULL,
     PRIMARY KEY (TaskID),
-    FOREIGN KEY (ProjectID) REFERENCES Projects (ProjectID) ON DELETE CASCADE
+    FOREIGN KEY (ProjectID) REFERENCES Projects (ProjectID) ON DELETE CASCADE,
+    FOREIGN KEY (AssignedTo) REFERENCES Users (UserID) ON DELETE SET NULL
 );
 
 CREATE TABLE SubTasks
@@ -67,10 +68,10 @@ CREATE TABLE SubTasks
     FOREIGN KEY (TaskID) REFERENCES Tasks (TaskID) ON DELETE CASCADE
 );
 
-CREATE TABLE employeeTasks
+CREATE TABLE EmployeeTasks
 (
     EmployeeTaskID INTEGER NOT NULL AUTO_INCREMENT,
-    UserID         INTEGER NOT NULL,
+    UserID         INTEGER,
     TaskID         INTEGER NOT NULL,
     Hours          DECIMAL(10, 2),
     PRIMARY KEY (EmployeeTaskID),

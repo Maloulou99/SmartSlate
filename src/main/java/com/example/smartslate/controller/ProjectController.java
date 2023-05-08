@@ -30,7 +30,7 @@ public class ProjectController {
 
     @PostMapping("/addProject")
     public String addProject(@RequestParam int userId, @RequestParam String projectName, @RequestParam String description, @RequestParam LocalDate startDate,
-                             @RequestParam LocalDate endDate, @RequestParam double budget, @RequestParam String status, Model model) {
+                             @RequestParam LocalDate endDate, @RequestParam String budget, @RequestParam String status, Model model) {
         Project newProject = new Project();
         newProject.setUserId(userId);
         newProject.setProjectName(projectName);
@@ -57,7 +57,7 @@ public class ProjectController {
 
     @GetMapping("/update-project")
     public String updateProject(@RequestParam String projectName, @RequestParam String description, @RequestParam LocalDate startDate,
-                                @RequestParam LocalDate endDate, @RequestParam double budget, @RequestParam String status, @ModelAttribute Project project, Model model) {
+                                @RequestParam LocalDate endDate, @RequestParam String budget, @RequestParam String status, @ModelAttribute Project project, Model model) {
 
         Project updatedProject = new Project();
         updatedProject.setProjectName(projectName);

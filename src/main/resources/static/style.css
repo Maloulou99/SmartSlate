@@ -11,7 +11,7 @@ body {
     font-size: 16px;
     line-height: 1.5;
     color: #333;
-    background-color: #f4f4f4;
+    background-color: #F3F6F9;
 }
 
 /* Header styles */
@@ -19,6 +19,7 @@ h1 {
     font-size: 36px;
     text-align: center;
     margin: 50px 0;
+    color: #2C3E50;
 }
 
 /* Navigation styles */
@@ -40,17 +41,18 @@ nav li {
 
 nav a {
     text-decoration: none;
-    color: #333;
+    color: #fff;
     font-weight: bold;
     text-transform: uppercase;
     padding: 10px 15px;
     border-radius: 5px;
-    border: 1px solid #333;
+    border: 1px solid #2C3E50;
+    background-color: #2C3E50;
 }
 
 nav a:hover {
-    background-color: #333;
-    color: #fff;
+    background-color: #fff;
+    color: #2C3E50;
 }
 
 /* Main content styles */
@@ -59,7 +61,7 @@ nav a:hover {
     margin: 50px auto;
     padding: 20px;
     background-color: #fff;
-    border: 1px solid #ccc;
+    border: 1px solid #2C3E50;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -67,12 +69,13 @@ nav a:hover {
 .box p {
     margin-bottom: 20px;
     font-size: 18px;
+    color: #333;
 }
 
 /* Footer styles */
 footer {
     text-align: center;
     padding: 20px;
-    background-color: #333;
+    background-color: #2C3E50;
     color: #fff;
 }
