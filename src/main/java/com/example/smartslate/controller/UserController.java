@@ -62,5 +62,31 @@ public class UserController {
         model.addAttribute("role", newUser.getRole());
         return "user-created";
     }
+    @PostMapping("/updateuser")
+    public String updateUser(@ModelAttribute User updatedUser, Model model) {
+        userService.updateUser(updatedUser);
+        model.addAttribute("user", updatedUser);
+        model.addAttribute("updatedAt", updatedUser.getUpdatedAt());
+        model.addAttribute("username", updatedUser.getUserName());
+        model.addAttribute("firstName", updatedUser.getFirstName());
+        model.addAttribute("lastName", updatedUser.getLastName());
+        model.addAttribute("email", updatedUser.getEmail());
+        model.addAttribute("password", updatedUser.getPassword());
+        model.addAttribute("phoneNumber", updatedUser.getPhoneNumber());
+        model.addAttribute("role", updatedUser.getRole());
+        return "user-updated";
+    }
+    @PostMapping("/deleteuser/{userId}")
+    public String deleteUser(@PathVariable int userId, Model model) {
+        userService.deleteUser(userId);
+        return "user-deleted";
+    }
+
+
+
+
+
+
+
 
 }
