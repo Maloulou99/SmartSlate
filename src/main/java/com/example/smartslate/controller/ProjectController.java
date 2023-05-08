@@ -3,15 +3,19 @@ package com.example.smartslate.controller;
 import com.example.smartslate.model.Project;
 import com.example.smartslate.model.Task;
 import com.example.smartslate.service.ProjectService;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequestMapping("smartslate")
+@Controller
 public class ProjectController {
     private ProjectService projectService;
 

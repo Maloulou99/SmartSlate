@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Date;
 
-@RequestMapping("/")
+@RequestMapping("smartslate")
 @Controller
 public class TaskController {
     private ProjectService projectService;

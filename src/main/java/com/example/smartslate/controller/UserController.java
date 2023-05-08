@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/")
+@RequestMapping("smartslate")
 @Controller
 public class UserController {
     private UserService userService;
