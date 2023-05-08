@@ -5,10 +5,7 @@ import com.example.smartslate.model.Task;
 import com.example.smartslate.service.ProjectService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -48,9 +45,28 @@ public class ProjectController {
 
         model.addAttribute("project", newProject);
 
-        return "redirect:/user-frontsite/" + userId; // redirect to the user frontsite with the user id
+        return "redirect:/user-frontsite/" + userId; // redirect to the user frontsite with the  // user id
     }
 
+    @GetMapping("/delete-project")
+    public String deleteProject(@RequestParam("id")  int id, @RequestParam("userId") int userId) {
+        projectService.deleteProject(id);
+        return "reditect:/user-frontsite/" + userId; //will redirect to homepage after project is deleted.
+    }
+
+    @GetMapping("/update-project")
+    public String updateProject(@RequestParam("id") int id, @ModelAttribute Project project, Model model) {
+        projectService.getProjectByUserId(id);
+        model.addAttribute("project", project);
+        return "redirect:/user-frontsite/";
+    }
+
+    @PostMapping("/update-project")
+    public String saveUpdatedProject(@ModelAttribute Project project, Model model) {
+        model.addAttribute("project", project);
+        projectService.updateProject(project);
+        return "redirect:/user-frontsite/";
+    }
 
     @GetMapping("/projects")
     public String getAllProjects(Model model) {
