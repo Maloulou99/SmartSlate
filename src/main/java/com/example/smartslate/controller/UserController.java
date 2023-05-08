@@ -62,7 +62,7 @@ public class UserController {
         model.addAttribute("role", newUser.getRole());
         return "user-created";
     }
-    @PostMapping("/updateuser")
+    @PostMapping("/smartslate/user/update")
     public String updateUser(@ModelAttribute User updatedUser, Model model) {
         userService.updateUser(updatedUser);
         model.addAttribute("user", updatedUser);
@@ -81,6 +81,7 @@ public class UserController {
         userService.deleteUser(userId);
         return "user-deleted";
     }
+    }
 
 
 
@@ -89,4 +90,4 @@ public class UserController {
 
 
 
-}
+

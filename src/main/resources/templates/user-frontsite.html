@@ -8,72 +8,88 @@
 <body>
 <h1>Welcome, <span th:text="${user.firstName}"></span> <span th:text="${user.lastName}"></span>!</h1>
 
-<div class="table-container">
-  <div class="table">
-    <h2>User's Projects</h2>
-    <table>
-      <tr>
-        <th>Project ID</th>
-        <th>Project Name</th>
-        <th>Description</th>
-        <th>Start Date</th>
-        <th>End Date</th>
-        <th>Budget</th>
-        <th>Status</th>
-        <th>Edit</th>
-        <th>Delete</th>
-        <th>Create Task</th>
-      </tr>
-      <tr th:if="${projects.isEmpty()}">
-        <td colspan="10">No projects found... Create a new project!</td>
-      </tr>
-      <tr th:unless="${projects.isEmpty()}" th:each="project : ${projects}">
-        <td th:text="${project.projectId}"></td>
-        <td th:text="${project.projectName}"></td>
-        <td th:text="${project.description}"></td>
-        <td th:text="${project.startDate}"></td>
-        <td th:text="${project.endDate}"></td>
-        <td th:text="${project.budget}"></td>
-        <td th:text="${project.status}"></td>
-        <td>
-          <a th:href="@{'/projects/edit/' + ${project.projectId}}">Edit</a>
-        </td>
-        <td>
-          <a th:href="@{'/projects/delete/' + ${project.projectId}}">Delete</a>
-        </td>
-        <td>
-          <a th:href="@{'/projects/' + ${project.projectId} + '/createTask'}">Create Task</a>
-        </td>
-      </tr>
-    </table>
-  </div>
+<label>#UserID:</label>
+<span th:text="${user.userId}"></span> <br/>
 
-  <div class="table">
-    <h2>Project's Tasks</h2>
-    <table>
-      <tr>
-        <th>Task ID</th>
-        <th>Project Name</th>
-        <th>Description</th>
-        <th>Deadline</th>
-        <th>Assigned To</th>
-        <th>Status</th>
-      </tr>
-      <tr th:if="${tasks.isEmpty()}">
-        <td colspan="6">No tasks found... Create a new task!</td>
-      </tr>
-      <tr th:unless="${tasks.isEmpty()}" th:each="task : ${tasks}">
-        <td th:text="${task.project.projectId}"></td>
-        <td th:text="${task.taskId}"></td>
-        <td th:text="${task.project.projectName}"></td>
-        <td th:text="${task.description}"></td>
-        <td th:text="${task.deadline}"></td>
-        <td th:text="${task.assignedTo}"></td>
-        <td th:text="${task.status}"></td>
-      </tr>
-    </table>
-  </div>
-</div>
+<label>UserName:</label>
+<span th:text="${user.userName}"></span> <br/>
+
+<label>First name:</label>
+<span th:text="${user.firstName}"></span> <br/>
+
+<label>Last name:</label>
+<span th:text="${user.lastName}"></span> <br/>
+
+<label>Email:</label>
+<span th:text="${user.email}"></span><br/>
+
+<label>Phone Number:</label>
+<span th:text="${user.phoneNumber}"></span> <br/>
+
+<label>Role:</label>
+<span th:text="${user.role}"></span> <br/>
 
 <a href="/smartslate/create/project">Create Project</a>
 <a href="/smartslate/update/user">Update User</a>
+<a href="/deleteuser/{userId}">Delete User</a>
+
+
+<h2>User's Projects</h2>
+<table>
+  <tr>
+    <th>Project ID</th>
+    <th>Project Name</th>
+    <th>Description</th>
+    <th>Start Date</th>
+    <th>End Date</th>
+    <th>Budget</th>
+    <th>Status</th>
+  </tr>
+  <tr th:if="${projects.isEmpty()}">
+    <td colspan="7">No projects found... Create a new project!</td>
+  </tr>
+  <tr th:unless="${projects.isEmpty()}" th:each="project : ${projects}">
+    <td th:text="${project.projectId}"></td>
+    <td th:text="${project.projectName}"></td>
+    <td th:text="${project.description}"></td>
+    <td th:text="${project.startDate}"></td>
+    <td th:text="${project.endDate}"></td>
+    <td th:text="${project.budget}"></td>
+    <td th:text="${project.status}"></td>
+    <td>
+      <a th:href="@{'/projects/edit/' + ${project.projectId}}">Edit</a>
+      <a th:href="@{'/projects/delete/' + ${project.projectId}}">Delete</a>
+    </td>
+    <td>
+      <a th:href="@{'/projects/' + ${project.projectId} + '/createTask'}">Create Task</a>
+    </td>
+  </tr>
+</table>
+
+<!-- Display project tasks -->
+<th:block th:if="${not #lists.isEmpty(tasks)}">
+  <h2>Project's Tasks</h2>
+  <table>
+    <tr>
+      <th>Task ID</th>
+      <th>Project Name</th>
+      <th>Description</th>
+      <th>Deadline</th>
+      <th>Assigned To</th>
+      <th>Status</th>
+    </tr>
+    <tr th:if="${tasks.isEmpty()}">
+      <td colspan="6">No tasks found... Create a new task!</td>
+    </tr>
+    <tr th:unless="${tasks.isEmpty()}" th:each="task : ${tasks}">
+      <td th:text="${task.taskId}"></td>
+      <td th:text="${task.project.projectName}"></td>
+      <td th:text="${task.description}"></td>
+      <td th:text="${task.deadline}"></td>
+      <td th:text="${task.assignedTo}"></td>
+      <td th:text="${task.status}"></td>
+    </tr>
+  </table>
+</th:block>
+</body>
+</html>

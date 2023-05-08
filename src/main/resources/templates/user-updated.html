@@ -6,9 +6,9 @@
 </head>
 <body>
 <h1>Update User Information</h1>
-<form method="POST" action="/user/update">
-  <label for="username">Old Username:</label>
-  <input type="text" id="username" name="username" required><br><br>
+<form method="POST" th:action="@{/smartslate/user/update}">
+  <label for="old_username">Old Username:</label>
+  <input type="text" id="old_username" name="old_username" required><br><br>
 
   <label for="new_username">New Username:</label>
   <input type="text" id="new_username" name="new_username" required><br><br>
@@ -35,4 +35,5 @@
 </form>
 </body>
 </html>
+
 
