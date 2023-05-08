@@ -14,10 +14,10 @@ public class Project {
     private LocalDate endDate;
     private double budget;
     private String status;
-    private ArrayList<Task> tasks; // en liste over opgaver i projektet
+    private List<Task> tasks; // en liste over opgaver i projektet
 
 
-    public Project(int projectId, int userId, String projectName, String description, LocalDate startDate, LocalDate endDate, double budget, String status, ArrayList<Task> tasks) {
+    public Project(int projectId, int userId, String projectName, String description, LocalDate startDate, LocalDate endDate, double budget, String status, List<Task> tasks) {
         this.projectId = projectId;
         this.userId = userId;
         this.projectName = projectName;
@@ -100,11 +100,11 @@ public class Project {
         this.endDate = endDate;
     }
 
-    public ArrayList<Task> getTasks() {
+    public List<Task> getTasks() {
         return tasks;
     }
 
-    public void setTasks(ArrayList<Task> tasks) {
+    public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
     }
 
@@ -115,6 +115,7 @@ public class Project {
     public void removeTask(Task task) {
         tasks.remove(task);
     }
+
 
 
 }

@@ -27,6 +27,7 @@ public class ProjectController {
         model.addAttribute("tasks", new ArrayList<Task>()); // add an empty ArrayList of tasks to the model
         return "create-project";
     }
+
     @PostMapping("/addProject")
     public String addProject(@RequestParam int userId, @RequestParam String projectName, @RequestParam String description, @RequestParam LocalDate startDate,
                              @RequestParam LocalDate endDate, @RequestParam double budget, @RequestParam String status, Model model) {
@@ -49,22 +50,26 @@ public class ProjectController {
     }
 
     @GetMapping("/delete-project")
-    public String deleteProject(@RequestParam("id")  int id, @RequestParam("userId") int userId) {
+    public String deleteProject(@RequestParam("id") int id, @RequestParam("userId") int userId) {
         projectService.deleteProject(id);
         return "reditect:/user-frontsite/" + userId; //will redirect to homepage after project is deleted.
     }
 
     @GetMapping("/update-project")
-    public String updateProject(@RequestParam("id") int id, @ModelAttribute Project project, Model model) {
-        projectService.getProjectByUserId(id);
-        model.addAttribute("project", project);
-        return "redirect:/user-frontsite/";
-    }
+    public String updateProject(@RequestParam String projectName, @RequestParam String description, @RequestParam LocalDate startDate,
+                                @RequestParam LocalDate endDate, @RequestParam double budget, @RequestParam String status, @ModelAttribute Project project, Model model) {
 
-    @PostMapping("/update-project")
-    public String saveUpdatedProject(@ModelAttribute Project project, Model model) {
-        model.addAttribute("project", project);
-        projectService.updateProject(project);
+        Project updatedProject = new Project();
+        updatedProject.setProjectName(projectName);
+        updatedProject.setDescription(description);
+        updatedProject.setStartDate(startDate);
+        updatedProject.setEndDate(endDate);
+        updatedProject.setBudget(budget);
+        updatedProject.setStatus(status);
+
+        //add updated data to project
+        int projectId = projectService.createProject(updatedProject);
+        updatedProject.setProjectId(projectId);
         return "redirect:/user-frontsite/";
     }
 
@@ -74,5 +79,4 @@ public class ProjectController {
         model.addAttribute("projects", projects);
         return "user-frontsite"; // navn på din Thymeleaf visningsside for projektlisten
     }
-
 }

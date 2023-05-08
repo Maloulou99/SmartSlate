@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RequestMapping("smartslate")
 @Controller
@@ -24,32 +25,35 @@ public class TaskController {
     }
 
 
-    @PostMapping("/addTask")
-    public String addTask(@RequestParam("description") String description, @RequestParam("deadline") Date deadline,
-                          @RequestParam("assignedTo") String assignedTo, @RequestParam("status") String status,
-                          @ModelAttribute("newProject") Project newProject, Model model) {
-
-        Task newTask = new Task();
-        newTask.setDescription(description);
-        newTask.setDeadline(deadline);
-        newTask.setAssignedTo(assignedTo);
-        newTask.setStatus(status);
-
-        ArrayList<Task> tasks = newProject.getTasks();
-        tasks.add(newTask);
-        newProject.setTasks(tasks);
-
-        model.addAttribute("newTask", new Task()); // initialiser tomt Task-objekt til listen.
-        model.addAttribute("tasks", tasks); // Tilføj opdateret liste over opgaver til listen.
-
+    @GetMapping("/projects/{projectId}/createTask")
+    public String showCreateTaskForm(@PathVariable int projectId, Model model) {
+        Project project = projectService.getProject(projectId);
+        Task task = new Task();
+        task.setProject(project);
+        model.addAttribute("newTask", task);
+        model.addAttribute("project", project);
         return "create-task";
     }
 
     @PostMapping("/projects/{projectId}/createTask")
-    public String createTask(@PathVariable int projectId, @ModelAttribute Task task) {
+    public String createTask(@PathVariable int projectId, @ModelAttribute Task newTask, Model model) {
         Project project = projectService.getProject(projectId);
-        task.setProject(project);
-        taskService.createTask(task);
-        return "redirect:/projects/" + projectId;
+        newTask.setProject(project);
+        taskService.createTask(newTask);
+        List<Task> tasks = project.getTasks();
+        model.addAttribute("newTask", new Task());
+        model.addAttribute("tasks", tasks);
+        return "create-task";
+    }
+
+    @PostMapping("/addTask")
+    public String addTask(@ModelAttribute("newTask") Task newTask, @ModelAttribute("project") Project project, Model model) {
+        List<Task> tasks = project.getTasks();
+        newTask.setProject(project);
+        taskService.createTask(newTask);
+        tasks.add(newTask);
+        model.addAttribute("newTask", new Task());
+        model.addAttribute("tasks", tasks);
+        return "user-frontsite";
     }
 }

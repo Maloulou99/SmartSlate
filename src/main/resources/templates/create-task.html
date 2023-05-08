@@ -8,12 +8,8 @@
 
 <h2>Task Details</h2>
 
-<form method="post" th:action="@{/create-task}">
+<form method="post" th:action="@{/projects/{projectId}/createTask(projectId=${newTask.projectId})}" th:object="${newTask}">
   <table>
-    <tr>
-      <td><label for="taskName">Task Name:</label></td>
-      <td><input type="text" id="taskName" name="taskName" th:value="${newProject.projectName}"></td>
-    </tr>
     <tr>
       <td><label for="taskDescription">Task Description:</label></td>
       <td><textarea id="taskDescription" name="description" th:text="${newTask.description}"></textarea></td>
@@ -22,10 +18,18 @@
       <td><label for="deadline">Task Due Date:</label></td>
       <td><input type="date" id="deadline" name="deadline" th:value="${newTask.deadline}"></td>
     </tr>
+    <tr>
+      <td><label for="assignedTo">Assigned To:</label></td>
+      <td><input type="text" id="assignedTo" name="assignedTo" th:value="${newTask.assignedTo}"></td>
+    </tr>
+    <tr>
+      <td><label for="status">Task Status:</label></td>
+      <td><input type="text" id="status" name="status" th:value="${newTask.status}"></td>
+    </tr>
   </table>
 
-  <input type="hidden" id="userId" name="userId" th:value="${newProject.userId}">
-  <input type="hidden" id="projectId" name="projectId" th:value="${newProject.projectId}">
+  <input type="hidden" id="userId" name="userId" th:value="${newTask.userId}">
+  <input type="hidden" id="projectId" name="projectId" th:value="${newTask.projectId}">
 
   <input type="submit" value="Create Task">
 </form>

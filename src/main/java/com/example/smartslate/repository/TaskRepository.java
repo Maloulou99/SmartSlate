@@ -93,8 +93,10 @@ public class TaskRepository {
             pstmt.setInt(1, taskId);
             pstmt.executeUpdate();
         } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
+
 
     public List<Task> getAllTasks() {
         List<Task> tasks = new ArrayList<>();

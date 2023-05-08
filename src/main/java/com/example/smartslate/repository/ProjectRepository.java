@@ -1,6 +1,7 @@
 package com.example.smartslate.repository;
 
 import com.example.smartslate.model.Project;
+import com.example.smartslate.model.Task;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -17,8 +18,8 @@ public class ProjectRepository {
     @Value("${spring.datasource.password}")
     String user_pwd;
 
-    // Create a project
 
+    // Create a project
     public int createProject(Project project) {
         int projectId = 0;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
@@ -65,6 +66,7 @@ public class ProjectRepository {
                 project.setDescription(rs.getString("Description"));
                 project.setStartDate(rs.getDate("StartDate").toLocalDate());
                 project.setEndDate(rs.getDate("EndDate").toLocalDate());
+                project.setStatus(rs.getString("Status"));
                 projects.add(project);
             }
 
@@ -133,28 +135,32 @@ public class ProjectRepository {
     }
 
     public Project getProject(int projectId) {
-        Project project = null;
-
-        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+        Project projectFound = null;
+        TaskRepository taskRepository = new TaskRepository();
+        try(Connection con = DriverManager.getConnection(url,user_id,user_pwd)){
             String SQL = "SELECT * FROM Projects WHERE ProjectID = ?;";
             PreparedStatement pstmt = con.prepareStatement(SQL);
-            pstmt.setInt(1, projectId);
-            ResultSet rs = pstmt.executeQuery();
+            pstmt.setInt(1,projectId);
 
-            if (rs.next()) {
-                project = new Project();
-                project.setProjectId(rs.getInt("ProjectID"));
-                project.setUserId(rs.getInt("UserID"));
-                project.setProjectName(rs.getString("ProjectName"));
-                project.setDescription(rs.getString("Description"));
-                project.setStartDate(rs.getDate("StartDate").toLocalDate());
-                project.setEndDate(rs.getDate("EndDate").toLocalDate());
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next()){
+                List<Task> taskList = taskRepository.getTasksByProjectId(projectId);
+                projectFound = new Project(
+                        rs.getInt("ProjectID"),
+                        rs.getInt("UserID"),
+                        rs.getString("ProjectName"),
+                        rs.getString("Description"),
+                        rs.getDate("StartDate").toLocalDate(),
+                        rs.getDate("EndDate").toLocalDate(),
+                        rs.getDouble("Budget"),
+                        rs.getString("Status"), taskList);
             }
-        } catch (SQLException e) {
+            return projectFound;
+
+        } catch(SQLException e){
             throw new RuntimeException(e);
         }
-
-        return project;
     }
+
 
 }

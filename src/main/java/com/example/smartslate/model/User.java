@@ -15,8 +15,10 @@ public class User {
     private LocalDate createdAt;
     private LocalDate updatedAt;
     private ArrayList<Project> projects;
+    private ArrayList<Task> tasks;
 
-    public User(int userId, String userName, String firstName, String lastName, String email, String password, String phoneNumber, String role, LocalDate createdAt, LocalDate updatedAt) {
+
+    public User(int userId, String userName, String firstName, String lastName, String email, String password, String phoneNumber, String role, LocalDate createdAt, LocalDate updatedAt, ArrayList<Project> projects, ArrayList<Task> tasks) {
         this.userId = userId;
         this.userName = userName;
         this.firstName = firstName;
@@ -27,6 +29,8 @@ public class User {
         this.role = role;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.projects = projects;
+        this.tasks = tasks;
     }
 
     public User(int userId, String userName, String firstName, String lastName, String email, String password, String phoneNumber, String role, LocalDate createdAt, LocalDate updatedAt, ArrayList<Project> projects) {
@@ -134,6 +138,14 @@ public class User {
 
     public void setProjects(ArrayList<Project> projects) {
         this.projects = projects;
+    }
+
+    public ArrayList<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(ArrayList<Task> tasks) {
+        this.tasks = tasks;
     }
 }
 
