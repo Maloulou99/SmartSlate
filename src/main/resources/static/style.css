@@ -1,25 +1,39 @@
 /* Reset styles */
-* {
+
+{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+/* Additional styles */
+h2 {
+    font-size: 28px;
+    text-align: center;
+    margin: 50px 0 20px;
+    color: #007FFF;
+}
+
+/* Change navigation background color */
+nav a {
+    background-color: #007FFF;
+    border-color: #007FFF;
+}
 
 /* Body styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: "Open Sans", sans-serif;
     font-size: 16px;
     line-height: 1.5;
     color: #333;
-    background-color: #F3F6F9;
+    background-color: #F6F8F9;
 }
 
 /* Header styles */
 h1 {
-    font-size: 36px;
+    font-size: 42px;
     text-align: center;
-    margin: 50px 0;
-    color: #2C3E50;
+    margin: 50px 0 20px;
+    color: #007FFF;
 }
 
 /* Navigation styles */
@@ -46,22 +60,22 @@ nav a {
     text-transform: uppercase;
     padding: 10px 15px;
     border-radius: 5px;
-    border: 1px solid #2C3E50;
-    background-color: #2C3E50;
+    border: 1px solid #007FFF;
+    background-color: #007FFF;
 }
 
 nav a:hover {
     background-color: #fff;
-    color: #2C3E50;
+    color: #007FFF;
 }
 
 /* Main content styles */
 .box {
-    max-width: 600px;
+    max-width: 700px;
     margin: 50px auto;
-    padding: 20px;
+    padding: 40px;
     background-color: #fff;
-    border: 1px solid #2C3E50;
+    border: 1px solid #DDE2E6;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -70,12 +84,18 @@ nav a:hover {
     margin-bottom: 20px;
     font-size: 18px;
     color: #333;
+    line-height: 1.6;
 }
 
 /* Footer styles */
 footer {
     text-align: center;
     padding: 20px;
-    background-color: #2C3E50;
+    background-color: #007FFF;
     color: #fff;
 }
+
+
+
+
+
