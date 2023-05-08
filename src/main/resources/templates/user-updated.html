@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Update User</title>
 </head>
 <body>
 <h1>Update User Information</h1>
-<form method="POST" action="/smartslate/user/update">
+<form method="POST" th:action="@{/smartslate/user/update}">
   <label for="old_username">Old Username:</label>
   <input type="text" id="old_username" name="old_username" required><br><br>
 
@@ -35,4 +35,5 @@
 </form>
 </body>
 </html>
+
 
