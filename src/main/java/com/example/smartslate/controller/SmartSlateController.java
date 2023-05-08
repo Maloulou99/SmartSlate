@@ -36,19 +36,19 @@ public class SmartSlateController {
             return "redirect:/";
         }
 
-        model.addAttribute("userId", user.getUserId());
+        model.addAttribute("userId", user.getUserID());
         model.addAttribute("firstName", user.getFirstName());
         model.addAttribute("lastName", user.getLastName());
 
         // Tjek om brugeren er logget ind
         if (session.getAttribute("loggedInUserId") != null && (int) session.getAttribute("loggedInUserId") == uid) {
-            return "user-frontsite"; // Hvis brugeren er logget ind, vis hovedsiden
+            return "user-frontpage"; // Hvis brugeren er logget ind, vis hovedsiden
         } else {
             return "redirect:/"; // Hvis brugeren ikke er logget ind, send brugeren til login-siden
         }
     }
 
-    @GetMapping("/user/frontsite")
+    @GetMapping("/user/frontpage")
     public String getUserFrontsite(Model model) {
         List<Project> projects = projectService.getAllProjects();
         model.addAttribute("projects", projects);
@@ -56,7 +56,7 @@ public class SmartSlateController {
         List<Task> tasks = taskService.getAllTasks();
         model.addAttribute("tasks", tasks);
 
-        return "user-frontsite";
+        return "user-frontpage";
     }
 
 

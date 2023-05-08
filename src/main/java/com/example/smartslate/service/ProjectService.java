@@ -18,8 +18,8 @@ public class ProjectService {
         return projectRepository.createProject(project);
     }
 
-    public List<Project> getProjectByUserId(int userId) {
-        return projectRepository.getProjectsByUserId(userId);
+    public Project getProjectById(int userId) {
+        return projectRepository.getProjectById(userId);
     }
 
     public void updateProject(Project project) {
@@ -34,8 +34,8 @@ public class ProjectService {
        return projectRepository.getAllProjects();
     }
 
-    public Project getProject(int projectId){
-        return projectRepository.getProject(projectId);
+    public List<Project> getAllProjectsByUserId(int userId){
+        return projectRepository.getAllProjectsByUserId(userId);
     }
 
 }

@@ -19,8 +19,8 @@ public class UserService {
         return userRepository.createUser(newUser);
     }
 
-    public User getUser(int uid){
-        return userRepository.getUser(uid);
+    public User getUser(int userId){
+        return userRepository.getUser(userId);
     }
 
     public void updateUser(User updatedUser){

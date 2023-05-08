@@ -25,7 +25,7 @@ public class LoginRepository {
 
             if (rs.next()) {
                 user = new User();
-                user.setUserId(rs.getInt("UserID"));
+                user.setUserID(rs.getInt("UserID"));
                 user.setEmail(rs.getString("Email"));
                 user.setPassword(rs.getString("Password"));
             }
@@ -47,7 +47,7 @@ public class LoginRepository {
 
             if (rs.next()) {
                 user = new User();
-                user.setUserId(rs.getInt("UserID"));
+                user.setUserID(rs.getInt("UserID"));
                 user.setEmail(rs.getString("Email"));
                 user.setPassword(rs.getString("Password"));
             }
@@ -68,8 +68,8 @@ public class LoginRepository {
 
             if (rs.next()) {
                 user = new User();
-                user.setUserId(rs.getInt("UserID"));
-                user.setUserName(rs.getString("Username"));
+                user.setUserID(rs.getInt("UserID"));
+                user.setUsername(rs.getString("Username"));
                 user.setPassword(rs.getString("Password"));
             }
         } catch (SQLException e) {

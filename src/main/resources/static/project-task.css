@@ -1,19 +1,19 @@
 /* Style for project and task tables */
 
 table {
-    font-family: arial, sans-serif;
+    font-family: Arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
 }
 
 td, th {
-    border: 1px solid #dddddd;
+    border: 1px solid #ccc;
     text-align: left;
     padding: 8px;
 }
 
 th {
-    background-color: #dddddd;
+    background-color: #E6F1FF;
 }
 
 /* Style for task form */
@@ -22,33 +22,37 @@ th {
     border: 1px solid #ccc;
     padding: 20px;
     margin-bottom: 20px;
+    background-color: #F0F6FF;
+    border-radius: 5px;
 }
 
 .task-form label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    color: #222;
+    font-weight: bold;
 }
 
 .task-form input[type="text"],
 .task-form textarea {
     width: 100%;
-    padding: 5px;
-    margin-bottom: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
 .task-form input[type="submit"] {
-    background-color: #4CAF50;
+    background-color: #0074D9;
     color: white;
     border: none;
     border-radius: 5px;
-    padding: 10px;
+    padding: 10px 20px;
     cursor: pointer;
 }
 
 .task-form input[type="submit"]:hover {
-    background-color: #45a049;
+    background-color: #005AB5;
 }
 
 /* Style for project details */
@@ -58,7 +62,10 @@ th {
 }
 
 .project-details h2 {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    color: #222;
+    font-weight: bold;
+    font-size: 28px;
 }
 
 .project-details table td:first-child {
@@ -73,7 +80,10 @@ th {
 }
 
 .task-list h2 {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    color: #222;
+    font-weight: bold;
+    font-size: 28px;
 }
 
 .task-list ul {
@@ -83,13 +93,15 @@ th {
 }
 
 .task-list li {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 .task-list .task-name {
     font-weight: bold;
+    color: #222;
 }
 
 .task-list .task-status {
     font-style: italic;
+    color: #777;
 }

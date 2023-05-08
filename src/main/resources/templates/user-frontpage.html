@@ -9,10 +9,10 @@
 <h1>Welcome, <span th:text="${user.firstName}"></span> <span th:text="${user.lastName}"></span>!</h1>
 
 <label>#UserID:</label>
-<span th:text="${user.userId}"></span> <br/>
+<span th:text="${user.userID}"></span> <br/>
 
 <label>UserName:</label>
-<span th:text="${user.userName}"></span> <br/>
+<span th:text="${user.username}"></span> <br/>
 
 <label>First name:</label>
 <span th:text="${user.firstName}"></span> <br/>
@@ -27,12 +27,11 @@
 <span th:text="${user.phoneNumber}"></span> <br/>
 
 <label>Role:</label>
-<span th:text="${user.role}"></span> <br/>
+<span th:text="${user.roleID}"></span> <br/>
 
-<a href="/smartslate/create/project">Create Project</a>
-<a href="/smartslate/update/user">Update User</a>
-<a href="/deleteuser/{userId}">Delete User</a>
-
+<a href="/projects/create">Create Project</a>
+<a th:href="@{/smartslate/user/update/{userId}(userId=${user.userID})}">Update User</a>
+<a th:href="@{/smartslate/deleteuser/{userId}(userId=${user.userID})}">Delete user</a>
 
 <h2>User's Projects</h2>
 <table>

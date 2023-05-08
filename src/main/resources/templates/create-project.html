@@ -7,49 +7,32 @@
 </head>
 <body>
 <h1>Create Project</h1>
-<form method="POST" action="/smartslate/addProject">
+<form action="/create" method="post">
+    <label for="projectName">Project Name:</label>
+    <input type="text" id="projectName" name="projectName"><br>
 
-    <h2>Project Details</h2>
-    <table>
-        <tr>
-            <td><label for="userID">Bruger ID:</label></td>
-            <td><input type="number" id="userID" name="" required></td>
-        </tr>
+    <label for="description">Description:</label>
+    <textarea id="description" name="description"></textarea><br>
 
-        <tr>
-            <td><label for="projectName">Project Name:</label></td>
-            <td><input type="text" id="projectName" name="projectName"></td>
-        </tr>
-        <tr>
-            <td><label for="description">Description:</label></td>
-            <td><textarea id="description"  name="description"></textarea></td>
-        </tr>
-        <tr>
-            <td><label for="startDate">Start Date:</label></td>
-            <td><input type="date" id="startDate" name="startDate"></td>
-        </tr>
-        <tr>
-            <td><label for="endDate">End Date:</label></td>
-            <td><input type="date" id="endDate"  name="endDate"></td>
-        </tr>
-        <tr>
-            <td><label for="budget">Budget:</label></td>
-            <td><input type="number" id="budget" name="budget"></td>
-        </tr>
-        <tr>
-            <td><label for="status">Status:</label></td>
-            <td>
-                <select id="status"  name="status">
-                    <option value="New">New</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Completed">Completed</option>
-                </select>
-            </td>
-        </tr>
-    </table>
+    <label for="startDate">Start Date:</label>
+    <input type="date" id="startDate" name="startDate"><br>
 
-    <button type="submit" class="btn btn-primary">Add Project</button>
+    <label for="endDate">End Date:</label>
+    <input type="date" id="endDate" name="endDate"><br>
+
+    <label for="budget">Budget:</label>
+    <input type="text" id="budget" name="budget"><br>
+
+    <label for="status">Status:</label>
+    <select id="status" name="status">
+        <option value="Planning">Planning</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Completed">Completed</option>
+    </select><br>
+
+    <button type="submit">Create Project</button>
 </form>
+
 
 </body>
 </html>

@@ -10,7 +10,7 @@
 <div>
     <form th:action="@{/smartslate/adduser}" th:object="${newUser}" method="post">
         <label>
-            <input type="text" name="userName" th:field="*{userName}" placeholder="Type username">
+            <input type="text" name="userName" th:field="*{username}" placeholder="Type username">
         </label>
 
         <label>
@@ -34,7 +34,7 @@
         </label>
 
         <label for="role">Role:</label>
-        <select id="role" name="role" th:field="*{role}">
+        <select id="role" name="role" th:field="*{roleID}">
             <option value="Customer">Customer</option>
             <option value="Employee">Employee</option>
         </select>
@@ -46,7 +46,7 @@
 
 <!-- Viser information om den oprettede brugeren -->
 <div style="display:none;">
-    <input type="hidden" name="userId" th:value="${newUser.userId}" />
+    <input type="hidden" name="userId" th:value="${newUser.userID}" />
     <input type="hidden" name="createdAt" th:value="${newUser.createdAt}" />
 </div>
 

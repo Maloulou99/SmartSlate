@@ -27,4 +27,14 @@ public class TaskService {
     public List<Task> getTasksByAssignedUser(String assignedUser){
         return taskRepository.getTasksByAssignedUser(assignedUser);
     }
+    public void updateTask(Task task) {
+        taskRepository.updateTask(task);
+    }
+    public void deleteTask(int taskId) {
+        taskRepository.deleteTask(taskId);
+    }
+    public Task getTaskById(int taskId){
+        return taskRepository.getTaskById(taskId);
+    }
+
 }

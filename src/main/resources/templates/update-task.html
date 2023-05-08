@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Update task</title>
+</head>
+<body>
+<form th:action="@{/tasks/{id}/update(id=${task.taskId})}" th:method="post" th:object="${task}">
+
+  <div>
+    <input type="hidden" id="projectId" th:field="*{projectId}">
+  </div>
+
+  <div>
+    <input type="hidden" id="taskId" th:field="*{taskId}">
+  </div>
+
+  <div>
+    <label for="taskDescription">Description</label>
+    <textarea name="description" id="taskDescription" cols="30" rows="10" th:field="*{description}" required></textarea>
+  </div>
+
+
+  <div>
+    <label for="deadline">Deadline:</label>
+    <input type="date" id="deadline" th:field="*{deadline}">
+  </div>
+
+
+  <div>
+    <label for="assignedTo">Assigned To</label>
+    <select id="assignedTo" th:field="*{assignedTo}">
+      <option value="">-- None --</option>
+      <option th:each="user : ${users}" th:value="${user.userID}" th:text="${user.username}"></option>
+    </select>
+  </div>
+
+
+  <label for="status">Status:</label>
+  <div>
+    <select id="status" name="status" th:field="*{status}">
+      <option value="New">New</option>
+      <option value="In Progress">In Progress</option>
+      <option value="Completed">Completed</option>
+    </select>
+  </div>
+
+  <div>
+    <button type="submit">Update task</button>
+  </div>
+</form>
+
+</body>
+</html>

@@ -14,13 +14,11 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class LoginController {
     private LoginService loginService;
-    private UserService userService;
     private int current_userId;
 
 
-    public LoginController(LoginService loginService, UserService userService) {
+    public LoginController(LoginService loginService) {
         this.loginService = loginService;
-        this.userService = userService;
     }
 
     protected boolean isLoggedIn(HttpSession session, int uid) {
@@ -49,7 +47,7 @@ public class LoginController {
         User user = loginService.findByUsernameAndPassword(username, password);
         if (user != null) {
             session.setAttribute("user", user);
-            current_userId = user.getUserId();
+            current_userId = user.getUserID();
             session.setMaxInactiveInterval(30);
             return "redirect:/smartslate/user/" + current_userId;
         }

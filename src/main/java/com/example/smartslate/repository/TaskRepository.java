@@ -149,5 +149,30 @@ public class TaskRepository {
         return tasks;
     }
 
+    public Task getTaskById(int taskId) {
+        Task task = null;
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "SELECT * FROM Tasks WHERE TaskID = ?";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, taskId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                task = new Task();
+                task.setTaskId(rs.getInt("TaskID"));
+                task.setProjectId(rs.getInt("ProjectID"));
+                task.setDescription(rs.getString("Description"));
+                task.setDeadline(rs.getDate("Deadline"));
+                task.setAssignedTo(rs.getString("AssignedTo"));
+                task.setStatus(rs.getString("Status"));
+                task.setUserId(rs.getInt("UserID"));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return task;
+    }
 
 }

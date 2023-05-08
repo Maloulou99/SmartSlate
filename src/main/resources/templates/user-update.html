@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Update User</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/project-task.css}">
+</head>
+<body>
+<div class="container">
+  <h1>Update User</h1>
+  <form th:object="${user}" method="post" action="/user/update">
+    <div class="form-group">
+      <label for="username">Username:</label>
+      <input type="text" id="username" th:field="*{username}" />
+    </div>
+    <div class="form-group">
+      <label for="firstName">First Name:</label>
+      <input type="text" id="firstName" th:field="*{firstName}" />
+    </div>
+    <div class="form-group">
+      <label for="lastName">Last Name:</label>
+      <input type="text" id="lastName" th:field="*{lastName}" />
+    </div>
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" id="email" th:field="*{email}" />
+    </div>
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" id="password" th:field="*{password}" />
+    </div>
+    <div class="form-group">
+      <label for="phoneNumber">Phone Number:</label>
+      <input type="text" id="phoneNumber" th:field="*{phoneNumber}" />
+    </div>
+    <div class="form-group">
+      <label for="role">Role:</label>
+      <select id="role" th:field="*{roleID}">
+        <option value="1" th:selected="${user.roleID == 1}">Admin</option>
+        <option value="2" th:selected="${user.roleID == 2}">Project Manager</option>
+        <option value="3" th:selected="${user.roleID == 3}">Team Member</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <input type="submit" value="Update" />
+      <button type="button" onclick="history.back()">Back</button>
+    </div>
+  </form>
+</div>
+</body>
+</html>

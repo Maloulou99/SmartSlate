@@ -1,45 +1,25 @@
 package com.example.smartslate.model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
+
+import java.math.BigDecimal;
 import java.util.List;
+
 
 public class Project {
     private int projectId;
-    private int userId;
+    private int projectManagerId;
     private String projectName;
     private String description;
     private LocalDate startDate;
     private LocalDate endDate;
     private String budget;
     private String status;
-    private List<Task> tasks; // en liste over opgaver i projektet
+    private List<Task> tasks;
 
-    private User user;
-
-
-
-    public Project(int projectId, int userId, String projectName, String description, LocalDate startDate, LocalDate endDate, String budget, String status, List<Task> tasks, User user) {
+    public Project(int projectId, int projectManagerId, String projectName, String description, LocalDate startDate, LocalDate endDate, String budget, String status, List<Task> tasks) {
         this.projectId = projectId;
-        this.userId = userId;
-        this.projectName = projectName;
-        this.description = description;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.budget = budget;
-        this.status = status;
-        this.tasks = tasks;
-        this.user = user;
-    }
-
-    public Project() {
-        this.tasks = new ArrayList<>();
-    }
-
-    public Project(int projectId, int userId, String projectName, String description, LocalDate startDate, LocalDate endDate, String budget, String status, List<Task> tasks) {
-        this.projectId = projectId;
-        this.userId = userId;
+        this.projectManagerId = projectManagerId;
         this.projectName = projectName;
         this.description = description;
         this.startDate = startDate;
@@ -49,28 +29,31 @@ public class Project {
         this.tasks = tasks;
     }
 
-    public User getUser() {
-        return user;
-    }
+   public Project(){
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
+   }
     public int getProjectId() {
         return projectId;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 
     public void setProjectId(int projectId) {
         this.projectId = projectId;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getProjectManagerId() {
+        return projectManagerId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setProjectManagerId(int projectManagerId) {
+        this.projectManagerId = projectManagerId;
     }
 
     public String getProjectName() {
@@ -79,22 +62,6 @@ public class Project {
 
     public void setProjectName(String projectName) {
         this.projectName = projectName;
-    }
-
-    public String getBudget() {
-        return budget;
-    }
-
-    public void setBudget(String budget) {
-        this.budget = budget;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getDescription() {
@@ -121,23 +88,20 @@ public class Project {
         this.endDate = endDate;
     }
 
-    public List<Task> getTasks() {
-        return tasks;
+    public String getBudget() {
+        return budget;
     }
 
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
+    public void setBudget(String budget) {
+        this.budget = budget;
     }
 
-    public void addTask(Task task) {
-        tasks.add(task);
+    public String getStatus() {
+        return status;
     }
 
-    public void removeTask(Task task) {
-        tasks.remove(task);
+    public void setStatus(String status) {
+        this.status = status;
     }
-
-
-
 }
 

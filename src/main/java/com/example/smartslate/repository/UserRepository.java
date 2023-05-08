@@ -18,19 +18,18 @@ public class UserRepository {
     @Value("${spring.datasource.password}")
     String user_pwd;
 
-
     public int createUser(User newUser) {
         int userId = 0;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "INSERT INTO users (username, FirstName, Lastname, Email, Password, phonenumber, role) values (?,?,?,?,?, ?,?);";
+            String SQL = "INSERT INTO users (username, firstName, lastName, email, password, phoneNumber, roleID) values (?, ?, ?, ?, ?, ?, ?);";
             PreparedStatement pstmt = con.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setString(1, newUser.getUserName());
+            pstmt.setString(1, newUser.getUsername());
             pstmt.setString(2, newUser.getFirstName());
             pstmt.setString(3, newUser.getLastName());
             pstmt.setString(4, newUser.getEmail());
             pstmt.setString(5, newUser.getPassword());
             pstmt.setString(6, newUser.getPhoneNumber());
-            pstmt.setString(7, newUser.getRole());
+            pstmt.setInt(7, newUser.getRoleID());
             pstmt.executeUpdate();
 
             ResultSet rs = pstmt.getGeneratedKeys();
@@ -44,45 +43,48 @@ public class UserRepository {
         return userId;
     }
 
-    public User getUser(int uid) {
-        User user = new User();
+    public User getUser(int userId) {
+        User user = null;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT * FROM users WHERE UserID = ?;";
+            String SQL = "SELECT * FROM users WHERE userID = ?;";
             PreparedStatement pstmt = con.prepareStatement(SQL);
-            pstmt.setInt(1, uid);
+            pstmt.setInt(1, userId);
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                user.setUserId(rs.getInt("UserID"));
-                user.setUserName(rs.getString("UserName"));
-                user.setFirstName(rs.getString("Firstname"));
-                user.setLastName(rs.getString("Lastname"));
-                user.setEmail(rs.getString("Email"));
-                user.setPassword(rs.getString("Password"));
-                user.setPhoneNumber(rs.getString("PhoneNumber"));
-                user.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime().toLocalDate());
+                user = new User();
+                user.setUserID(rs.getInt("userID"));
+                user.setUsername(rs.getString("username"));
+                user.setFirstName(rs.getString("firstName"));
+                user.setLastName(rs.getString("lastName"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setPhoneNumber(rs.getString("phoneNumber"));
+                user.setRoleID(rs.getInt("roleID"));
+                user.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
+                user.setUpdatedAt(rs.getTimestamp("updatedAt").toLocalDateTime());
             }
-
-            return user;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
+        return user;
     }
 
     public void updateUser(User updatedUser) {
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "UPDATE Users SET Username = ?, Password = ?, Email = ?, FirstName = ?, " +
-                    "LastName = ?, PhoneNumber = ?, UpdatedAt = CURRENT_TIMESTAMP WHERE UserID = ?;";
+            String SQL = "UPDATE users SET username = ?, password = ?, email = ?, firstName = ?, " +
+                    "lastName = ?, phoneNumber = ?, updatedAt = CURRENT_TIMESTAMP, roleID = ? WHERE userID = ?;";
             PreparedStatement pstmt = con.prepareStatement(SQL);
-            pstmt.setString(1, updatedUser.getUserName());
+            pstmt.setString(1, updatedUser.getUsername());
             pstmt.setString(2, updatedUser.getPassword());
             pstmt.setString(3, updatedUser.getEmail());
             pstmt.setString(4, updatedUser.getFirstName());
             pstmt.setString(5, updatedUser.getLastName());
             pstmt.setString(6, updatedUser.getPhoneNumber());
-            pstmt.setInt(7, updatedUser.getUserId());
+            pstmt.setInt(7, updatedUser.getRoleID());
+            pstmt.setInt(8, updatedUser.getUserID());
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -92,7 +94,7 @@ public class UserRepository {
 
     public void deleteUser(int userId) {
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "DELETE FROM Users WHERE UserID = ?;";
+            String SQL = "DELETE FROM users WHERE userID = ?;";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setInt(1, userId);
             pstmt.executeUpdate();
@@ -102,25 +104,26 @@ public class UserRepository {
         }
     }
 
+
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT * FROM Users;";
+            String SQL = "SELECT * FROM users";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 User user = new User();
-                user.setUserId(rs.getInt("UserID"));
-                user.setUserName(rs.getString("Username"));
-                user.setPassword(rs.getString("Password"));
-                user.setEmail(rs.getString("Email"));
-                user.setPhoneNumber(rs.getString("PhoneNumber"));
-                user.setRole(rs.getString("Role"));
-                user.setFirstName(rs.getString("FirstName"));
-                user.setLastName(rs.getString("LastName"));
-                user.setCreatedAt(rs.getTimestamp("CreatedAt").toLocalDateTime().toLocalDate());
-                user.setUpdatedAt(rs.getTimestamp("UpdatedAt").toLocalDateTime().toLocalDate());
+                user.setUserID(rs.getInt("userID"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setEmail(rs.getString("email"));
+                user.setPhoneNumber(rs.getString("phoneNumber"));
+                user.setFirstName(rs.getString("firstName"));
+                user.setLastName(rs.getString("lastName"));
+                user.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
+                user.setUpdatedAt(rs.getTimestamp("updatedAt").toLocalDateTime());
+                user.setRoleID(rs.getInt("roleID"));
                 users.add(user);
             }
 
@@ -131,7 +134,31 @@ public class UserRepository {
         return users;
     }
 
-
-
+    public List<User> getUsersByRole(String roleName) {
+        List<User> users = new ArrayList<>();
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "SELECT * FROM users WHERE roleID = (SELECT roleID FROM roles WHERE roleName = ?)";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setString(1, roleName);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                User user = new User();
+                user.setUserID(rs.getInt("userID"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setEmail(rs.getString("email"));
+                user.setPhoneNumber(rs.getString("phoneNumber"));
+                user.setFirstName(rs.getString("firstName"));
+                user.setLastName(rs.getString("lastName"));
+                user.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
+                user.setUpdatedAt(rs.getTimestamp("updatedAt").toLocalDateTime());
+                user.setRoleID(rs.getInt("roleID"));
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return users;
+    }
 
 }

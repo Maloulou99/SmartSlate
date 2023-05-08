@@ -3,52 +3,86 @@ package com.example.smartslate.model;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 public class User {
-    private int userId;
-    private String userName;
+    private int userID;
+    private String username;
+    private String password;
+    private String email;
     private String firstName;
     private String lastName;
-    private String email;
-    private String password;
     private String phoneNumber;
-    private String role;
-    private LocalDate createdAt;
-    private LocalDate updatedAt;
-    private ArrayList<Project> projects;
-    private ArrayList<Task> tasks;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private int roleID;
 
-
-    public User(int userId, String userName, String firstName, String lastName, String email, String password, String phoneNumber, String role, LocalDate createdAt, LocalDate updatedAt, ArrayList<Project> projects, ArrayList<Task> tasks) {
-        this.userId = userId;
-        this.userName = userName;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.phoneNumber = phoneNumber;
-        this.role = role;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.projects = projects;
-        this.tasks = tasks;
-    }
-
-    public User(int userId, String userName, String firstName, String lastName, String email, String password, String phoneNumber, String role, LocalDate createdAt, LocalDate updatedAt, ArrayList<Project> projects) {
-        this.userId = userId;
-        this.userName = userName;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.phoneNumber = phoneNumber;
-        this.role = role;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.projects = projects;
-    }
-
+    // constructors
     public User() {
+    }
 
+    public User(int userID, String username, String password, String email, String firstName, String lastName, String phoneNumber, LocalDateTime createdAt, LocalDateTime updatedAt, int roleID) {
+        this.userID = userID;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.roleID = roleID;
+    }
+
+
+    // getters and setters
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getPhoneNumber() {
@@ -59,93 +93,30 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public LocalDate getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDate createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDate getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDate updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    public ArrayList<Project> getProjects() {
-        return projects;
+    public int getRoleID() {
+        return roleID;
     }
 
-    public void setProjects(ArrayList<Project> projects) {
-        this.projects = projects;
-    }
-
-    public ArrayList<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(ArrayList<Task> tasks) {
-        this.tasks = tasks;
+    public void setRoleID(int roleID) {
+        this.roleID = roleID;
     }
 }
+
+
 
