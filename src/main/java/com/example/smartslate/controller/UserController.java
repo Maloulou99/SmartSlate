@@ -74,7 +74,7 @@ public class UserController {
         model.addAttribute("password", updatedUser.getPassword());
         model.addAttribute("phoneNumber", updatedUser.getPhoneNumber());
         model.addAttribute("role", updatedUser.getRole());
-        return "user-updated";
+        return "user-frontsite";
     }
     @PostMapping("/deleteuser/{userId}")
     public String deleteUser(@PathVariable int userId, Model model) {
