@@ -1,107 +1,70 @@
-/* Style for project and task tables */
-
-table {
+body {
+    background-color: #f2f2f2;
     font-family: Arial, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
 }
 
-td, th {
-    border: 1px solid #ccc;
-    text-align: left;
-    padding: 8px;
+h1 {
+    color: #0077cc;
 }
 
-th {
-    background-color: #E6F1FF;
-}
-
-/* Style for task form */
-
-.task-form {
-    border: 1px solid #ccc;
+form {
+    margin: 20px;
     padding: 20px;
-    margin-bottom: 20px;
-    background-color: #F0F6FF;
-    border-radius: 5px;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
 }
 
-.task-form label {
+label {
+    font-weight: bold;
     display: block;
     margin-bottom: 10px;
-    color: #222;
-    font-weight: bold;
+    color: #0077cc;
 }
 
-.task-form input[type="text"],
-.task-form textarea {
+input[type="text"],
+textarea,
+select {
     width: 100%;
     padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
     border-radius: 5px;
+    border: 1px solid #cccccc;
+    margin-bottom: 20px;
 }
 
-.task-form input[type="submit"] {
-    background-color: #0074D9;
-    color: white;
+button[type="submit"] {
+    background-color: #0077cc;
+    color: #ffffff;
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    padding: 10px 20px;
     cursor: pointer;
 }
 
-.task-form input[type="submit"]:hover {
-    background-color: #005AB5;
+button[type="submit"]:hover {
+    background-color: #005fa3;
 }
 
-/* Style for project details */
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
 
-.project-details {
+input[type="date"] {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #cccccc;
     margin-bottom: 20px;
 }
 
-.project-details h2 {
-    margin-bottom: 20px;
-    color: #222;
-    font-weight: bold;
-    font-size: 28px;
-}
-
-.project-details table td:first-child {
-    font-weight: bold;
-    width: 200px;
-}
-
-/* Style for task list */
-
-.task-list {
+select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #cccccc;
     margin-bottom: 20px;
 }
 
-.task-list h2 {
-    margin-bottom: 20px;
-    color: #222;
-    font-weight: bold;
-    font-size: 28px;
-}
-
-.task-list ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.task-list li {
-    margin-bottom: 10px;
-}
-
-.task-list .task-name {
-    font-weight: bold;
-    color: #222;
-}
-
-.task-list .task-status {
-    font-style: italic;
-    color: #777;
+select option {
+    padding: 5px;
 }

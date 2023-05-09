@@ -2,29 +2,29 @@
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" th:href="@{/project-task.css}" />
+    <link rel="stylesheet" href="/project-task.css">
     <title>Create Project</title>
 </head>
 <body>
 <h1>Create Project</h1>
-<form action="/create" method="post">
+<form th:action="@{/projects/create}" th:object="${project}" method="post">
     <label for="projectName">Project Name:</label>
-    <input type="text" id="projectName" name="projectName"><br>
+    <input type="text" id="projectName" th:field="*{projectName}"><br>
 
     <label for="description">Description:</label>
-    <textarea id="description" name="description"></textarea><br>
+    <textarea id="description" th:field="*{description}"></textarea><br>
 
     <label for="startDate">Start Date:</label>
-    <input type="date" id="startDate" name="startDate"><br>
+    <input type="date" id="startDate" th:field="*{startDate}"><br>
 
     <label for="endDate">End Date:</label>
-    <input type="date" id="endDate" name="endDate"><br>
+    <input type="date" id="endDate" th:field="*{endDate}"><br>
 
     <label for="budget">Budget:</label>
-    <input type="text" id="budget" name="budget"><br>
+    <input type="text" id="budget" th:field="*{budget}"><br>
 
     <label for="status">Status:</label>
-    <select id="status" name="status">
+    <select id="status" th:field="*{status}">
         <option value="Planning">Planning</option>
         <option value="In Progress">In Progress</option>
         <option value="Completed">Completed</option>
@@ -32,7 +32,5 @@
 
     <button type="submit">Create Project</button>
 </form>
-
-
 </body>
 </html>
