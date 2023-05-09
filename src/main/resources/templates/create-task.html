@@ -22,10 +22,14 @@
       <td><label for="assignedTo">Assigned To:</label></td>
       <td><input type="text" id="assignedTo" name="assignedTo" th:value="${newTask.assignedTo}"></td>
     </tr>
-    <tr>
-      <td><label for="status">Task Status:</label></td>
-      <td><input type="text" id="status" name="status" th:value="${newTask.status}"></td>
-    </tr>
+
+    <label for="status">Status:</label>
+    <select id="status" name="status" th:value="${project.status}">
+      <option value="Planning">Planning</option>
+      <option value="In Progress">In Progress</option>
+      <option value="Completed">Completed</option>
+    </select><br>
+
   </table>
 
   <input type="hidden" id="userId" name="userId" th:value="${newTask.userId}">

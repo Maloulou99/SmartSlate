@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class LoginController {
     private LoginService loginService;
+    private UserService userService;
     private int current_userId;
 
 
-    public LoginController(LoginService loginService) {
+    public LoginController(LoginService loginService, UserService userService) {
         this.loginService = loginService;
+        this.userService = userService;
     }
 
     protected boolean isLoggedIn(HttpSession session, int uid) {
@@ -40,21 +42,25 @@ public class LoginController {
     public String processLoginForm(
             @RequestParam("usernameOrEmail") String username,
             @RequestParam("password") String password,
-            @RequestParam(value = "userId", required = false) Integer userId, HttpSession session, Model model) {
-        if (userId != null) {
-            current_userId = userId;
+            HttpSession session,
+            Model model) {
+
+        User user = loginService.findByUsernameOrEmailAndPassword(username, password);
+
+        if (user == null) {
+            // Brugeren findes ikke i databasen, vis en fejlmeddelelse
+            model.addAttribute("errorMessage", "Invalid username/email or password.");
+            return "user-login";
         }
-        User user = loginService.findByUsernameAndPassword(username, password);
-        if (user != null) {
-            session.setAttribute("user", user);
-            current_userId = user.getUserID();
-            session.setMaxInactiveInterval(30);
-            return "redirect:/smartslate/user/" + current_userId;
-        }
-        model.addAttribute("wrongCredentials", true);
-        model.addAttribute("userId", null);
-        return "user-login";
+
+        // Brugeren er logget ind, gem brugerens ID i sessionen
+        session.setAttribute("userId", user.getUserID());
+        session.setMaxInactiveInterval(200);
+
+        // Redirect brugeren til "Min side"
+        return "redirect:/smartslate/user/" + user.getUserID();
     }
+
 
 
     @GetMapping("/logout")

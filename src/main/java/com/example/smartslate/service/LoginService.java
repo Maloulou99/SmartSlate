@@ -13,15 +13,8 @@ public class LoginService {
         this.loginRepository = loginRepository;
     }
 
-    public User checkUser(String email, String password) {
-        return loginRepository.checkUser(email, password);
-    }
-
-    public User findByEmailAndPassword(String email, String password){
-        return loginRepository.findByEmailAndPassword(email, password);
-    }
-    public User findByUsernameAndPassword(String username, String password){
-        return loginRepository.findByUsernameAndPassword(username, password);
+    public User findByUsernameOrEmailAndPassword(String usernameOrEmail, String password){
+        return loginRepository.findByUsernameOrEmailAndPassword(usernameOrEmail, password);
     }
 
 

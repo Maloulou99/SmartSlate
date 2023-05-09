@@ -1,11 +1,13 @@
 package com.example.smartslate.controller;
 
 import com.example.smartslate.model.Project;
+import com.example.smartslate.model.User;
 import com.example.smartslate.service.ProjectService;
+import com.example.smartslate.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -13,13 +15,15 @@ import java.util.List;
 @RequestMapping("/projects")
 public class ProjectController {
 
-    private final ProjectService projectService;
+    private ProjectService projectService;
+    private UserService userService;
 
-    public ProjectController(ProjectService projectService) {
+    public ProjectController(ProjectService projectService, UserService userService) {
         this.projectService = projectService;
+        this.userService = userService;
     }
 
-    @GetMapping
+    @GetMapping("/all-projects")
     public String getAllProjects(Model model) {
         List<Project> projects = projectService.getAllProjects();
         model.addAttribute("projects", projects);
@@ -27,16 +31,37 @@ public class ProjectController {
     }
 
     @GetMapping("/create")
-    public String createProjectForm(Model model) {
+    public String createProjectForm(Model model, HttpSession session) {
         model.addAttribute("project", new Project());
+        Integer userIdObj = (Integer) session.getAttribute("userId"); // Hent brugerens ID fra session
+        if (userIdObj == null) {
+            // Brugeren er ikke logget ind, så redirect til login siden eller vis en fejlmeddelelse
+            return "redirect:/login";
+        }
+        int userId = userIdObj;
+        User user = userService.getUser(userId); // Hent brugeren med det pågældende ID
+        model.addAttribute("user", user);
         return "create-project";
     }
 
-    @PostMapping("/create")
-    public String createProject(@ModelAttribute Project project) {
-        projectService.createProject(project);
-        return "redirect:/user-frontpage";
+
+    @GetMapping("/projects/{userId}")
+    public String getUserProjects(@PathVariable("userId") int userId, Model model) {
+        List<Project> userProjects = projectService.getAllProjectsByUserId(userId);
+        model.addAttribute("projects", userProjects);
+        model.addAttribute("user", userService.getUser(userId));
+        return "user-frontpage";
     }
+
+
+    @PostMapping("/create")
+    public String createProject(@ModelAttribute Project project, HttpSession httpSession) {
+        int user = (int) httpSession.getAttribute("userId");
+        project.setProjectManagerId(user);
+        projectService.createProject(project);
+        return "redirect:/smartslate/user/" + user;
+    }
+
 
     @GetMapping("/update/{id}")
     public String updateProjectForm(@PathVariable("id") int id, Model model) {
@@ -52,9 +77,10 @@ public class ProjectController {
         return "redirect:/user-frontpage";
     }
 
+
     @GetMapping("/delete/{id}")
     public String deleteProject(@PathVariable("id") int id) {
         projectService.deleteProject(id);
-        return "redirect:/user-frontpage";
+        return "redirect:/projects/projects/{id}";
     }
 }

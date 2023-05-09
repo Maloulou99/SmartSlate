@@ -82,6 +82,7 @@ public class UserRepository {
             pstmt.setString(3, updatedUser.getEmail());
             pstmt.setString(4, updatedUser.getFirstName());
             pstmt.setString(5, updatedUser.getLastName());
+            //pstmt.setDate(6, updatedUser.getUpdatedAt());
             pstmt.setString(6, updatedUser.getPhoneNumber());
             pstmt.setInt(7, updatedUser.getRoleID());
             pstmt.setInt(8, updatedUser.getUserID());
@@ -160,5 +161,7 @@ public class UserRepository {
         }
         return users;
     }
+
+
 
 }

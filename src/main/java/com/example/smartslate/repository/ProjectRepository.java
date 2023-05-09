@@ -2,6 +2,7 @@ package com.example.smartslate.repository;
 
 import com.example.smartslate.model.Project;
 import com.example.smartslate.model.Task;
+import com.example.smartslate.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -145,6 +146,19 @@ public class ProjectRepository {
         }
         return projects;
     }
+
+    public void addUserToProject(int userId, int projectId) {
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "INSERT INTO projects (projectManagerID, projectID) VALUES (?, ?)";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, userId);
+            pstmt.setInt(2, projectId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 
 }

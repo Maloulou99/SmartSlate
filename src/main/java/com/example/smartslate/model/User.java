@@ -1,10 +1,7 @@
 package com.example.smartslate.model;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-
+import java.sql.Date;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class User {
     private int userID;

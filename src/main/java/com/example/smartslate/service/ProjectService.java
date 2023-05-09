@@ -38,4 +38,7 @@ public class ProjectService {
         return projectRepository.getAllProjectsByUserId(userId);
     }
 
+    public void addUserToProject(int userId, int projectId) {
+        projectRepository.addUserToProject(userId, projectId);
+    }
 }

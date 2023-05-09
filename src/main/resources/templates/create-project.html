@@ -7,24 +7,24 @@
 </head>
 <body>
 <h1>Create Project</h1>
-<form th:action="@{/projects/create}" th:object="${project}" method="post">
+<form action="/projects/create" method="post">
     <label for="projectName">Project Name:</label>
-    <input type="text" id="projectName" th:field="*{projectName}"><br>
+    <input type="text" id="projectName" name="projectName" th:value="${project.projectName}"><br>
 
     <label for="description">Description:</label>
-    <textarea id="description" th:field="*{description}"></textarea><br>
+    <textarea id="description" name="description" th:value="${project.description}"></textarea><br>
 
     <label for="startDate">Start Date:</label>
-    <input type="date" id="startDate" th:field="*{startDate}"><br>
+    <input type="date" id="startDate" name="startDate" th:value="${project.startDate}"><br>
 
     <label for="endDate">End Date:</label>
-    <input type="date" id="endDate" th:field="*{endDate}"><br>
+    <input type="date" id="endDate" name="endDate" th:value="${project.endDate}"><br>
 
     <label for="budget">Budget:</label>
-    <input type="text" id="budget" th:field="*{budget}"><br>
+    <input type="text" id="budget" name="budget" th:value="${project.budget}"><br>
 
     <label for="status">Status:</label>
-    <select id="status" th:field="*{status}">
+    <select id="status" name="status" th:value="${project.status}">
         <option value="Planning">Planning</option>
         <option value="In Progress">In Progress</option>
         <option value="Completed">Completed</option>
@@ -32,5 +32,7 @@
 
     <button type="submit">Create Project</button>
 </form>
+
+
 </body>
 </html>
