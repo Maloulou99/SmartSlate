@@ -34,7 +34,7 @@ CREATE TABLE users
     updatedAt    DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     roleID       INTEGER             NOT NULL,
     PRIMARY KEY (userID),
-    FOREIGN KEY (roleID) REFERENCES roles(roleID) ON DELETE CASCADE
+    FOREIGN KEY (roleID) REFERENCES roles(roleID)
 );
 
 
@@ -49,7 +49,7 @@ CREATE TABLE projects
     budget           DECIMAL(10, 2),
     status           VARCHAR(20)  NOT NULL,
     PRIMARY KEY (projectID),
-    FOREIGN KEY (projectManagerID) REFERENCES users (userID) ON DELETE CASCADE
+    FOREIGN KEY (projectManagerID) REFERENCES users (userID)
 );
 
 CREATE TABLE tasks
@@ -62,7 +62,7 @@ CREATE TABLE tasks
     status       VARCHAR(20)   NOT NULL,
     PRIMARY KEY (taskID),
     FOREIGN KEY (projectID) REFERENCES projects (projectID) ON DELETE CASCADE,
-    FOREIGN KEY (assignedTo) REFERENCES users (userID) ON DELETE SET NULL
+    FOREIGN KEY (assignedTo) REFERENCES users (userID)
 );
 
 CREATE TABLE subtasks

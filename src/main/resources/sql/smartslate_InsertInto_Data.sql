@@ -16,6 +16,8 @@ VALUES ('bigduke', '1234', 'magnus@email.com', 'Magnus', 'Korse', '11223344', 2)
 INSERT INTO projects (projectManagerID, projectName, description, startDate, endDate, budget, status)
 VALUES (1, 'Project X', 'Description of project X', '2023-01-01', '2023-12-31', 100000.00, 'In progress');
 
+INSERT INTO projects (projectManagerID, projectName, description, startDate, endDate, budget, status)
+VALUES (1, 'Project Y', 'Description of project Y', '2023-06-01', '2023-09-30', 50000.00, 'In progress');
 
 INSERT INTO tasks (projectID, description, deadline, assignedTo, status)
 VALUES (1, 'Task 1 for project X', '2023-02-28', 1, 'In progress');
