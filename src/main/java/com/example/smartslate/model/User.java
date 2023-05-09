@@ -1,6 +1,7 @@
 package com.example.smartslate.model;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class User {
@@ -31,6 +32,7 @@ public class User {
         this.updatedAt = updatedAt;
         this.roleID = roleID;
     }
+
 
 
     // getters and setters

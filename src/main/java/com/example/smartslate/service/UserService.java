@@ -32,7 +32,13 @@ public class UserService {
     }
     public List<User> getAllUsers(){
        return userRepository.getAllUsers();
-
     }
 
+    public List<User> getProjectManagersByProjectId(int projectId){
+        return userRepository.getProjectManagersByProjectId(projectId);
+    }
+
+    public User getUserByUsername(String username){
+        return userRepository.getUserByUsername(username);
+    }
 }

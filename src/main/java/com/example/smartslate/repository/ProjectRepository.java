@@ -53,7 +53,7 @@ public class ProjectRepository {
             pstmt.setString(2, project.getProjectName());
             pstmt.setString(3, project.getDescription());
             pstmt.setDate(4, Date.valueOf(project.getStartDate()));
-            pstmt.setDate(5, project.getEndDate() != null ? Date.valueOf(project.getEndDate()) : null);
+            pstmt.setDate(5, Date.valueOf(project.getEndDate()));
             pstmt.setString(6, project.getBudget());
             pstmt.setString(7, project.getStatus());
             pstmt.setInt(8, project.getProjectId());
@@ -77,7 +77,7 @@ public class ProjectRepository {
     public Project getProjectById(int projectId) {
         Project project = null;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT * FROM projects WHERE projectID=?";
+            String SQL = "SELECT * FROM projects WHERE projectManagerID = ?";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setInt(1, projectId);
             ResultSet rs = pstmt.executeQuery();
@@ -88,7 +88,7 @@ public class ProjectRepository {
                 project.setProjectName(rs.getString("projectName"));
                 project.setDescription(rs.getString("description"));
                 project.setStartDate(rs.getDate("startDate").toLocalDate());
-                project.setEndDate(rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null);
+                project.setEndDate(rs.getDate("endDate").toLocalDate());
                 project.setBudget(rs.getString("budget"));
                 project.setStatus(rs.getString("status"));
             }
@@ -111,7 +111,7 @@ public class ProjectRepository {
                 project.setProjectName(rs.getString("projectName"));
                 project.setDescription(rs.getString("description"));
                 project.setStartDate(rs.getDate("startDate").toLocalDate());
-                project.setEndDate(rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null);
+                project.setEndDate(rs.getDate("endDate").toLocalDate());
                 project.setBudget(rs.getString("budget"));
                 project.setStatus(rs.getString("status"));
                 projects.add(project);
@@ -125,7 +125,7 @@ public class ProjectRepository {
     public List<Project> getAllProjectsByUserId(int userId) {
         List<Project> projects = new ArrayList<>();
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT p.* FROM projects p JOIN tasks t ON p.projectID = t.projectID JOIN employeeTasks et ON t.taskID = et.taskID WHERE et.taskEmployeeID = ?";
+            String SQL = "SELECT * FROM projects WHERE projectManagerID = ?";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setInt(1, userId);
             ResultSet rs = pstmt.executeQuery();
@@ -136,7 +136,7 @@ public class ProjectRepository {
                 project.setProjectName(rs.getString("projectName"));
                 project.setDescription(rs.getString("description"));
                 project.setStartDate(rs.getDate("startDate").toLocalDate());
-                project.setEndDate(rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null);
+                project.setEndDate(rs.getDate("endDate").toLocalDate());
                 project.setBudget(rs.getString("budget"));
                 project.setStatus(rs.getString("status"));
                 projects.add(project);
@@ -147,17 +147,6 @@ public class ProjectRepository {
         return projects;
     }
 
-    public void addUserToProject(int userId, int projectId) {
-        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "INSERT INTO projects (projectManagerID, projectID) VALUES (?, ?)";
-            PreparedStatement pstmt = con.prepareStatement(SQL);
-            pstmt.setInt(1, userId);
-            pstmt.setInt(2, projectId);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
 
 

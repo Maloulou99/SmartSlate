@@ -63,6 +63,10 @@ public class UserController {
         return "user-created";
     }
 
+    @GetMapping("/{username}")
+    public User getUserByUsername(@PathVariable String username) {
+        return userService.getUserByUsername(username);
+    }
     @GetMapping("/user/update/{userId}")
     public String updateUserForm(@PathVariable int userId, Model model) {
         User user = userService.getUser(userId);

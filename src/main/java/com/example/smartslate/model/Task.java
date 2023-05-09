@@ -1,19 +1,20 @@
 package com.example.smartslate.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class Task {
     private int taskId;
     private int projectId;
     private String description;
-    private Date deadline;
+    private String deadline;
     private String assignedTo;
     private String status;
     private Project project;
 
     private int userId; // Fremmednøgle til User-tabellen
 
-    public Task(int taskId, int projectId, String description, Date deadline, String assignedTo, String status, Project project, int userId) {
+    public Task(int taskId, int projectId, String description, String deadline, String assignedTo, String status, Project project, int userId) {
         this.taskId = taskId;
         this.projectId = projectId;
         this.description = description;
@@ -26,6 +27,13 @@ public class Task {
 
     public Task(){
 
+    }
+
+    public Task(String description, String deadline, String status, Project project) {
+        this.description = description;
+        this.deadline = deadline;
+        this.status = status;
+        this.project = project;
     }
 
     public Project getProject() {
@@ -60,12 +68,8 @@ public class Task {
         this.description = description;
     }
 
-    public Date getDeadline() {
+    public String getDeadline() {
         return deadline;
-    }
-
-    public void setDeadline(Date deadline) {
-        this.deadline = deadline;
     }
 
     public String getAssignedTo() {
@@ -75,6 +79,7 @@ public class Task {
     public void setAssignedTo(String assignedTo) {
         this.assignedTo = assignedTo;
     }
+
 
     public String getStatus() {
         return status;
@@ -91,4 +96,9 @@ public class Task {
     public void setUserId(int userId) {
         this.userId = userId;
     }
+
+    public void setDeadline(String deadline) {
+        this.deadline = deadline;
+    }
+
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -135,12 +136,12 @@ public class UserRepository {
         return users;
     }
 
-    public List<User> getUsersByRole(String roleName) {
-        List<User> users = new ArrayList<>();
+    public List<User> getProjectManagersByProjectId(int projectId) {
+        List<User> projectManagers = new ArrayList<>();
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT * FROM users WHERE roleID = (SELECT roleID FROM roles WHERE roleName = ?)";
+            String SQL = "SELECT u.* FROM users u INNER JOIN projects p ON u.userID = p.projectManagerID WHERE p.projectID = ?";
             PreparedStatement pstmt = con.prepareStatement(SQL);
-            pstmt.setString(1, roleName);
+            pstmt.setInt(1, projectId);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 User user = new User();
@@ -148,19 +149,47 @@ public class UserRepository {
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
                 user.setEmail(rs.getString("email"));
-                user.setPhoneNumber(rs.getString("phoneNumber"));
                 user.setFirstName(rs.getString("firstName"));
                 user.setLastName(rs.getString("lastName"));
+                user.setPhoneNumber(rs.getString("phoneNumber"));
                 user.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
                 user.setUpdatedAt(rs.getTimestamp("updatedAt").toLocalDateTime());
                 user.setRoleID(rs.getInt("roleID"));
-                users.add(user);
+                projectManagers.add(user);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return users;
+        return projectManagers;
     }
+
+
+    public User getUserByUsername(String username) {
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "SELECT * FROM Users WHERE Username = ?";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                int userID = rs.getInt("userID");
+                String password = rs.getString("password");
+                String email = rs.getString("email");
+                String firstName = rs.getString("firstName");
+                String lastName = rs.getString("lastName");
+                String phoneNumber = rs.getString("phoneNumber");
+                LocalDateTime createdAt = rs.getTimestamp("createdAt").toLocalDateTime();
+                LocalDateTime updatedAt = rs.getTimestamp("updatedAt").toLocalDateTime();
+                int roleID = rs.getInt("roleID");
+                return new User(userID, username, password, email, firstName, lastName, phoneNumber, createdAt, updatedAt, roleID);
+            } else {
+                return null; // no user with the given username was found
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 
 
 
