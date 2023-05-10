@@ -78,9 +78,9 @@ public class ProjectController {
     }
 
 
-    @GetMapping("/delete/{id}")
-    public String deleteProject(@PathVariable("id") int id) {
+    @GetMapping("/delete/{id}/{userid}")
+    public String deleteProject(@PathVariable("id") int id, @PathVariable("userid") int userID) {
         projectService.deleteProject(id);
-        return "redirect:/projects/projects/{id}";
+        return "redirect:/smartslate/user/" + userID;
     }
 }
