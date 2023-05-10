@@ -71,11 +71,16 @@ public class UserController {
     public String updateUserForm(@PathVariable int userId, Model model) {
         User user = userService.getUser(userId);
         model.addAttribute("user", user);
+        System.out.println(userId);
         return "user-update";
     }
 
     @PostMapping("/user/update")
-    public String updateUser(@ModelAttribute("user") User updatedUser) {
+    public String updateUser(@RequestBody User updatedUser, Model model) {
+        //User user = userService.getUser(userId);
+        //User user = model.getAttribute(User user);
+        System.out.println(updatedUser.getPhoneNumber());
+        System.out.println(updatedUser);
         userService.updateUser(updatedUser);
         return "user-frontpage";
     }
