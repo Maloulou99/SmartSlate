@@ -58,11 +58,6 @@ public class SmartSlateController {
 
         return "user-frontpage";
     }
-
-
-
-
-
 }
 
 

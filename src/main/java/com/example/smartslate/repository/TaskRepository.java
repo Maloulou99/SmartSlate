@@ -32,13 +32,14 @@ public class TaskRepository {
     public int createTask(Task task) {
         int taskId = 0;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "INSERT INTO Tasks (Description, Deadline, AssignedTo, Status) "
-                    + "VALUES (?, ?, ?, ?)";
+            String SQL = "INSERT INTO Tasks (projectID, Description, Deadline, AssignedTo, Status)"
+                    + "VALUES (?, ?, ?, ?, ?)";
             PreparedStatement pstmt = con.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setString(1, task.getDescription());
-            pstmt.setString(2, task.getDeadline());
-            pstmt.setObject(3, task.getAssignedTo());
-            pstmt.setString(4, task.getStatus());
+            pstmt.setInt(1, task.getProjectId());
+            pstmt.setString(2, task.getDescription());
+            pstmt.setString(3, task.getDeadline());
+            pstmt.setObject(4, task.getAssignedTo());
+            pstmt.setString(5, task.getStatus());
             pstmt.executeUpdate();
 
             ResultSet rs = pstmt.getGeneratedKeys();
@@ -177,7 +178,7 @@ public class TaskRepository {
     }
 
 
-    public Task getTaskById(int taskId) {
+    public int getTaskById(int taskId) {
         Task task = null;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
             String SQL = "SELECT * FROM Tasks WHERE TaskID = ?";
@@ -200,7 +201,7 @@ public class TaskRepository {
             throw new RuntimeException(e);
         }
 
-        return task;
+        return taskId;
     }
 
 }

@@ -23,7 +23,7 @@ CREATE TABLE roles
 -- Create new tables
 CREATE TABLE users
 (
-    userID       INTEGER             NOT NULL AUTO_INCREMENT,
+    userID       INTEGER             NOT NULL AUTO_INCREMENT UNIQUE,
     username     VARCHAR(255) UNIQUE NOT NULL,
     password     VARCHAR(255)        NOT NULL,
     email        VARCHAR(255) UNIQUE,
@@ -37,10 +37,9 @@ CREATE TABLE users
     FOREIGN KEY (roleID) REFERENCES roles(roleID)
 );
 
-
 CREATE TABLE projects
 (
-    projectID        INTEGER      NOT NULL AUTO_INCREMENT,
+    projectID        INTEGER      NOT NULL AUTO_INCREMENT UNIQUE,
     projectManagerID INTEGER      NOT NULL,
     projectName      VARCHAR(255) NOT NULL,
     description      VARCHAR(1000),
@@ -57,7 +56,7 @@ CREATE TABLE tasks
     taskID       INTEGER       NOT NULL AUTO_INCREMENT,
     projectID    INTEGER       NOT NULL,
     description  VARCHAR(1000) NOT NULL,
-    deadline     DATE,
+    deadline     VARCHAR(255),
     assignedTo   INTEGER,
     status       VARCHAR(20)   NOT NULL,
     PRIMARY KEY (taskID),
@@ -89,5 +88,3 @@ CREATE TABLE employeeTasks
     FOREIGN KEY (taskEmployeeID) REFERENCES users (userID) ON DELETE CASCADE,
     FOREIGN KEY (taskID) REFERENCES tasks (taskID) ON DELETE CASCADE
 );
-
-

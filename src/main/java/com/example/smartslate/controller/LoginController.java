@@ -61,8 +61,6 @@ public class LoginController {
         return "redirect:/smartslate/user/" + user.getUserID();
     }
 
-
-
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         // invalidate session and return landing page

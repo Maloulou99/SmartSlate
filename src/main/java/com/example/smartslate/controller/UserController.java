@@ -84,32 +84,8 @@ public class UserController {
     @GetMapping("/deleteuser/{userId}")
     public String deleteUser(@PathVariable int userId) {
         userService.deleteUser(userId);
-        return "redirect:/";
+        return "user-frontpage";
     }
-
-    /*@PostMapping("/smartslate/user/update")
-    public String updateUser(@ModelAttribute User updatedUser, Model model) {
-        userService.updateUser(updatedUser);
-        model.addAttribute("user", updatedUser);
-        model.addAttribute("updatedAt", updatedUser.getUpdatedAt());
-        model.addAttribute("username", updatedUser.getUsername());
-        model.addAttribute("firstName", updatedUser.getFirstName());
-        model.addAttribute("lastName", updatedUser.getLastName());
-        model.addAttribute("email", updatedUser.getEmail());
-        model.addAttribute("password", updatedUser.getPassword());
-        model.addAttribute("phoneNumber", updatedUser.getPhoneNumber());
-        model.addAttribute("role", updatedUser.getRoleID());
-        return "user-updated";
-    }
-    @PostMapping("/deleteuser/{userId}")
-    public String deleteUser(@PathVariable int userId, Model model) {
-        userService.deleteUser(userId);
-        return "user-deleted";
-    }*/
-
-
-
-
 
 }
 

@@ -49,10 +49,8 @@ public class TaskController {
         return "create-task";
     }
 
-
-
-    @PostMapping("/projects/{projectId}/createTask")
-    public String createTask(@PathVariable int projectId,
+   /* @PostMapping("/projects/{projectId}/createTask")
+    public String createTask(@RequestParam("projectId") int projectId,
                              @RequestParam("assignedTo") String assignedTo,
                              @RequestParam("description") String description,
                              @RequestParam("deadline") String deadline,
@@ -60,6 +58,7 @@ public class TaskController {
         Project project = projectService.getProjectById(projectId);
         if (project != null) {
             Task newTask = new Task();
+            newTask.setProjectId(projectId);
             newTask.setDescription(description);
             newTask.setDeadline(deadline);
             newTask.setStatus(status);
@@ -72,7 +71,25 @@ public class TaskController {
         }
         model.addAttribute("projectId", projectId); // add project ID to model
         return "create-task";
-    }
+    }*/
+   @PostMapping("/projects/{projectId}/createTask")
+   public String createTask(@RequestParam("projectId") int projectId, @RequestParam("taskId") int taskId, Model model) {
+       Project project = projectService.getProjectById(projectId);
+       int task = taskService.getTaskById(taskId);
+       if (project != null) {
+           Task newTask = new Task();
+           newTask.setProjectId(projectId);
+           newTask.setProject(project);
+           newTask.setTaskId(task);
+           taskService.createTask(newTask);
+           List<Task> tasks = taskService.getTasksByProjectId(projectId);
+           model.addAttribute("tasks", tasks);
+           model.addAttribute("newTask", new Task());
+           model.addAttribute("projectManagers", userService.getProjectManagersByProjectId(projectId));
+       }
+       model.addAttribute("projectId", projectId); // add project ID to model
+       return "create-task";
+   }
 
 
     @GetMapping("/task/{userId}")
@@ -95,7 +112,7 @@ public class TaskController {
     // Update task
     @GetMapping("/tasks/{id}/edit")
     public String editTask(Model model, @PathVariable("id") int taskId) {
-        Task task = taskService.getTaskById(taskId);
+        int task = taskService.getTaskById(taskId);
         model.addAttribute("task", task);
         model.addAttribute("users", userService.getAllUsers());
         return "update-task";
@@ -113,7 +130,7 @@ public class TaskController {
     // Delete task
     @PostMapping("/tasks/{id}/delete")
     public String deleteTask(@PathVariable("id") int taskId, RedirectAttributes redirectAttributes) {
-        int userId = taskService.getTaskById(taskId).getUserId();
+        int userId = taskService.getTaskById(taskId);
         taskService.deleteTask(taskId);
         redirectAttributes.addAttribute("userId", userId);
         return "redirect:/user/{userId}";

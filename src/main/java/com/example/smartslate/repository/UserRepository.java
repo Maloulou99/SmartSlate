@@ -22,7 +22,7 @@ public class UserRepository {
     public int createUser(User newUser) {
         int userId = 0;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "INSERT INTO users (username, firstName, lastName, email, password, phoneNumber, roleID) values (?, ?, ?, ?, ?, ?, ?);";
+            String SQL = "INSERT INTO users (username, firstName, lastName, email, password, phoneNumber, roleID) values (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = con.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, newUser.getUsername());
             pstmt.setString(2, newUser.getFirstName());
@@ -47,7 +47,7 @@ public class UserRepository {
     public User getUser(int userId) {
         User user = null;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT * FROM users WHERE userID = ?;";
+            String SQL = "SELECT * FROM users WHERE userID = ?";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setInt(1, userId);
             ResultSet rs = pstmt.executeQuery();
@@ -76,7 +76,7 @@ public class UserRepository {
     public void updateUser(User updatedUser) {
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
             String SQL = "UPDATE users SET username = ?, password = ?, email = ?, firstName = ?, " +
-                    "lastName = ?, phoneNumber = ?, updatedAt = CURRENT_TIMESTAMP, roleID = ? WHERE userID = ?;";
+                    "lastName = ?, phoneNumber = ?, updatedAt = CURRENT_TIMESTAMP, roleID = ? WHERE userID = ?";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setString(1, updatedUser.getUsername());
             pstmt.setString(2, updatedUser.getPassword());
@@ -96,7 +96,7 @@ public class UserRepository {
 
     public void deleteUser(int userId) {
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "DELETE FROM users WHERE userID = ?;";
+            String SQL = "DELETE FROM users WHERE userID = ?";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setInt(1, userId);
             pstmt.executeUpdate();

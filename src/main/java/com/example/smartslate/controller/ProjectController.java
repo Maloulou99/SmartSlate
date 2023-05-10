@@ -62,7 +62,6 @@ public class ProjectController {
         return "redirect:/smartslate/user/" + user;
     }
 
-
     @GetMapping("/update/{id}")
     public String updateProjectForm(@PathVariable("id") int id, Model model) {
         Project project = projectService.getProjectById(id);

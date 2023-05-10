@@ -1,6 +1,5 @@
 package com.example.smartslate.repository;
 import com.example.smartslate.model.User;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 

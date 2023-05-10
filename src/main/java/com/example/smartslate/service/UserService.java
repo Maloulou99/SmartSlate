@@ -8,12 +8,11 @@ import java.util.List;
 
 @Service
 public class UserService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
 
     public int createUser(User newUser){
         return userRepository.createUser(newUser);
