@@ -32,12 +32,27 @@ public class TaskRepository {
     public int createTask(Task task) {
         int taskId = 0;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            // Get project manager IDs for the project
+            String managerSQL = "SELECT userID FROM users WHERE roleID != 1 AND userID = ?";
+            PreparedStatement managerStmt = con.prepareStatement(managerSQL);
+            managerStmt.setObject(1, task.getUserId());
+            ResultSet managerRs = managerStmt.executeQuery();
+            List<Integer> managerIds = new ArrayList<>();
+            while (managerRs.next()) {
+                managerIds.add(managerRs.getInt(1));
+            }
+
+            // Insert task with project manager as an option for AssignedTo
             String SQL = "INSERT INTO Tasks (Description, Deadline, AssignedTo, Status) "
                     + "VALUES (?, ?, ?, ?)";
             PreparedStatement pstmt = con.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, task.getDescription());
             pstmt.setString(2, task.getDeadline());
-            pstmt.setObject(3, task.getAssignedTo());
+            if (task.getAssignedTo() == 0 && !managerIds.isEmpty()) {
+                pstmt.setObject(3, managerIds.get(0));
+            } else {
+                pstmt.setObject(3, task.getAssignedTo());
+            }
             pstmt.setString(4, task.getStatus());
             pstmt.executeUpdate();
 
@@ -50,6 +65,7 @@ public class TaskRepository {
         }
         return taskId;
     }
+
 
 
     // Read
@@ -73,8 +89,8 @@ public class TaskRepository {
                 task.setDeadline(rs.getString("deadline"));
                 task.setStatus(rs.getString("status"));
                 User assignedTo = new User();
-                assignedTo.setUsername(rs.getString("assignedTo"));
-                task.setAssignedTo("assignedTo");
+                assignedTo.setUsername(String.valueOf(rs.getInt("assignedTo")));
+                task.setAssignedTo(rs.getInt("assignedTo"));
                 Project project = new Project();
                 project.setProjectId(projectId);
                 project.setProjectManagerId(rs.getInt("projectManagerID"));
@@ -97,7 +113,7 @@ public class TaskRepository {
             pstmt.setInt(1, task.getProjectId());
             pstmt.setString(2, task.getDescription());
             pstmt.setString(3, task.getDeadline());
-            pstmt.setString(4, task.getAssignedTo());
+            pstmt.setInt(4, task.getAssignedTo());
             pstmt.setString(5, task.getStatus());
             pstmt.setInt(6, task.getTaskId());
             pstmt.setInt(7, task.getUserId());
@@ -134,7 +150,7 @@ public class TaskRepository {
                 task.setProjectId(rs.getInt("ProjectID"));
                 task.setDescription(rs.getString("Description"));
                 task.setDeadline(rs.getString("Deadline"));
-                task.setAssignedTo(rs.getString("AssignedTo"));
+                task.setAssignedTo(rs.getInt("AssignedTo"));
                 task.setStatus(rs.getString("Status"));
                 task.setUserId(rs.getInt("UserID"));
                 tasks.add(task);
@@ -163,7 +179,7 @@ public class TaskRepository {
                 task.setProjectId(rs.getInt("ProjectID"));
                 task.setDescription(rs.getString("Description"));
                 task.setDeadline(rs.getString("Deadline"));
-                task.setAssignedTo(rs.getString("assignedTo"));
+                task.setAssignedTo(rs.getInt("assignedTo"));
                 task.setStatus(rs.getString("Status"));
                 task.setUserId(rs.getInt("UserID"));
                 tasks.add(task);
@@ -191,7 +207,7 @@ public class TaskRepository {
                 task.setProjectId(rs.getInt("ProjectID"));
                 task.setDescription(rs.getString("Description"));
                 task.setDeadline(rs.getString("Deadline"));
-                task.setAssignedTo(rs.getString("assignedTo"));
+                task.setAssignedTo(rs.getInt("assignedTo"));
                 task.setStatus(rs.getString("Status"));
                 task.setUserId(rs.getInt("UserID"));
             }

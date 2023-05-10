@@ -1,52 +1,37 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <link rel="stylesheet" href="/project-task.css">
   <meta charset="UTF-8">
   <title>Create Task</title>
 </head>
 <body>
-
-<h2>Task Details</h2>
-
-<form method="post" th:action="@{/projects/{projectId}/createTask(projectId=${projectId})}">
-  <table>
-    <tr>
-      <td><label for="description">Task Description:</label></td>
-      <td><textarea id="description" name="description" th:text="${newTask.description}"></textarea></td>
-    </tr>
-    <tr>
-      <td><label for="deadline">Task Due Date:</label></td>
-      <td><input type="date" id="deadline" name="deadline" th:value="${newTask.deadline}"></td>
-    </tr>
-    <tr>
-      <td>
-        <label for="assignedTo">Assigned To:</label>
-        <select id="assignedTo" name="assignedTo">
-          <option value="">Choose a user</option>
-          <option th:each="user : ${projectManagers}" th:value="${user.userID}" th:text="${user.firstName} + ' ' + ${user.lastName}" th:selected="${newTask.assignedTo != null and newTask.assignedTo == user.userID}"></option>
-        </select>
-      </td>
-
-    </tr>
-    <tr>
-      <td><label for="status">Status:</label></td>
-      <td>
-        <select id="status" name="status" th:value="${newTask.status}">
-          <option value="Planning">Planning</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Completed">Completed</option>
-        </select>
-      </td>
-    </tr>
-  </table>
-
-  <input type="hidden" id="userId" name="userId" th:value="${user.userID}">
-  <input type="hidden" id="projectId" name="projectId" th:value="${projectId}">
-
-  <input type="submit" value="Create Task">
+<h1>Create Task</h1>
+<p>Assigned to: <span th:text="${user.username}"></span></p>
+<form th:action="@{'/projects/' + ${projectId} + '/createTask'}" method="post">
+  <div class="form-group">
+    <label for="description">Beskrivelse</label>
+    <textarea class="form-control" id="description" name="description"></textarea>
+  </div>
+  <div class="form-group">
+    <label for="deadline">Deadline</label>
+    <input type="datetime-local" class="form-control" id="deadline" name="deadline">
+  </div>
+  <div class="form-group">
+    <label for="assignedTo">Assigned To</label>
+    <select class="form-control" id="assignedTo" name="assignedTo">
+      <option value="">Choose a projectmanager</option>
+      <option th:each="pm : ${projectManagers}" th:value="${pm.userID}" th:text="${pm.firstName} + ${pm.lastName}"></option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="status">Status:</label>
+    <select id="status" name="status">
+      <option value="TODO">TODO</option>
+      <option value="IN_PROGRESS">IN PROGRESS</option>
+      <option value="COMPLETED">COMPLETED</option>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">Create Task to project</button>
 </form>
-
-
 </body>
 </html>

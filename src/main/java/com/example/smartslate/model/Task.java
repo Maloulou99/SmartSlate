@@ -8,13 +8,13 @@ public class Task {
     private int projectId;
     private String description;
     private String deadline;
-    private String assignedTo;
+    private int assignedTo;
     private String status;
     private Project project;
 
     private int userId; // Fremmednøgle til User-tabellen
 
-    public Task(int taskId, int projectId, String description, String deadline, String assignedTo, String status, Project project, int userId) {
+    public Task(int taskId, int projectId, String description, String deadline, int assignedTo, String status, Project project, int userId) {
         this.taskId = taskId;
         this.projectId = projectId;
         this.description = description;
@@ -72,11 +72,11 @@ public class Task {
         return deadline;
     }
 
-    public String getAssignedTo() {
+    public int getAssignedTo() {
         return assignedTo;
     }
 
-    public void setAssignedTo(String assignedTo) {
+    public void setAssignedTo(int assignedTo) {
         this.assignedTo = assignedTo;
     }
 
