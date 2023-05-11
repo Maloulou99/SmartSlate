@@ -59,7 +59,7 @@
     <td th:text="${project.budget}"></td>
     <td th:text="${project.status}"></td>
     <td>
-      <a th:href="@{'/projects/edit/' + ${project.projectId}}">Edit</a>
+      <a th:href="@{'/projects/update/' + ${project.projectId}}">update</a>
       <a th:href="@{/projects/delete/{id}/{userid}(id=${project.projectId}, userid=${user.userID})}" onclick="return confirm('Are you sure you want to delete this project?')">Delete Project</a>
       <a th:href="@{'/projects/' + ${project.projectId} + '/createTask'}">Create Task</a>
     </td>

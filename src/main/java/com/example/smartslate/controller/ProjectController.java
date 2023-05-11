@@ -66,6 +66,7 @@ public class ProjectController {
     @GetMapping("/update/{id}")
     public String updateProjectForm(@PathVariable("id") int id, Model model) {
         Project project = projectService.getProjectById(id);
+        System.out.println(id);
         model.addAttribute("project", project);
         return "update-project";
     }
