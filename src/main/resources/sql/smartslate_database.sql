@@ -6,7 +6,6 @@ USE smartslate_database;
 
 -- Drop tables if they exist
 DROP TABLE IF EXISTS employeetasks;
-DROP TABLE IF EXISTS subtasks;
 DROP TABLE IF EXISTS tasks;
 DROP TABLE IF EXISTS projects;
 DROP TABLE IF EXISTS users;
@@ -23,7 +22,7 @@ CREATE TABLE roles
 -- Create new tables
 CREATE TABLE users
 (
-    userID       INTEGER             NOT NULL AUTO_INCREMENT UNIQUE,
+    userID       INTEGER             NOT NULL AUTO_INCREMENT,
     username     VARCHAR(255) UNIQUE NOT NULL,
     password     VARCHAR(255)        NOT NULL,
     email        VARCHAR(255) UNIQUE,
@@ -35,12 +34,13 @@ CREATE TABLE users
     roleID       INTEGER             NOT NULL,
     PRIMARY KEY (userID),
     FOREIGN KEY (roleID) REFERENCES roles(roleID)
-);
+) auto_increment = 1;
+
 
 CREATE TABLE projects
 (
-    projectID        INTEGER      NOT NULL AUTO_INCREMENT UNIQUE,
-    projectManagerID INTEGER      NOT NULL,
+    projectID        INTEGER      NOT NULL AUTO_INCREMENT,
+    projectManagerID INTEGER,
     projectName      VARCHAR(255) NOT NULL,
     description      VARCHAR(1000),
     startDate        DATE         NOT NULL,
@@ -48,7 +48,7 @@ CREATE TABLE projects
     budget           DECIMAL(10, 2),
     status           VARCHAR(20)  NOT NULL,
     PRIMARY KEY (projectID),
-    FOREIGN KEY (projectManagerID) REFERENCES users (userID)
+    FOREIGN KEY (projectManagerID) REFERENCES users (userID) ON DELETE SET NULL
 );
 
 CREATE TABLE tasks
@@ -56,35 +56,23 @@ CREATE TABLE tasks
     taskID       INTEGER       NOT NULL AUTO_INCREMENT,
     projectID    INTEGER       NOT NULL,
     description  VARCHAR(1000) NOT NULL,
-    deadline     VARCHAR(255),
+    deadline     DATE,
     assignedTo   INTEGER,
     status       VARCHAR(20)   NOT NULL,
     PRIMARY KEY (taskID),
-    FOREIGN KEY (projectID) REFERENCES projects (projectID) ON DELETE CASCADE,
-    FOREIGN KEY (assignedTo) REFERENCES users (userID)
-);
-
-CREATE TABLE subtasks
-(
-    subtaskID     INTEGER      NOT NULL AUTO_INCREMENT,
-    taskID        INTEGER      NOT NULL,
-    subtaskName   VARCHAR(255) NOT NULL,
-    description   VARCHAR(1000),
-    startDate     DATE         NOT NULL,
-    endDate       DATE,
-    budget        DECIMAL(10, 2),
-    status        VARCHAR(20)  NOT NULL,
-    PRIMARY KEY (subtaskID),
-    FOREIGN KEY (taskID) REFERENCES tasks (taskID) ON DELETE CASCADE
-);
+    FOREIGN KEY (projectID) REFERENCES projects (projectID),
+    FOREIGN KEY (assignedTo) REFERENCES users (userID) ON DELETE SET NULL
+)auto_increment = 100;
 
 CREATE TABLE employeeTasks
 (
-    employeeTaskID   INTEGER NOT NULL AUTO_INCREMENT,
+    employeeTaskID   INTEGER AUTO_INCREMENT,
     taskEmployeeID   INTEGER,
     taskID           INTEGER NOT NULL,
     hours            DECIMAL(10, 2),
     PRIMARY KEY (employeeTaskID),
-    FOREIGN KEY (taskEmployeeID) REFERENCES users (userID) ON DELETE CASCADE,
-    FOREIGN KEY (taskID) REFERENCES tasks (taskID) ON DELETE CASCADE
-);
+    FOREIGN KEY (taskEmployeeID) REFERENCES users (userID) ON DELETE SET NULL,
+    FOREIGN KEY (taskID) REFERENCES tasks (taskID)
+)auto_increment = 10000;
+
+
