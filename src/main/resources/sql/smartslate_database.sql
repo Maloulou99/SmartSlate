@@ -5,11 +5,12 @@ CREATE DATABASE IF NOT EXISTS smartslate_database;
 USE smartslate_database;
 
 -- Drop tables if they exist
-DROP TABLE IF EXISTS employeeTasks;
+DROP TABLE IF EXISTS employeetasks;
 DROP TABLE IF EXISTS tasks;
 DROP TABLE IF EXISTS projects;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS roles;
+
 
 CREATE TABLE roles
 (
@@ -39,7 +40,7 @@ CREATE TABLE users
 CREATE TABLE projects
 (
     projectID        INTEGER      NOT NULL AUTO_INCREMENT,
-    userID 			 INTEGER,
+    projectManagerID INTEGER,
     projectName      VARCHAR(255) NOT NULL,
     description      VARCHAR(1000),
     startDate        DATE         NOT NULL,
@@ -47,34 +48,31 @@ CREATE TABLE projects
     budget           DECIMAL(10, 2),
     status           VARCHAR(20)  NOT NULL,
     PRIMARY KEY (projectID),
-    FOREIGN KEY (userID) REFERENCES users (userID) ON DELETE SET NULL
+    FOREIGN KEY (projectManagerID) REFERENCES users (userID) ON DELETE SET NULL
 );
 
 CREATE TABLE tasks
 (
-    taskID           INTEGER      NOT NULL AUTO_INCREMENT,
-    projectID        INTEGER      NOT NULL,
-    taskName         VARCHAR(50)  NOT NULL,
-    description      VARCHAR(1000),
-    deadline         VARCHAR(10),
-    projectManagerID INTEGER,
-    status           VARCHAR(20)  NOT NULL,
+    taskID       INTEGER       NOT NULL AUTO_INCREMENT,
+    projectID    INTEGER       NOT NULL,
+    description  VARCHAR(1000) NOT NULL,
+    deadline     DATE,
+    assignedTo   INTEGER,
+    status       VARCHAR(20)   NOT NULL,
     PRIMARY KEY (taskID),
-    FOREIGN KEY (projectID) REFERENCES projects(projectID),
-    FOREIGN KEY (projectManagerID) REFERENCES users (userID)
-);
-
+    FOREIGN KEY (projectID) REFERENCES projects (projectID),
+    FOREIGN KEY (assignedTo) REFERENCES users (userID) ON DELETE SET NULL
+)auto_increment = 100;
 
 CREATE TABLE employeeTasks
 (
-    employeeTaskID INTEGER NOT NULL AUTO_INCREMENT,
-    taskEmployeeID INTEGER,
-    taskID         INTEGER NOT NULL,
-    hours          DECIMAL(10, 2),
+    employeeTaskID   INTEGER AUTO_INCREMENT,
+    taskEmployeeID   INTEGER,
+    taskID           INTEGER NOT NULL,
+    hours            DECIMAL(10, 2),
     PRIMARY KEY (employeeTaskID),
-    FOREIGN KEY (taskEmployeeID) REFERENCES users(userID) ON DELETE SET NULL,
-    FOREIGN KEY (taskID) REFERENCES tasks(taskID)
-) AUTO_INCREMENT = 1;
-
+    FOREIGN KEY (taskEmployeeID) REFERENCES users (userID) ON DELETE SET NULL,
+    FOREIGN KEY (taskID) REFERENCES tasks (taskID)
+)auto_increment = 10000;
 
 
