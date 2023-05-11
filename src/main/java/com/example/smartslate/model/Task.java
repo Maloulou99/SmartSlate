@@ -28,11 +28,12 @@ public class Task {
 
     }
 
-    public Task(String description, String deadline, String status, Project project) {
+    public Task(String taskName, String description, String deadline, int projectManagerID, String status) {
+        this.taskName = taskName;
         this.description = description;
         this.deadline = deadline;
+        this.projectManagerID = projectManagerID;
         this.status = status;
-        this.project = project;
     }
 
     public String getTaskName() {
@@ -107,5 +108,6 @@ public class Task {
     public void setDeadline(String deadline) {
         this.deadline = deadline;
     }
+
 
 }

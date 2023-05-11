@@ -13,30 +13,32 @@
   <table>
     <tr>
       <td><label for="taskName">Task Name:</label></td>
-      <td><input type="text" id="taskName" name="taskName" th:value="${newTask.taskName}"></td>
+      <td><input type="text" id="taskName" name="taskName" th:value="${task.taskName}"></td>
     </tr>
     <tr>
       <td><label for="description">Task Description:</label></td>
-      <td><textarea id="description" name="description" th:text="${newTask.description}"></textarea></td>
+      <td><textarea id="description" name="description" th:text="${task.description}"></textarea></td>
     </tr>
     <tr>
       <td><label for="deadline">Task Due Date:</label></td>
-      <td><input type="date" id="deadline" name="deadline" th:value="${newTask.deadline}"></td>
+      <td><input type="date" id="deadline" name="deadline" th:value="${task.deadline}"></td>
     </tr>
     <tr>
       <td>
-        <label for="projectManagerID">Assigned To:</label>
-        <select id="projectManagerID" name="projectManagerID">
-          <option value="">Choose a Project Manager</option>
-          <option th:each="user : ${projectManagers}" th:value="${user.userID}" th:text="${user.firstName} + ' ' + ${user.lastName}" th:selected="${newTask.projectManagerID != null and newTask.projectManagerID == user.userID}"></option>
-        </select>
+        <option th:each="user : ${projectManagers}"
+                th:value="${user.userID}"
+                th:text="${user.firstName} + ' ' + ${user.lastName}"
+                th:selected="${task.projectManagerID != null and task.projectManagerID == user.userID}">
+        </option>
+
+
       </td>
 
     </tr>
     <tr>
       <td><label for="status">Status:</label></td>
       <td>
-        <select id="status" name="status" th:value="${newTask.status}">
+        <select id="status" name="status" th:value="${task.status}">
           <option value="Planning">Planning</option>
           <option value="In Progress">In Progress</option>
           <option value="Completed">Completed</option>

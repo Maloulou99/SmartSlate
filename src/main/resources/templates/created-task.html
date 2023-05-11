@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/frontsite.css}" />
+    <title>User Frontsite</title>
+</head>
+<body>
+<h1><span th:text="${task.project.projectName}"></span> <span th:text="${task.project.projectId}"></span></h1>
+
+<th:block th:if="${not #lists.isEmpty(task.project.tasks)}">
+    <h2>Project's Tasks</h2>
+    <table>
+        <tr>
+            <th>Task ID</th>
+            <th>Task Name</th>
+            <th>Description</th>
+            <th>Deadline</th>
+            <th>Assigned To</th>
+            <th>Status</th>
+        </tr>
+        <tr th:each="projectTask : ${task.project.tasks}">
+            <td th:text="${projectTask.taskId}"></td>
+            <td th:text="${projectTask.taskName}"></td>
+            <td th:text="${projectTask.description}"></td>
+            <td th:text="${projectTask.deadline}"></td>
+            <td th:text="${projectTask.projectManagerID}"></td>
+            <td th:text="${projectTask.status}"></td>
+        </tr>
+    </table>
+    <a th:href="@{'/projects/' + ${task.project.projectId} + '/createTask'}">Create a new task for this project</a>
+</th:block>
+
+<th:block th:unless="${not #lists.isEmpty(task.project.tasks)}">
+    <h2>No tasks found for Project: <span th:text="${task.project.projectName}"></span> (ID: <span th:text="${task.project.projectId}"></span>)</h2>
+    <p>Please create a new task for this project.</p>
+    <a th:href="@{'/projects/' + ${task.project.projectId} + '/createTask'}">Create a new task for this project</a>
+</th:block>
+
+</body>
+</html>

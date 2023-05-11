@@ -2,7 +2,6 @@ package com.example.smartslate.repository;
 
 import com.example.smartslate.model.Project;
 import com.example.smartslate.model.Task;
-import com.example.smartslate.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -163,7 +162,6 @@ public class TaskRepository implements ITaskRepository {
                 task.setDeadline(rs.getString("deadline"));
                 task.setProjectManagerID(rs.getInt("projectManagerID"));
                 task.setStatus(rs.getString("status"));
-                task.setUserId(rs.getInt("userID"));
                 tasks.add(task);
             }
 

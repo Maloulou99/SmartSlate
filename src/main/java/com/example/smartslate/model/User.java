@@ -15,8 +15,9 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private int roleID;
+    private String roleName;
 
-    public User(int userID, String username, String password, String email, String firstName, String lastName, String phoneNumber, LocalDateTime createdAt, LocalDateTime updatedAt, int roleID) {
+    public User(int userID, String username, String password, String email, String firstName, String lastName, String phoneNumber, LocalDateTime createdAt, LocalDateTime updatedAt, int roleID, String roleName) {
         this.userID = userID;
         this.username = username;
         this.password = password;
@@ -27,6 +28,7 @@ public class User {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.roleID = roleID;
+        this.roleName = roleName;
     }
 
     public User() {
@@ -112,6 +114,14 @@ public class User {
 
     public void setRoleID(int roleID) {
         this.roleID = roleID;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 }
 
