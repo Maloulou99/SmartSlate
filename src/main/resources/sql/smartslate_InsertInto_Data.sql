@@ -19,24 +19,27 @@ VALUES (1, 'Project X', 'Description of project X', '2023-01-01', '2023-12-31', 
 INSERT INTO projects (projectManagerID, projectName, description, startDate, endDate, budget, status)
 VALUES (1, 'Project Y', 'Description of project Y', '2023-06-01', '2023-09-30', 50000.00, 'In progress');
 
-INSERT INTO tasks (projectID, description, deadline, assignedTo, status)
-VALUES (1, 'Task 1 for project X', '2023-02-28', 1, 'In progress');
+INSERT INTO projects (projectManagerID, projectName, description, startDate, endDate, budget, status)
+VALUES (2, 'Project Y', 'Description of project Y', '2023-06-01', '2023-09-30', 50000.00, 'In progress');
+
+INSERT INTO projects (projectManagerID, projectName, description, startDate, endDate, budget, status)
+VALUES (3, 'Project Y', 'Description of project Y', '2023-06-01', '2023-09-30', 50000.00, 'In progress');
 
 INSERT INTO tasks (projectID, description, deadline, assignedTo, status)
-VALUES (1, 'Task 2 for project X', '2023-03-31', 3, 'Not started');
+VALUES (1, 'Task 2 for project X', '2023-03-31', 1, 'Not started');
 
-INSERT INTO subtasks (taskID, subtaskName, description, startDate, endDate, budget, status)
-VALUES (1, 'Subtask A for task 1', 'Description of subtask A for task 1', '2023-02-15', '2023-02-28', 5000.00, 'In progress');
+INSERT INTO tasks (projectID, description, deadline, assignedTo, status)
+VALUES (2, 'Task 1 for project X', '2023-02-28', 2, 'In progress');
 
-INSERT INTO subtasks (taskID, subtaskName, description, startDate, endDate, budget, status)
-VALUES (1, 'Subtask B for task 1', 'Description of subtask B for task 1', '2023-02-28', '2023-03-15', 5000.00, 'Not started');
+INSERT INTO tasks (projectID, description, deadline, assignedTo, status)
+VALUES (3, 'Task 2 for project X', '2023-03-31', 3, 'Not started');
 
-
-INSERT INTO employeeTasks (taskEmployeeID, taskID, hours)
-VALUES (1, 1, 20.5);
 
 INSERT INTO employeeTasks (taskEmployeeID, taskID, hours)
-VALUES (2, 1, 15.0);
+VALUES (1, 100, 20.5);
 
 INSERT INTO employeeTasks (taskEmployeeID, taskID, hours)
-VALUES (3, 2, 10.0);
+VALUES (2, 101, 15.0);
+
+INSERT INTO employeeTasks (taskEmployeeID, taskID, hours)
+VALUES (3, 102, 10.0);
