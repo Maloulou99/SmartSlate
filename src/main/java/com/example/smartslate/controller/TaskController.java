@@ -107,6 +107,7 @@ public class TaskController {
             model.addAttribute("tasks", tasks);
             model.addAttribute("newTask", new Task());
 
+
             // add other model attributes as needed
             model.addAttribute("projectManagers", userService.getProjectManagersByProjectId(projectId));
         }
