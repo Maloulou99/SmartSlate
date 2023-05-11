@@ -76,14 +76,13 @@ public class UserController {
     }
 
     @PostMapping("/user/update")
-    public String updateUser(@RequestBody User updatedUser, Model model) {
-        //User user = userService.getUser(userId);
-        //User user = model.getAttribute(User user);
-        System.out.println(updatedUser.getPhoneNumber());
-        System.out.println(updatedUser);
-        userService.updateUser(updatedUser);
+    public String updateUser(@ModelAttribute User user, Model model) {
+        userService.updateUser(user);
+        projectService.getAllProjectsByUserId(user.getUserID());
+        model.addAttribute("id", user.getUserID());
         return "user-frontpage";
     }
+
 
 
     @GetMapping("/deleteuser/{userId}")
