@@ -181,5 +181,29 @@ public class UserRepository implements IUserRepository{
         return roleName;
     }
 
-
+    public List<User> getAllProjectManagersByID() {
+        List<User> projectManagers = new ArrayList<>();
+        String query = "SELECT * FROM users WHERE roleID = 2";
+        try(Connection con = DriverManager.getConnection(url, user_id, user_pwd)){
+            PreparedStatement pr = con.prepareStatement(query);
+            ResultSet rs = pr.executeQuery();
+            while (rs.next()) {
+                User user = new User();
+                user.setUserID(rs.getInt("userID"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setEmail(rs.getString("email"));
+                user.setFirstName(rs.getString("firstName"));
+                user.setLastName(rs.getString("lastName"));
+                user.setPhoneNumber(rs.getString("phoneNumber"));
+                user.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
+                user.setUpdatedAt(rs.getTimestamp("updatedAt").toLocalDateTime());
+                user.setRoleID(rs.getInt("roleID"));
+                projectManagers.add(user);
+            }
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
+        return projectManagers;
+    }
 }

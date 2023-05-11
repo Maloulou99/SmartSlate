@@ -24,7 +24,14 @@
             <td th:text="${projectTask.taskName}"></td>
             <td th:text="${projectTask.description}"></td>
             <td th:text="${projectTask.deadline}"></td>
-            <td th:text="${projectTask.projectManagerID != null ? projectTask.projectManagerID : 'No project manager assigned.'}"></td>
+            <td>
+                <span th:if="${projectManager.firstName != null}" th:text="${projectManager.firstName}"></span>
+                <span th:if="${projectManager.firstName == null}" th:text="'No project manager assigned.'"></span>
+                <span> </span>
+                <span th:if="${projectManager.lastName != null}" th:text="${projectManager.lastName}"></span>
+                <span th:if="${projectManager.lastName == null}" th:text="'No project manager assigned.'"></span>
+            </td>
+
             <td th:text="${projectTask.status}"></td>
         </tr>
     </table>

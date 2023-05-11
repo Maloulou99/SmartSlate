@@ -29,20 +29,29 @@ public class TaskController {
     }
     @GetMapping("/projects/{projectId}/createTask")
     public String createTaskForm(@PathVariable int projectId, Model model, HttpSession session) {
+        // Få bruger-id fra sessionen
         Integer userIdObj = (Integer) session.getAttribute("userId");
         if (userIdObj == null) {
             return "redirect:/login";
         }
         int userId = userIdObj;
+
+        // Få bruger og projekt
         User user = iUserRepository.getUser(userId);
         Project project = iProjectRepository.getProjectById(projectId);
-        List<User> projectManagers = iUserRepository.getProjectManagersByProjectId(projectId);
+
+        // Hent alle project managers med roleID = 2
+        List<User> projectManagers = iUserRepository.getAllProjectManagersByID();
+
+        // Tilføj data til modellen
         model.addAttribute("user", user);
         model.addAttribute("project", project);
         model.addAttribute("task", new Task());
         model.addAttribute("projectManagers", projectManagers);
+
         return "create-task";
     }
+
 
     @PostMapping("/projects/{projectId}/createTask")
     public String createTask(@PathVariable int projectId,
@@ -143,6 +152,11 @@ public class TaskController {
         int userId = userIdObj;
         List<Task> tasks = iTaskRepository.getTasksByProjectId(projectId);
         Project project = iProjectRepository.getProjectById(projectId);
+        User projectManager = null;
+        if (project.getProjectManagerId() != 0) {
+            projectManager = iUserRepository.getUser(project.getProjectManagerId());
+        }
+        model.addAttribute("projectManager", projectManager);
         model.addAttribute("tasks", tasks);
         model.addAttribute("projectName", project.getProjectName());
         return "created-task";

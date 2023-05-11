@@ -24,16 +24,17 @@
       <td><input type="date" id="deadline" name="deadline" th:value="${task.deadline}"></td>
     </tr>
     <tr>
+      <td><label for="projectManagers">Select An Available Project Manager:</label></td>
       <td>
-        <option th:each="user : ${projectManagers}"
-                th:value="${user.userID}"
-                th:text="${user.firstName} + ' ' + ${user.lastName}"
-                th:selected="${task.projectManagerID != null and task.projectManagerID == user.userID}">
-        </option>
-
-
+        <select id="projectManagers" name="projectManagerId">
+          <option th:each="user : ${projectManagers}"
+                  th:if="${user.roleID == 2}"
+                  th:value="${user.userID}"
+                  th:text="${user.firstName} + ' ' + ${user.lastName}"
+                  th:selected="${task.projectManagerID != null and task.projectManagerID == user.userID}">
+          </option>
+        </select>
       </td>
-
     </tr>
     <tr>
       <td><label for="status">Status:</label></td>
