@@ -81,7 +81,7 @@ public class TaskController {
 
 
     // Update task
-    @GetMapping("/tasks/{id}/edit")
+    @GetMapping("/tasks/{id}/update")
     public String updateTask(Model model, @PathVariable("id") int taskId) {
         Task task = iTaskRepository.getTaskById(taskId);
         model.addAttribute("task", task);
@@ -134,17 +134,23 @@ public class TaskController {
         return "redirect:/user/{userId}";
     }
 
-    @GetMapping("/tasks/{taskId}")
-    public String getTask(@PathVariable int taskId, Model model, HttpSession session) {
+    @GetMapping("/projects/{projectId}/tasks")
+    public String getTasksByProjectId(@PathVariable int projectId, Model model, HttpSession session) {
         Integer userIdObj = (Integer) session.getAttribute("userId");
         if (userIdObj == null) {
             return "redirect:/login";
         }
         int userId = userIdObj;
-        Task task = iTaskRepository.getTaskById(taskId);
-        model.addAttribute("task", task);
+        List<Task> tasks = iTaskRepository.getTasksByProjectId(projectId);
+        Project project = iProjectRepository.getProjectById(projectId);
+        model.addAttribute("tasks", tasks);
+        model.addAttribute("projectName", project.getProjectName());
         return "created-task";
     }
+
+
+
+
 
 }
 

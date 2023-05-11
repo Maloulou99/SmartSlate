@@ -189,7 +189,10 @@ public class TaskRepository implements ITaskRepository {
                 task.setTaskName(rs.getString("taskName"));
                 task.setDescription(rs.getString("description"));
                 task.setDeadline(rs.getString("deadline"));
-                task.setProjectManagerID(rs.getInt("projectManagerID"));
+                int projectManagerID = rs.getInt("projectManagerID");
+                if (!rs.wasNull()) {
+                    task.setProjectManagerID(projectManagerID);
+                }
                 task.setStatus(rs.getString("status"));
                 task.setUserId(rs.getInt("userID"));
             }
@@ -200,5 +203,6 @@ public class TaskRepository implements ITaskRepository {
 
         return task;
     }
+
 
 }

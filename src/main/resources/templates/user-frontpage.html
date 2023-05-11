@@ -61,9 +61,12 @@
     <td>
       <a th:href="@{'/projects/update/' + ${project.projectId}}">update</a>
       <a th:href="@{/projects/delete/{id}/{userid}(id=${project.projectId}, userid=${user.userID})}" onclick="return confirm('Are you sure you want to delete this project?')">Delete Project</a>
-      <a th:href="${tasks.isEmpty() ? '@{/projects/' + project.projectId + '/createTask}' : '@{/projects/' + project.projectId + '/tasks}'}">
-        ${tasks.isEmpty() ? 'Create Task' : 'Show Tasks'}
-      </a>
+      <th:block th:if="${not #lists.isEmpty(tasks)}">
+        <a th:href="@{'/projects/' + ${project.projectId} + '/tasks'}">Show Tasks</a>
+      </th:block>
+      <th:block th:unless="${not #lists.isEmpty(tasks)}">
+        <a th:href="@{'/projects/' + ${project.projectId} + '/createTask'}">Create Task</a>
+      </th:block>
     </td>
   </tr>
 </table>

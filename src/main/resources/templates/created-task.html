@@ -6,9 +6,9 @@
     <title>User Frontsite</title>
 </head>
 <body>
-<h1><span th:text="${task.project.projectName}"></span> <span th:text="${task.project.projectId}"></span></h1>
+<h1><span th:text="${projectName}"></span> <span th:text="${projectId}"></span></h1>
 
-<th:block th:if="${not #lists.isEmpty(task.project.tasks)}">
+<th:block th:if="${not #lists.isEmpty(tasks)}">
     <h2>Project's Tasks</h2>
     <table>
         <tr>
@@ -19,22 +19,22 @@
             <th>Assigned To</th>
             <th>Status</th>
         </tr>
-        <tr th:each="projectTask : ${task.project.tasks}">
+        <tr th:each="projectTask : ${tasks}">
             <td th:text="${projectTask.taskId}"></td>
             <td th:text="${projectTask.taskName}"></td>
             <td th:text="${projectTask.description}"></td>
             <td th:text="${projectTask.deadline}"></td>
-            <td th:text="${projectTask.projectManagerID}"></td>
+            <td th:text="${projectTask.projectManagerID != null ? projectTask.projectManagerID : 'No project manager assigned.'}"></td>
             <td th:text="${projectTask.status}"></td>
         </tr>
     </table>
-    <a th:href="@{'/projects/' + ${task.project.projectId} + '/createTask'}">Create a new task for this project</a>
+    <a th:href="@{'/projects/' + ${projectId} + '/createTask'}">Create a new task for this project</a>
 </th:block>
 
-<th:block th:unless="${not #lists.isEmpty(task.project.tasks)}">
-    <h2>No tasks found for Project: <span th:text="${task.project.projectName}"></span> (ID: <span th:text="${task.project.projectId}"></span>)</h2>
+<th:block th:unless="${not #lists.isEmpty(tasks)}">
+    <h2>No tasks found for Project: <span th:text="${projectName}"></span> (ID: <span th:text="${projectId}"></span>)</h2>
     <p>Please create a new task for this project.</p>
-    <a th:href="@{'/projects/' + ${task.project.projectId} + '/createTask'}">Create a new task for this project</a>
+    <a th:href="@{'/projects/' + ${projectId} + '/createTask'}">Create a new task for this project</a>
 </th:block>
 
 </body>
