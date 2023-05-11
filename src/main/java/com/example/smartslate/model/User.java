@@ -16,10 +16,6 @@ public class User {
     private LocalDateTime updatedAt;
     private int roleID;
 
-    // constructors
-    public User() {
-    }
-
     public User(int userID, String username, String password, String email, String firstName, String lastName, String phoneNumber, LocalDateTime createdAt, LocalDateTime updatedAt, int roleID) {
         this.userID = userID;
         this.username = username;
@@ -33,6 +29,8 @@ public class User {
         this.roleID = roleID;
     }
 
+    public User() {
+    }
 
 
     // getters and setters

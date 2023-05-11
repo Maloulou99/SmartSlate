@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 @Repository
-public class LoginRepository {
+public class LoginRepository implements ILoginRepository {
     @Value("${spring.datasource.url}")
     String url;
     @Value("${spring.datasource.username}")

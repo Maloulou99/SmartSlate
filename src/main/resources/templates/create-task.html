@@ -12,6 +12,10 @@
 <form method="post" th:action="@{/projects/{projectId}/createTask(projectId=${projectId})}">
   <table>
     <tr>
+      <td><label for="taskName">Task Name:</label></td>
+      <td><input type="text" id="taskName" name="taskName" th:value="${newTask.taskName}"></td>
+    </tr>
+    <tr>
       <td><label for="description">Task Description:</label></td>
       <td><textarea id="description" name="description" th:text="${newTask.description}"></textarea></td>
     </tr>
@@ -21,10 +25,10 @@
     </tr>
     <tr>
       <td>
-        <label for="assignedTo">Assigned To:</label>
-        <select id="assignedTo" name="assignedTo">
-          <option value="">Choose a user</option>
-          <option th:each="user : ${projectManagers}" th:value="${user.userID}" th:text="${user.firstName} + ' ' + ${user.lastName}" th:selected="${newTask.assignedTo != null and newTask.assignedTo == user.userID}"></option>
+        <label for="projectManagerID">Assigned To:</label>
+        <select id="projectManagerID" name="projectManagerID">
+          <option value="">Choose a Project Manager</option>
+          <option th:each="user : ${projectManagers}" th:value="${user.userID}" th:text="${user.firstName} + ' ' + ${user.lastName}" th:selected="${newTask.projectManagerID != null and newTask.projectManagerID == user.userID}"></option>
         </select>
       </td>
 
@@ -41,8 +45,7 @@
     </tr>
   </table>
 
-  <input type="hidden" id="userId" name="userId" th:value="${user.userID}">
-  <input type="hidden" id="projectId" name="projectId" th:value="${projectId}">
+  <input type="hidden" id="projectID" name="projectID" th:value="${projectId}">
 
   <input type="submit" value="Create Task">
 </form>

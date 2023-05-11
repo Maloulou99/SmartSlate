@@ -8,7 +8,7 @@
 <body>
 <div class="container">
   <h1>Update User</h1>
-  <form th:object="${user}" th:action="@{/smartslate/user/update/{userId}(userId=${userId})}" method="post">
+  <form th:object="${user}" th:action="@{/smartslate/user/update}" method="post">
     <div class="form-group">
       <input type="hidden" id="userID" th:field="*{userID}" />
     </div>
@@ -47,10 +47,10 @@
     </div>
     <div class="form-group">
       <label for="role">Role:</label>
-      <select id="role" th:field="*{roleID}">
-        <option value="1" th:selected="${user.roleID == 1}">Admin</option>
-        <option value="2" th:selected="${user.roleID == 2}">Project Manager</option>
-        <option value="3" th:selected="${user.roleID == 3}">Team Member</option>
+      <select id="role" name="role" th:field="*{roleID}">
+        <option value="1">Admin</option>
+        <option value="2">Project Manager</option>
+        <option value="2">Employee</option>
       </select>
     </div>
     <div class="form-group">

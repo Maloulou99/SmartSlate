@@ -2,8 +2,8 @@ package com.example.smartslate.controller;
 
 import com.example.smartslate.model.Project;
 import com.example.smartslate.model.User;
-import com.example.smartslate.service.ProjectService;
-import com.example.smartslate.service.UserService;
+import com.example.smartslate.repository.IProjectRepository;
+import com.example.smartslate.repository.IUserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,17 +15,17 @@ import java.util.List;
 @RequestMapping("/projects")
 public class ProjectController {
 
-    private ProjectService projectService;
-    private UserService userService;
+    private IProjectRepository iProjectRepository;
+    private IUserRepository iUserRepository;
 
-    public ProjectController(ProjectService projectService, UserService userService) {
-        this.projectService = projectService;
-        this.userService = userService;
+    public ProjectController(IProjectRepository iProjectRepository, IUserRepository iUserRepository) {
+        this.iProjectRepository = iProjectRepository;
+        this.iUserRepository = iUserRepository;
     }
 
     @GetMapping("/all-projects")
     public String getAllProjects(Model model) {
-        List<Project> projects = projectService.getAllProjects();
+        List<Project> projects = iProjectRepository.getAllProjects();
         model.addAttribute("projects", projects);
         return "user-frontpage"; // navn på din Thymeleaf visningsside for projektlisten
     }
@@ -39,7 +39,7 @@ public class ProjectController {
             return "redirect:/login";
         }
         int userId = userIdObj;
-        User user = userService.getUser(userId); // Hent brugeren med det pågældende ID
+        User user = iUserRepository.getUser(userId); // Hent brugeren med det pågældende ID
         model.addAttribute("user", user);
         return "create-project";
     }
@@ -47,9 +47,9 @@ public class ProjectController {
 
     @GetMapping("/projects/{userId}")
     public String getUserProjects(@PathVariable("userId") int userId, Model model) {
-        List<Project> userProjects = projectService.getAllProjectsByUserId(userId);
+        List<Project> userProjects = iProjectRepository.getAllProjectsByUserId(userId);
         model.addAttribute("projects", userProjects);
-        model.addAttribute("user", userService.getUser(userId));
+        model.addAttribute("user", iUserRepository.getUser(userId));
         return "user-frontpage";
     }
 
@@ -58,14 +58,14 @@ public class ProjectController {
     public String createProject(@ModelAttribute Project project, HttpSession httpSession) {
         int user = (int) httpSession.getAttribute("userId");
         project.setProjectManagerId(user);
-        projectService.createProject(project);
+        iProjectRepository.createProject(project);
         return "redirect:/smartslate/user/" + user;
     }
 
 
     @GetMapping("/update/{id}")
     public String updateProjectForm(@PathVariable("id") int id, Model model) {
-        Project project = projectService.getProjectById(id);
+        Project project = iProjectRepository.getProjectById(id);
         System.out.println(id);
         model.addAttribute("project", project);
         return "update-project";
@@ -74,14 +74,14 @@ public class ProjectController {
     @PostMapping("/update/{id}")
     public String updateProject(@ModelAttribute Project project, @PathVariable("id") int id) {
         project.setProjectId(id);
-        projectService.updateProject(project);
+        iProjectRepository.updateProject(project);
         return "redirect:/user-frontpage";
     }
 
 
     @GetMapping("/delete/{id}/{userid}")
     public String deleteProject(@PathVariable("id") int id, @PathVariable("userid") int userID) {
-        projectService.deleteProject(id);
+        iProjectRepository.deleteProject(id);
         return "redirect:/smartslate/user/" + userID;
     }
 }

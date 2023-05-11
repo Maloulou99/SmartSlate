@@ -9,36 +9,35 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
-public class TaskRepository {
+public class TaskRepository implements ITaskRepository {
     @Value("${spring.datasource.url}")
     String url;
     @Value("${spring.datasource.username}")
     String user_id;
     @Value("${spring.datasource.password}")
     String user_pwd;
-    private StringBuilder userNamesBuilder = new StringBuilder();
     private UserRepository userRepository;
     private ProjectRepository projectRepository;
 
-    public TaskRepository( UserRepository userRepository, ProjectRepository projectRepository) {
+    public TaskRepository(UserRepository userRepository, ProjectRepository projectRepository) {
         this.userRepository = userRepository;
         this.projectRepository = projectRepository;
     }
 
     // Create a task
-    public int createTask(Task task) {
+    public int createTask(Task task, int projectId, int projectManagerId) {
         int taskId = 0;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "INSERT INTO Tasks (Description, Deadline, AssignedTo, Status) "
-                    + "VALUES (?, ?, ?, ?)";
+            String SQL = "INSERT INTO tasks (projectID, taskName, description, deadline, projectManagerID, status) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = con.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setString(1, task.getDescription());
-            pstmt.setString(2, task.getDeadline());
-            pstmt.setObject(3, task.getAssignedTo());
-            pstmt.setString(4, task.getStatus());
+            pstmt.setInt(1, projectId);
+            pstmt.setString(2, task.getTaskName());
+            pstmt.setString(3, task.getDescription());
+            pstmt.setString(4, task.getDeadline());
+            pstmt.setInt(5, projectManagerId);
+            pstmt.setString(6, task.getStatus());
             pstmt.executeUpdate();
 
             ResultSet rs = pstmt.getGeneratedKeys();
@@ -52,32 +51,31 @@ public class TaskRepository {
     }
 
 
-    // Read
+
     public List<Task> getTasksByProjectId(int projectId) {
         List<Task> tasks = new ArrayList<>();
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT t.taskID, t.description, t.deadline, t.status, u.username AS assignedTo, p.projectManagerID " +
+            String SQL = "SELECT t.taskID, t.projectID, t.taskName, t.description, t.deadline, t.projectManagerID, t.status, u.userID " +
                     "FROM tasks t " +
-                    "JOIN users u ON u.userID = t.assignedTo " +
-                    "JOIN projects p ON p.projectID = t.projectID " +
-                    "WHERE t.projectID = ? AND p.projectID = ?;";
+                    "LEFT JOIN employeeTasks et ON t.taskID = et.taskID " +
+                    "LEFT JOIN users u ON et.taskEmployeeID = u.userID " +
+                    "WHERE t.projectID = ?;";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setInt(1, projectId);
-            pstmt.setInt(2, projectId);
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 Task task = new Task();
                 task.setTaskId(rs.getInt("taskID"));
+                task.setProjectId(rs.getInt("projectID"));
+                task.setTaskName(rs.getString("taskName"));
                 task.setDescription(rs.getString("description"));
                 task.setDeadline(rs.getString("deadline"));
+                task.setProjectManagerID(rs.getInt("projectManagerID"));
                 task.setStatus(rs.getString("status"));
-                User assignedTo = new User();
-                assignedTo.setUsername(rs.getString("assignedTo"));
-                task.setAssignedTo("assignedTo");
+                task.setUserId(rs.getInt("userID"));
                 Project project = new Project();
-                project.setProjectId(projectId);
-                project.setProjectManagerId(rs.getInt("projectManagerID"));
+                project.setProjectId(rs.getInt("projectID"));
                 task.setProject(project);
                 tasks.add(task);
             }
@@ -88,24 +86,24 @@ public class TaskRepository {
     }
 
 
-    // Update
     public void updateTask(Task task) {
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "UPDATE Tasks SET ProjectID = ?, Description = ?, Deadline = ?, AssignedTo = ?, Status = ? "
-                    + "WHERE TaskID = ? AND UserID = ?";
+            String SQL = "UPDATE tasks SET projectID = ?, taskName = ?, description = ?, deadline = ?, projectManagerID = ?, status = ? WHERE taskID = ? AND userID = ?";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setInt(1, task.getProjectId());
-            pstmt.setString(2, task.getDescription());
-            pstmt.setString(3, task.getDeadline());
-            pstmt.setString(4, task.getAssignedTo());
-            pstmt.setString(5, task.getStatus());
-            pstmt.setInt(6, task.getTaskId());
-            pstmt.setInt(7, task.getUserId());
+            pstmt.setString(2, task.getTaskName());
+            pstmt.setString(3, task.getDescription());
+            pstmt.setString(4, task.getDeadline());
+            pstmt.setInt(5, task.getProjectManagerID());
+            pstmt.setString(6, task.getStatus());
+            pstmt.setInt(7, task.getTaskId());
+            pstmt.setInt(8, task.getUserId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
 
     // Delete
     public void deleteTask(int taskId) {
@@ -124,19 +122,19 @@ public class TaskRepository {
         List<Task> tasks = new ArrayList<>();
 
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT * FROM Tasks;";
+            String SQL = "SELECT * FROM tasks;";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 Task task = new Task();
-                task.setTaskId(rs.getInt("TaskID"));
-                task.setProjectId(rs.getInt("ProjectID"));
-                task.setDescription(rs.getString("Description"));
-                task.setDeadline(rs.getString("Deadline"));
-                task.setAssignedTo(rs.getString("AssignedTo"));
-                task.setStatus(rs.getString("Status"));
-                task.setUserId(rs.getInt("UserID"));
+                task.setTaskId(rs.getInt("taskID"));
+                task.setProjectId(rs.getInt("projectID"));
+                task.setTaskName(rs.getString("taskName"));
+                task.setDescription(rs.getString("description"));
+                task.setDeadline(rs.getString("deadline"));
+                task.setProjectManagerID(rs.getInt("projectManagerID"));
+                task.setStatus(rs.getString("status"));
                 tasks.add(task);
             }
 
@@ -147,25 +145,25 @@ public class TaskRepository {
         return tasks;
     }
 
-
-    public List<Task> getTasksByAssignedUser(String assignedUser) {
+    public List<Task> getTasksByProjectManagerID(int projectManagerID) {
         List<Task> tasks = new ArrayList<>();
 
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT * FROM Tasks WHERE AssignedTo = ?";
+            String SQL = "SELECT * FROM Tasks WHERE projectManagerID = ?";
             PreparedStatement pstmt = con.prepareStatement(SQL);
-            pstmt.setString(1, assignedUser);
+            pstmt.setInt(1, projectManagerID);
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 Task task = new Task();
-                task.setTaskId(rs.getInt("TaskID"));
-                task.setProjectId(rs.getInt("ProjectID"));
-                task.setDescription(rs.getString("Description"));
-                task.setDeadline(rs.getString("Deadline"));
-                task.setAssignedTo(rs.getString("assignedTo"));
-                task.setStatus(rs.getString("Status"));
-                task.setUserId(rs.getInt("UserID"));
+                task.setTaskId(rs.getInt("taskID"));
+                task.setProjectId(rs.getInt("projectID"));
+                task.setTaskName(rs.getString("taskName"));
+                task.setDescription(rs.getString("description"));
+                task.setDeadline(rs.getString("deadline"));
+                task.setProjectManagerID(rs.getInt("projectManagerID"));
+                task.setStatus(rs.getString("status"));
+                task.setUserId(rs.getInt("userID"));
                 tasks.add(task);
             }
 
@@ -175,6 +173,7 @@ public class TaskRepository {
 
         return tasks;
     }
+
 
 
     public Task getTaskById(int taskId) {
@@ -187,13 +186,14 @@ public class TaskRepository {
 
             if (rs.next()) {
                 task = new Task();
-                task.setTaskId(rs.getInt("TaskID"));
-                task.setProjectId(rs.getInt("ProjectID"));
-                task.setDescription(rs.getString("Description"));
-                task.setDeadline(rs.getString("Deadline"));
-                task.setAssignedTo(rs.getString("assignedTo"));
-                task.setStatus(rs.getString("Status"));
-                task.setUserId(rs.getInt("UserID"));
+                task.setTaskId(rs.getInt("taskID"));
+                task.setProjectId(rs.getInt("projectID"));
+                task.setTaskName(rs.getString("taskName"));
+                task.setDescription(rs.getString("description"));
+                task.setDeadline(rs.getString("deadline"));
+                task.setProjectManagerID(rs.getInt("projectManagerID"));
+                task.setStatus(rs.getString("status"));
+                task.setUserId(rs.getInt("userID"));
             }
 
         } catch (SQLException e) {
