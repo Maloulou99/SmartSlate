@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("smartslate")
+@RequestMapping("/smartslate")
 @Controller
 public class UserController {
     private UserService userService;
@@ -77,6 +77,7 @@ public class UserController {
 
     @PostMapping("/user/update")
     public String updateUser(@RequestBody User updatedUser, Model model) {
+        System.out.println("Update");
         //User user = userService.getUser(userId);
         //User user = model.getAttribute(User user);
         System.out.println(updatedUser.getPhoneNumber());

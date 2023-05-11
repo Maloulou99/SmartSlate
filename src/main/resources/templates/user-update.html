@@ -8,7 +8,19 @@
 <body>
 <div class="container">
   <h1>Update User</h1>
-  <form th:object="${user}" method="POST" action="/smartslate/user/update">
+  <form th:object="${user}" th:action="@{/smartslate/user/update/{userId}(userId=${userId})}" method="post">
+    <div class="form-group">
+      <input type="hidden" id="userID" th:field="*{userID}" />
+    </div>
+    <div class="form-group">
+      <input type="hidden" id="createdAt" th:field="*{createdAt}" />
+    </div>
+    <div class="form-group">
+      <input type="hidden" id="updatedAt" th:field="*{updatedAt}" />
+    </div>
+    <div class="form-group">
+      <input type="hidden" id="roleID" th:field="*{roleID}" />
+    </div>
     <div class="form-group">
       <label for="username">Username:</label>
       <input type="text" id="username" th:field="*{username}" />
