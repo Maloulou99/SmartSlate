@@ -9,20 +9,20 @@
 <h1>Task Created</h1>
 <p>The following task has been created:</p>
 <table>
-    <tr th:each="task : ${tasks}">
+    <tr>
         <td th:text="${task.taskId}"></td>
         <td th:text="${task.taskName}"></td>
         <td th:text="${task.description}"></td>
         <td th:text="${task.deadline}"></td>
         <td>
-        <span th:if="${task.projectManagerID}">
-            <span th:text="${projectManagerFirstName}"></span>
-            <span> </span>
-            <span th:text="${projectManagerLastName}"></span>
-        </span>
+            <span th:if="${task.projectManagerID}">
+                <span th:text="${projectManagerFirstName}"></span>
+                <span> </span>
+                <span th:text="${projectManagerLastName}"></span>
+            </span>
             <span th:unless="${task.projectManagerID}">
-            No project manager assigned.
-        </span>
+                No project manager assigned.
+            </span>
         </td>
         <td th:text="${task.status}"></td>
     </tr>
