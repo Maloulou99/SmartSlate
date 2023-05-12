@@ -9,7 +9,7 @@
 
 <h2>Task Details</h2>
 
-<form method="post" th:action="@{/projects/{projectId}/createTask(projectId=${projectId})}">
+<form method="post" th:object="${task}" th:action="@{/projects/{projectId}/createTask(projectId=${projectId})}">
   <table>
     <tr>
       <td><label for="taskName">Task Name:</label></td>

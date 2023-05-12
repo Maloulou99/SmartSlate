@@ -54,8 +54,9 @@ public class TaskController {
 
 
     @PostMapping("/projects/{projectId}/createTask")
-    public String createTask(@PathVariable int projectId,
+    public String createdTask(@PathVariable int projectId,
                              @ModelAttribute Task task,
+                             @RequestParam int projectManagerId,
                              Model model,
                              HttpSession session) {
         Integer userIdObj = (Integer) session.getAttribute("userId");
@@ -63,12 +64,14 @@ public class TaskController {
             return "redirect:/login";
         }
         int userId = userIdObj;
-        iTaskRepository.createTask(task, projectId, task.getProjectManagerID());
+        iTaskRepository.createTask(task.getTaskName(), task.getDescription(), task.getDeadline(), projectId, projectManagerId, task.getStatus());
+        model.addAttribute("task", task);
+
         return "created-task";
     }
 
 
-    @PostMapping("/tasks/create")
+    /*@PostMapping("/tasks/create")
     public String createTaskFromParams(@RequestParam("taskName") String taskName,
                                        @RequestParam("description") String description,
                                        @RequestParam("deadline") String deadline,
@@ -82,9 +85,9 @@ public class TaskController {
         }
         int userId = userIdObj;
         Task newTask = new Task(taskName, description, deadline, projectManagerId, status);
-        iTaskRepository.createTask(newTask, projectId, projectManagerId);
+        //iTaskRepository.createTask(newTask, projectId, projectManagerId);
         return "created-task";
-    }
+    }*/
 
 
 
