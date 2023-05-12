@@ -136,7 +136,7 @@ public class UserRepository implements IUserRepository{
     }
 
 
-    public List<User> getAllProjectManagersByID(int projectId) {
+    /*public List<User> getAllProjectManagersByID(int projectId) {
         List<User> projectManagers = new ArrayList<>();
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
             String SQL = "SELECT u.* FROM users u INNER JOIN projects p ON u.userID = p.userID WHERE p.projectID = ?";
@@ -161,7 +161,7 @@ public class UserRepository implements IUserRepository{
             throw new RuntimeException(e);
         }
         return projectManagers;
-    }
+    }*/
 
 
     public String getRoleName(int roleID){
@@ -180,11 +180,6 @@ public class UserRepository implements IUserRepository{
             throw new RuntimeException(e);
         }
         return roleName;
-    }
-
-    @Override
-    public List<User> getAllProjectManagersByID() {
-        return null;
     }
 
     public List<User> getProjectManagersByRoleId() {
@@ -266,6 +261,24 @@ public class UserRepository implements IUserRepository{
             throw new RuntimeException(e);
         }
         return projectManager;
+    }
+
+    public int getUserIdByProjectId(int projectId) {
+        Integer userId = null;
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "SELECT userID FROM projects WHERE projectID = ?";
+
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, projectId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                userId = rs.getInt("userID");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return userId;
     }
 
 

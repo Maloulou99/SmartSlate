@@ -48,9 +48,6 @@ public class TaskController {
         return "create-task";
     }
 
-
-
-
     @PostMapping("/projects/{projectId}/createTask")
     public String createTask(@PathVariable int projectId,
                              @ModelAttribute Task task,
@@ -77,6 +74,9 @@ public class TaskController {
 
         // Hent opgave objektet baseret på taskId
         Task createdTask = iTaskRepository.getTaskById(taskId);
+
+        // Opdater opgavens projekt-id med den korrekte værdi
+        createdTask.setProjectId(projectId);
 
         // Tilføj attributterne til modellen
         model.addAttribute("task", createdTask);
@@ -157,6 +157,22 @@ public class TaskController {
         model.addAttribute("tasks", tasks);
         model.addAttribute("projectName", project.getProjectName());
         return "created-task";
+    }
+
+
+    @GetMapping("/projects/tasks/{projectId}/{userId}")
+    public String showTasksForProject(@PathVariable int projectId, @PathVariable int userId, Model model) {
+        // code to fetch tasks for the given projectId from the database
+        List<Task> tasks = iTaskRepository.getTasksByProjectManagerID(projectId);
+        // get the userId of the user who created the project
+        userId = iUserRepository.getUserIdByProjectId(projectId);
+        // add tasks and projectId to the model
+        model.addAttribute("tasks", tasks);
+        model.addAttribute("projectId", projectId);
+        model.addAttribute("userId", userId);
+
+        // redirect to the user-frontpage with the user id as a path variable
+        return "redirect:/smartslate/user/" + userId;
     }
 
 
