@@ -4,6 +4,7 @@ import com.example.smartslate.model.Project;
 import com.example.smartslate.model.Task;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -26,17 +27,18 @@ public class TaskRepository implements ITaskRepository {
     }
 
     // Create a task
-    public int createTask(Task task, int projectId, int projectManagerId) {
+    public int createTask(String name, String desc, String deadline, int projectId, int projectManagerId, String status) {
+
         int taskId = 0;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
             String SQL = "INSERT INTO tasks (projectID, taskName, description, deadline, projectManagerID, status) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = con.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
             pstmt.setInt(1, projectId);
-            pstmt.setString(2, task.getTaskName());
-            pstmt.setString(3, task.getDescription());
-            pstmt.setString(4, task.getDeadline());
+            pstmt.setString(2, name);
+            pstmt.setString(3, deadline);
+            pstmt.setString(4, deadline);
             pstmt.setInt(5, projectManagerId);
-            pstmt.setString(6, task.getStatus());
+            pstmt.setString(6, status);
             pstmt.executeUpdate();
 
             ResultSet rs = pstmt.getGeneratedKeys();
