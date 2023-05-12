@@ -135,10 +135,11 @@ public class UserRepository implements IUserRepository{
         return users;
     }
 
-    public List<User> getProjectManagersByProjectId(int projectId) {
+
+    public List<User> getAllProjectManagersByID(int projectId) {
         List<User> projectManagers = new ArrayList<>();
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT u.* FROM users u INNER JOIN projects p ON u.userID = p.projectManagerID WHERE p.projectID = ?";
+            String SQL = "SELECT u.* FROM users u INNER JOIN projects p ON u.userID = p.userID WHERE p.projectID = ?";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setInt(1, projectId);
             ResultSet rs = pstmt.executeQuery();
@@ -181,7 +182,12 @@ public class UserRepository implements IUserRepository{
         return roleName;
     }
 
+    @Override
     public List<User> getAllProjectManagersByID() {
+        return null;
+    }
+
+    public List<User> getProjectManagersByRoleId() {
         List<User> projectManagers = new ArrayList<>();
         String query = "SELECT * FROM users WHERE roleID = 2";
         try(Connection con = DriverManager.getConnection(url, user_id, user_pwd)){
@@ -206,4 +212,61 @@ public class UserRepository implements IUserRepository{
         }
         return projectManagers;
     }
+
+    public User getProjectManagerById(int projectManagerId) {
+        User projectManager = null;
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "SELECT * FROM users WHERE userID = ? AND roleID = 2;";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, projectManagerId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                projectManager = new User();
+                projectManager.setUserID(rs.getInt("userID"));
+                projectManager.setUsername(rs.getString("username"));
+                projectManager.setFirstName(rs.getString("firstName"));
+                projectManager.setLastName(rs.getString("lastName"));
+                projectManager.setEmail(rs.getString("email"));
+                projectManager.setPassword(rs.getString("password"));
+                projectManager.setPhoneNumber(rs.getString("phoneNumber"));
+                projectManager.setRoleID(rs.getInt("roleID"));
+                projectManager.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
+                projectManager.setUpdatedAt(rs.getTimestamp("updatedAt").toLocalDateTime());
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return projectManager;
+    }
+
+    public User getProjectManagerByProjectId(int projectId) {
+        User projectManager = null;
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "SELECT * FROM users WHERE userID IN ( SELECT userID FROM projects WHERE projectID = ?)";
+
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, projectId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                projectManager = new User();
+                projectManager.setUserID(rs.getInt("userID"));
+                projectManager.setUsername(rs.getString("username"));
+                projectManager.setFirstName(rs.getString("firstName"));
+                projectManager.setLastName(rs.getString("lastName"));
+                projectManager.setEmail(rs.getString("email"));
+                projectManager.setPassword(rs.getString("password"));
+                projectManager.setPhoneNumber(rs.getString("phoneNumber"));
+                projectManager.setRoleID(rs.getInt("roleID"));
+                projectManager.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
+                projectManager.setUpdatedAt(rs.getTimestamp("updatedAt").toLocalDateTime());
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return projectManager;
+    }
+
+
 }

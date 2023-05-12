@@ -27,13 +27,14 @@
       <td><label for="projectManagers">Select An Available Project Manager:</label></td>
       <td>
         <select id="projectManagers" name="projectManagerId">
-          <option th:each="user : ${projectManagers}"
-                  th:if="${user.roleID == 2}"
-                  th:value="${user.userID}"
-                  th:text="${user.firstName} + ' ' + ${user.lastName}"
-                  th:selected="${task.projectManagerID != null and task.projectManagerID == user.userID}">
+          <option th:each="projectManager : ${projectManagers}"
+                  th:if="${projectManager.roleID == 2}"
+                  th:value="${projectManager.userID}"
+                  th:text="${projectManager.firstName} + ' ' + ${projectManager.lastName}"
+                  th:selected="${task.projectManagerID != null and task.projectManagerID == projectManager.userID}">
           </option>
         </select>
+
       </td>
     </tr>
     <tr>

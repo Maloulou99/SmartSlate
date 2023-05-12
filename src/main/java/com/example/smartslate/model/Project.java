@@ -2,13 +2,12 @@ package com.example.smartslate.model;
 
 import java.time.LocalDate;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 
 public class Project {
     private int projectId;
-    private int projectManagerId;
+    private int userID;
     private String projectName;
     private String description;
     private LocalDate startDate;
@@ -17,9 +16,9 @@ public class Project {
     private String status;
     private List<Task> tasks;
 
-    public Project(int projectId, int projectManagerId, String projectName, String description, LocalDate startDate, LocalDate endDate, String budget, String status, List<Task> tasks) {
+    public Project(int projectId, int userID, String projectName, String description, LocalDate startDate, LocalDate endDate, String budget, String status, List<Task> tasks) {
         this.projectId = projectId;
-        this.projectManagerId = projectManagerId;
+        this.userID = userID;
         this.projectName = projectName;
         this.description = description;
         this.startDate = startDate;
@@ -48,12 +47,12 @@ public class Project {
         this.projectId = projectId;
     }
 
-    public int getProjectManagerId() {
-        return projectManagerId;
+    public int getUserID() {
+        return userID;
     }
 
-    public void setProjectManagerId(int projectManagerId) {
-        this.projectManagerId = projectManagerId;
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public String getProjectName() {
