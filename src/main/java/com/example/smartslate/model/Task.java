@@ -1,25 +1,24 @@
 package com.example.smartslate.model;
 
-import java.util.Date;
-import java.util.List;
-
 public class Task {
     private int taskId;
     private int projectId;
+    private String taskName;
     private String description;
     private String deadline;
-    private String assignedTo;
+    private int projectManagerID;
     private String status;
     private Project project;
-
     private int userId; // Fremmednøgle til User-tabellen
 
-    public Task(int taskId, int projectId, String description, String deadline, String assignedTo, String status, Project project, int userId) {
+
+    public Task(int taskId, int projectId, String taskName, String description, String deadline, int projectManagerID, String status, Project project, int userId) {
         this.taskId = taskId;
         this.projectId = projectId;
+        this.taskName = taskName;
         this.description = description;
         this.deadline = deadline;
-        this.assignedTo = assignedTo;
+        this.projectManagerID = projectManagerID;
         this.status = status;
         this.project = project;
         this.userId = userId;
@@ -29,11 +28,20 @@ public class Task {
 
     }
 
-    public Task(String description, String deadline, String status, Project project) {
+    public Task(String taskName, String description, String deadline, int projectManagerID, String status) {
+        this.taskName = taskName;
         this.description = description;
         this.deadline = deadline;
+        this.projectManagerID = projectManagerID;
         this.status = status;
-        this.project = project;
+    }
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
     }
 
     public Project getProject() {
@@ -72,12 +80,12 @@ public class Task {
         return deadline;
     }
 
-    public String getAssignedTo() {
-        return assignedTo;
+    public int getProjectManagerID() {
+        return projectManagerID;
     }
 
-    public void setAssignedTo(String assignedTo) {
-        this.assignedTo = assignedTo;
+    public void setProjectManagerID(int projectManagerID) {
+        this.projectManagerID = projectManagerID;
     }
 
 
@@ -100,5 +108,6 @@ public class Task {
     public void setDeadline(String deadline) {
         this.deadline = deadline;
     }
+
 
 }

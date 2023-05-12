@@ -3,9 +3,9 @@ package com.example.smartslate.controller;
 import com.example.smartslate.model.Project;
 import com.example.smartslate.model.Task;
 import com.example.smartslate.model.User;
-import com.example.smartslate.service.ProjectService;
-import com.example.smartslate.service.TaskService;
-import com.example.smartslate.service.UserService;
+import com.example.smartslate.repository.IProjectRepository;
+import com.example.smartslate.repository.ITaskRepository;
+import com.example.smartslate.repository.IUserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,20 +16,20 @@ import java.util.List;
 @RequestMapping("smartslate")
 @Controller
 public class SmartSlateController {
-    private UserService userService;
-    private ProjectService projectService;
-    private TaskService taskService;
+    private IUserRepository iUserRepository;
+    private IProjectRepository iProjectRepository;
+    private ITaskRepository iTaskRepository;
 
-    public SmartSlateController(UserService userService, ProjectService projectService, TaskService taskService) {
-        this.userService = userService;
-        this.projectService = projectService;
-        this.taskService = taskService;
+    public SmartSlateController(IUserRepository iUserRepository, IProjectRepository iProjectRepository, ITaskRepository iTaskRepository) {
+        this.iUserRepository = iUserRepository;
+        this.iProjectRepository = iProjectRepository;
+        this.iTaskRepository = iTaskRepository;
     }
 
 
     @GetMapping("/mainpage/{uid}")
     public String mainPage(@PathVariable int uid, Model model, HttpSession session) {
-        User user = userService.getUser(uid);
+        User user = iUserRepository.getUser(uid);
 
         if (user == null) {
             // Hvis der ikke er nogen bruger med det angivne id, send brugeren til login-siden
@@ -50,10 +50,10 @@ public class SmartSlateController {
 
     @GetMapping("/user/frontpage")
     public String getUserFrontsite(Model model) {
-        List<Project> projects = projectService.getAllProjects();
+        List<Project> projects = iProjectRepository.getAllProjects();
         model.addAttribute("projects", projects);
 
-        List<Task> tasks = taskService.getAllTasks();
+        List<Task> tasks = iTaskRepository.getAllTasks();
         model.addAttribute("tasks", tasks);
 
         return "user-frontpage";

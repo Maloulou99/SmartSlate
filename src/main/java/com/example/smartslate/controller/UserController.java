@@ -3,31 +3,31 @@ package com.example.smartslate.controller;
 import com.example.smartslate.model.Project;
 import com.example.smartslate.model.Task;
 import com.example.smartslate.model.User;
-import com.example.smartslate.service.ProjectService;
-import com.example.smartslate.service.TaskService;
-import com.example.smartslate.service.UserService;
+import com.example.smartslate.repository.ILoginRepository;
+import com.example.smartslate.repository.IProjectRepository;
+import com.example.smartslate.repository.ITaskRepository;
+import com.example.smartslate.repository.IUserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.plaf.IconUIResource;
 import java.util.List;
 
 @RequestMapping("/smartslate")
 @Controller
 public class UserController {
-    private UserService userService;
-    private ProjectService projectService;
-    private TaskService taskService;
-    private LoginController loginController;
+    private IUserRepository iUserRepository;
+    private IProjectRepository iProjectRepository;
+    private ITaskRepository iTaskRepository;
+    private ILoginRepository iLoginRepository;
 
-    public UserController(UserService userService, ProjectService projectService, TaskService taskService, LoginController loginController) {
-        this.userService = userService;
-        this.projectService = projectService;
-        this.taskService = taskService;
-        this.loginController = loginController;
+    public UserController(IUserRepository iUserRepository, IProjectRepository iProjectRepository, ITaskRepository iTaskRepository, ILoginRepository iLoginRepository) {
+        this.iUserRepository = iUserRepository;
+        this.iProjectRepository = iProjectRepository;
+        this.iTaskRepository = iTaskRepository;
+        this.iLoginRepository = iLoginRepository;
     }
-
-
 
     @GetMapping("/create/user")
     public String createUser(Model model) {
@@ -38,18 +38,21 @@ public class UserController {
 
     @GetMapping("/user/{userId}")
     public String getUser(@PathVariable int userId, Model model) {
-        User user = userService.getUser(userId);
-        List<Project> projects = projectService.getAllProjectsByUserId(userId);
-        List<Task> tasks = taskService.getTasksByAssignedUser(user.getUsername());
+        User user = iUserRepository.getUser(userId);
+        String roleName = iUserRepository.getRoleName(user.getRoleID()); // Henter rolle-navnet
+        List<Project> projects = iProjectRepository.getAllProjectsByUserId(userId);
+        List<Task> tasks = iTaskRepository.getTasksByProjectManagerID(user.getUserID());
         model.addAttribute("user", user);
+        model.addAttribute("roleName", roleName); // Tilføjer rolle-navnet til model
         model.addAttribute("projects", projects);
         model.addAttribute("tasks", tasks);
         return "user-frontpage";
     }
 
+
     @PostMapping("/adduser")
     public String addUser(@ModelAttribute User newUser, Model model) {
-        int userId = userService.createUser(newUser);
+        int userId = iUserRepository.createUser(newUser);
         newUser.setUserID(userId);
         model.addAttribute("user", newUser);
         model.addAttribute("createdAt", newUser.getCreatedAt());
@@ -59,38 +62,30 @@ public class UserController {
         model.addAttribute("email", newUser.getEmail());
         model.addAttribute("password", newUser.getPassword());
         model.addAttribute("phoneNumber", newUser.getPhoneNumber());
-        model.addAttribute("role", newUser.getRoleID());
+        model.addAttribute("role", iUserRepository.getRoleName(newUser.getRoleID())); // get role name instead of role id
         return "user-created";
     }
 
-    @GetMapping("/{username}")
-    public User getUserByUsername(@PathVariable String username) {
-        return userService.getUserByUsername(username);
-    }
     @GetMapping("/user/update/{userId}")
     public String updateUserForm(@PathVariable int userId, Model model) {
-        User user = userService.getUser(userId);
+        User user = iUserRepository.getUser(userId);
         model.addAttribute("user", user);
         System.out.println(userId);
         return "user-update";
     }
 
     @PostMapping("/user/update")
-    public String updateUser(@RequestBody User updatedUser, Model model) {
-        System.out.println("Update");
-        //User user = userService.getUser(userId);
-        //User user = model.getAttribute(User user);
-        System.out.println(updatedUser.getPhoneNumber());
-        System.out.println(updatedUser);
-        userService.updateUser(updatedUser);
+    public String updateUser(@ModelAttribute User user, Model model) {
+        iUserRepository.updateUser(user);
+        iProjectRepository.getProjectById(user.getUserID());
+        model.addAttribute("id", user.getUserID());
         return "user-frontpage";
     }
 
-
     @GetMapping("/deleteuser/{userId}")
     public String deleteUser(@PathVariable int userId) {
-        userService.deleteUser(userId);
-        return "user-frontpage";
+        iUserRepository.deleteUser(userId);
+        return "redirect:/";
     }
 
 }

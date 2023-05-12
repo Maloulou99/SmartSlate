@@ -1,52 +1,56 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
 <head>
-    <link rel="stylesheet" href="/project-task.css">
-    <meta charset="UTF-8">
-    <title>Create Task</title>
+  <link rel="stylesheet" href="/project-task.css">
+  <meta charset="UTF-8">
+  <title>Create Task</title>
 </head>
 <body>
 
 <h2>Task Details</h2>
 
 <form method="post" th:action="@{/projects/{projectId}/createTask(projectId=${projectId})}">
-    <table>
-        <tr>
-            <td><label for="description">Task Description:</label></td>
-            <td><textarea id="description" name="description" th:text="${newTask.description}"></textarea></td>
-        </tr>
-        <tr>
-            <td><label for="deadline">Assigned time for task:</label></td>
-            <td><input type="time" id="deadline" name="deadline" th:value="${newTask.deadline}"></td>
-        </tr>
-        <tr>
-            <td>
-                <label for="assignedTo">Assigned to:</label>
-                <select id="assignedTo" name="assignedTo">
-                    <option value="">Choose a user</option>
-                    <option th:each="user : ${projectManagers}" th:value="${user.userID}"
-                            th:text="${user.firstName} + ' ' + ${user.lastName}"
-                            th:selected="${newTask.assignedTo != null and newTask.assignedTo == user.userID}"></option>
-                </select>
-            </td>
+  <table>
+    <tr>
+      <td><label for="taskName">Task Name:</label></td>
+      <td><input type="text" id="taskName" name="taskName" th:value="${task.taskName}"></td>
+    </tr>
+    <tr>
+      <td><label for="description">Task Description:</label></td>
+      <td><textarea id="description" name="description" th:text="${task.description}"></textarea></td>
+    </tr>
+    <tr>
+      <td><label for="deadline">Task Due Date:</label></td>
+      <td><input type="date" id="deadline" name="deadline" th:value="${task.deadline}"></td>
+    </tr>
+    <tr>
+      <td><label for="projectManagers">Select An Available Project Manager:</label></td>
+      <td>
+        <select id="projectManagers" name="projectManagerId">
+          <option th:each="user : ${projectManagers}"
+                  th:if="${user.roleID == 2}"
+                  th:value="${user.userID}"
+                  th:text="${user.firstName} + ' ' + ${user.lastName}"
+                  th:selected="${task.projectManagerID != null and task.projectManagerID == user.userID}">
+          </option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td><label for="status">Status:</label></td>
+      <td>
+        <select id="status" name="status" th:value="${task.status}">
+          <option value="Planning">Planning</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Completed">Completed</option>
+        </select>
+      </td>
+    </tr>
+  </table>
 
-        </tr>
-        <tr>
-            <td><label for="status">Status:</label></td>
-            <td>
-                <select id="status" name="status" th:value="${newTask.status}">
-                    <option value="Planning">Planning</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Completed">Completed</option>
-                </select>
-            </td>
-        </tr>
-    </table>
+  <input type="hidden" id="projectID" name="projectID" th:value="${projectId}">
 
-    <input type="hidden" id="userId" name="userId" th:value="${user.userID}">
-    <input type="hidden" id="projectId" name="projectId" th:value="${projectId}">
-    <br>
-    <input type="submit" value="Create Task">
+  <input type="submit" value="Create Task">
 </form>
 
 

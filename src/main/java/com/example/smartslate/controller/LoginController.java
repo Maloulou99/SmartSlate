@@ -1,26 +1,24 @@
 package com.example.smartslate.controller;
 
-import com.example.smartslate.model.Project;
 import com.example.smartslate.model.User;
-import com.example.smartslate.service.LoginService;
-import com.example.smartslate.service.UserService;
+import com.example.smartslate.repository.ILoginRepository;
+import com.example.smartslate.repository.IUserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/")
 @Controller
 public class LoginController {
-    private LoginService loginService;
-    private UserService userService;
+    private ILoginRepository iLoginRepository;
+    private IUserRepository iUserRepository;
     private int current_userId;
 
 
-    public LoginController(LoginService loginService, UserService userService) {
-        this.loginService = loginService;
-        this.userService = userService;
+    public LoginController(ILoginRepository iLoginRepository, IUserRepository iUserRepository) {
+        this.iLoginRepository = iLoginRepository;
+        this.iUserRepository = iUserRepository;
     }
 
     protected boolean isLoggedIn(HttpSession session, int uid) {
@@ -45,7 +43,7 @@ public class LoginController {
             HttpSession session,
             Model model) {
 
-        User user = loginService.findByUsernameOrEmailAndPassword(username, password);
+        User user = iLoginRepository.findByUsernameOrEmailAndPassword(username, password);
 
         if (user == null) {
             // Brugeren findes ikke i databasen, vis en fejlmeddelelse

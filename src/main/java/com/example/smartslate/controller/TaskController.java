@@ -3,118 +3,98 @@ package com.example.smartslate.controller;
 import com.example.smartslate.model.Project;
 import com.example.smartslate.model.Task;
 import com.example.smartslate.model.User;
-import com.example.smartslate.service.ProjectService;
-import com.example.smartslate.service.TaskService;
-import com.example.smartslate.service.UserService;
+import com.example.smartslate.repository.IProjectRepository;
+import com.example.smartslate.repository.ITaskRepository;
+import com.example.smartslate.repository.IUserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequestMapping("")
 @Controller
 public class TaskController {
-    private ProjectService projectService;
-    private TaskService taskService;
-    private UserService userService;
+    private IProjectRepository iProjectRepository;
+    private ITaskRepository iTaskRepository;
+    private IUserRepository iUserRepository;
 
-    public TaskController(ProjectService projectService, TaskService taskService, UserService userService) {
-        this.projectService = projectService;
-        this.taskService = taskService;
-        this.userService = userService;
+    public TaskController(IProjectRepository iProjectRepository, ITaskRepository iTaskRepository, IUserRepository iUserRepository) {
+        this.iProjectRepository = iProjectRepository;
+        this.iTaskRepository = iTaskRepository;
+        this.iUserRepository = iUserRepository;
     }
-
-    @GetMapping("/all-Tasks")
-    public String getAllTasks(Model model) {
-        List<Task> tasks = taskService.getAllTasks();
-        model.addAttribute("tasks", tasks);
-        return "user-frontpage"; // navn på din Thymeleaf visningsside for projektlisten
-    }
-
     @GetMapping("/projects/{projectId}/createTask")
-    public String createTaskForm(Model model, HttpSession session) {
-        model.addAttribute("task", new Project());
-        Integer userIdObj = (Integer) session.getAttribute("userId"); // Hent brugerens ID fra session
+    public String createTaskForm(@PathVariable int projectId, Model model, HttpSession session) {
+        // Få bruger-id fra sessionen
+        Integer userIdObj = (Integer) session.getAttribute("userId");
         if (userIdObj == null) {
-            // Brugeren er ikke logget ind, så redirect til login siden eller vis en fejlmeddelelse
             return "redirect:/login";
         }
         int userId = userIdObj;
-        User user = userService.getUser(userId); // Hent brugeren med det pågældende ID
+
+        // Få bruger og projekt
+        User user = iUserRepository.getUser(userId);
+        Project project = iProjectRepository.getProjectById(projectId);
+
+        // Hent alle project managers med roleID = 2
+        List<User> projectManagers = iUserRepository.getAllProjectManagersByID();
+
+        // Tilføj data til modellen
         model.addAttribute("user", user);
+        model.addAttribute("project", project);
+        model.addAttribute("task", new Task());
+        model.addAttribute("projectManagers", projectManagers);
+
         return "create-task";
     }
 
-   /* @PostMapping("/projects/{projectId}/createTask")
-    public String createTask(@RequestParam("projectId") int projectId,
-                             @RequestParam("assignedTo") String assignedTo,
-                             @RequestParam("description") String description,
-                             @RequestParam("deadline") String deadline,
-                             @RequestParam("status") String status, Model model) {
-        Project project = projectService.getProjectById(projectId);
-        if (project != null) {
-            Task newTask = new Task();
-            newTask.setProjectId(projectId);
-            newTask.setDescription(description);
-            newTask.setDeadline(deadline);
-            newTask.setStatus(status);
-            newTask.setProject(project);
-            taskService.createTask(newTask);
-            List<Task> tasks = taskService.getTasksByProjectId(projectId);
-            model.addAttribute("tasks", tasks);
-            model.addAttribute("newTask", new Task());
-            model.addAttribute("projectManagers", userService.getProjectManagersByProjectId(projectId));
+
+    @PostMapping("/projects/{projectId}/createTask")
+    public String createTask(@PathVariable int projectId,
+                             @ModelAttribute Task task,
+                             Model model,
+                             HttpSession session) {
+        Integer userIdObj = (Integer) session.getAttribute("userId");
+        if (userIdObj == null) {
+            return "redirect:/login";
         }
-        model.addAttribute("projectId", projectId); // add project ID to model
-        return "create-task";
-    }*/
-   @PostMapping("/projects/{projectId}/createTask")
-   public String createTask(@RequestParam("projectId") int projectId, @RequestParam("taskId") int taskId, Model model) {
-       Project project = projectService.getProjectById(projectId);
-       int task = taskService.getTaskById(taskId);
-       if (project != null) {
-           Task newTask = new Task();
-           newTask.setProjectId(projectId);
-           newTask.setProject(project);
-           newTask.setTaskId(task);
-           taskService.createTask(newTask);
-           List<Task> tasks = taskService.getTasksByProjectId(projectId);
-           model.addAttribute("tasks", tasks);
-           model.addAttribute("newTask", new Task());
-           model.addAttribute("projectManagers", userService.getProjectManagersByProjectId(projectId));
-       }
-       model.addAttribute("projectId", projectId); // add project ID to model
-       return "create-task";
-   }
-
-
-    @GetMapping("/task/{userId}")
-    public String getUserProjects(@PathVariable("userId") int userId, Model model) {
-        List<Task> userTasks = taskService.getTasksByProjectId(userId);
-        model.addAttribute("projects", userTasks);
-        model.addAttribute("user", userService.getUser(userId));
-        return "user-frontpage";
+        int userId = userIdObj;
+        iTaskRepository.createTask(task, projectId, task.getProjectManagerID());
+        return "created-task";
     }
 
-    @PostMapping("/create")
-    public String createProject(@ModelAttribute Task task, HttpSession httpSession) {
-        int user = (int) httpSession.getAttribute("userId");
-        task.setUserId(user);
-        taskService.createTask(task);
-        return "redirect:/smartslate/user/" + user;
+
+    @PostMapping("/tasks/create")
+    public String createTaskFromParams(@RequestParam("taskName") String taskName,
+                                       @RequestParam("description") String description,
+                                       @RequestParam("deadline") String deadline,
+                                       @RequestParam("status") String status,
+                                       @RequestParam("projectManagerId") int projectManagerId,
+                                       @RequestParam int projectId,
+                                       HttpSession session) {
+        Integer userIdObj = (Integer) session.getAttribute("userId");
+        if (userIdObj == null) {
+            return "redirect:/login";
+        }
+        int userId = userIdObj;
+        Task newTask = new Task(taskName, description, deadline, projectManagerId, status);
+        iTaskRepository.createTask(newTask, projectId, projectManagerId);
+        return "created-task";
     }
+
+
 
 
     // Update task
-    @GetMapping("/tasks/{id}/edit")
-    public String editTask(Model model, @PathVariable("id") int taskId) {
-        int task = taskService.getTaskById(taskId);
+    @GetMapping("/tasks/{id}/update")
+    public String updateTask(Model model, @PathVariable("id") int taskId) {
+        Task task = iTaskRepository.getTaskById(taskId);
         model.addAttribute("task", task);
-        model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("users", iUserRepository.getAllUsers());
         return "update-task";
     }
 
@@ -122,20 +102,71 @@ public class TaskController {
     @PostMapping("/tasks/{id}/update")
     public String updateTask(@ModelAttribute("task") Task task, @PathVariable("id") int taskId) {
         task.setTaskId(taskId);
-        taskService.updateTask(task);
+        iTaskRepository.updateTask(task);
         return "redirect:/tasks/" + taskId;
     }
 
 
     // Delete task
-    @PostMapping("/tasks/{id}/delete")
+    /*@PostMapping("/tasks/{id}/delete")
     public String deleteTask(@PathVariable("id") int taskId, RedirectAttributes redirectAttributes) {
-        int userId = taskService.getTaskById(taskId);
-        taskService.deleteTask(taskId);
+        int userId = iTaskRepository.getTaskById(taskId).getUserId();
+        iTaskRepository.deleteTask(taskId);
+        redirectAttributes.addAttribute("userId", userId);
+        return "redirect:/user/{userId}";
+    }*/
+    @PostMapping("/tasks/{id}/delete")
+    public String deleteTask(@PathVariable("id") int taskId, RedirectAttributes redirectAttributes, HttpSession session) {
+        Integer userIdObj = (Integer) session.getAttribute("userId");
+        if (userIdObj == null) {
+            return "redirect:/login";
+        }
+        int userId = userIdObj;
+
+        Task task = iTaskRepository.getTaskById(taskId);
+        if (task == null) {
+            // Task not found, redirect to user page
+            redirectAttributes.addAttribute("userId", userId);
+            return "redirect:/user/{userId}";
+        }
+
+        if (task.getProjectManagerID() != userId) {
+            // User is not authorized to delete task, redirect to user page
+            redirectAttributes.addAttribute("userId", userId);
+            return "redirect:/user/{userId}";
+        }
+
+        // Delete task
+        iTaskRepository.deleteTask(taskId);
+
         redirectAttributes.addAttribute("userId", userId);
         return "redirect:/user/{userId}";
     }
 
+    @GetMapping("/projects/{projectId}/tasks")
+    public String getTasksByProjectId(@PathVariable int projectId, Model model, HttpSession session) {
+        Integer userIdObj = (Integer) session.getAttribute("userId");
+        if (userIdObj == null) {
+            return "redirect:/login";
+        }
+        int userId = userIdObj;
+        List<Task> tasks = iTaskRepository.getTasksByProjectId(projectId);
+        Project project = iProjectRepository.getProjectById(projectId);
+        User projectManager = null;
+        if (project.getProjectManagerId() != 0) {
+            projectManager = iUserRepository.getUser(project.getProjectManagerId());
+        }
+        model.addAttribute("projectManager", projectManager);
+        model.addAttribute("tasks", tasks);
+        model.addAttribute("projectName", project.getProjectName());
+        return "created-task";
+    }
+
+
+
 
 
 }
+
+
+
