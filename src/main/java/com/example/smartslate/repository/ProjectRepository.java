@@ -1,8 +1,6 @@
 package com.example.smartslate.repository;
 
 import com.example.smartslate.model.Project;
-import com.example.smartslate.model.Task;
-import com.example.smartslate.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -23,10 +21,10 @@ public class ProjectRepository implements IProjectRepository{
     public int createProject(Project project) {
         int projectId = 0;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "INSERT INTO projects (projectManagerID, projectName, description, startDate, endDate, budget, status) "
+            String SQL = "INSERT INTO projects (userID, projectName, description, startDate, endDate, budget, status) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = con.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setInt(1, project.getProjectManagerId());
+            pstmt.setInt(1, project.getUserID());
             pstmt.setString(2, project.getProjectName());
             pstmt.setString(3, project.getDescription());
             pstmt.setDate(4, Date.valueOf(project.getStartDate()));
@@ -47,9 +45,9 @@ public class ProjectRepository implements IProjectRepository{
 
     public void updateProject(Project project) {
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "UPDATE projects SET projectManagerID=?, projectName=?, description=?, startDate=?, endDate=?, budget=?, status=? WHERE projectID=?";
+            String SQL = "UPDATE projects SET userID=?, projectName=?, description=?, startDate=?, endDate=?, budget=?, status=? WHERE projectID=?";
             PreparedStatement pstmt = con.prepareStatement(SQL);
-            pstmt.setInt(1, project.getProjectManagerId());
+            pstmt.setInt(1, project.getUserID());
             pstmt.setString(2, project.getProjectName());
             pstmt.setString(3, project.getDescription());
             pstmt.setDate(4, Date.valueOf(project.getStartDate()));
@@ -77,14 +75,14 @@ public class ProjectRepository implements IProjectRepository{
     public Project getProjectById(int projectId) {
         Project project = null;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT * FROM projects WHERE projectManagerID = ?";
+            String SQL = "SELECT * FROM projects WHERE userID = ?";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setInt(1, projectId);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 project = new Project();
                 project.setProjectId(rs.getInt("projectID"));
-                project.setProjectManagerId(rs.getInt("projectManagerID"));
+                project.setUserID(rs.getInt("userID"));
                 project.setProjectName(rs.getString("projectName"));
                 project.setDescription(rs.getString("description"));
                 project.setStartDate(rs.getDate("startDate").toLocalDate());
@@ -107,7 +105,7 @@ public class ProjectRepository implements IProjectRepository{
             while (rs.next()) {
                 Project project = new Project();
                 project.setProjectId(rs.getInt("projectID"));
-                project.setProjectManagerId(rs.getInt("projectManagerID"));
+                project.setUserID(rs.getInt("userID"));
                 project.setProjectName(rs.getString("projectName"));
                 project.setDescription(rs.getString("description"));
                 project.setStartDate(rs.getDate("startDate").toLocalDate());
@@ -125,14 +123,14 @@ public class ProjectRepository implements IProjectRepository{
     public List<Project> getAllProjectsByUserId(int userId) {
         List<Project> projects = new ArrayList<>();
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT * FROM projects WHERE projectManagerID = ?";
+            String SQL = "SELECT * FROM projects WHERE userID = ?";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setInt(1, userId);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 Project project = new Project();
                 project.setProjectId(rs.getInt("projectID"));
-                project.setProjectManagerId(rs.getInt("projectManagerID"));
+                project.setUserID(rs.getInt("userID"));
                 project.setProjectName(rs.getString("projectName"));
                 project.setDescription(rs.getString("description"));
                 project.setStartDate(rs.getDate("startDate").toLocalDate());

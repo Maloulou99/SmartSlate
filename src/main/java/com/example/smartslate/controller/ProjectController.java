@@ -57,7 +57,7 @@ public class ProjectController {
     @PostMapping("/create")
     public String createProject(@ModelAttribute Project project, HttpSession httpSession) {
         int user = (int) httpSession.getAttribute("userId");
-        project.setProjectManagerId(user);
+        project.setUserID(user);
         iProjectRepository.createProject(project);
         return "redirect:/smartslate/user/" + user;
     }

@@ -53,38 +53,6 @@ public class TaskRepository implements ITaskRepository {
 
 
 
-    public List<Task> getTasksByProjectId(int projectId) {
-        List<Task> tasks = new ArrayList<>();
-        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT t.taskID, t.projectID, t.taskName, t.description, t.deadline, t.projectManagerID, t.status, u.userID " +
-                    "FROM tasks t " +
-                    "LEFT JOIN employeeTasks et ON t.taskID = et.taskID " +
-                    "LEFT JOIN users u ON et.taskEmployeeID = u.userID " +
-                    "WHERE t.projectID = ?;";
-            PreparedStatement pstmt = con.prepareStatement(SQL);
-            pstmt.setInt(1, projectId);
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                Task task = new Task();
-                task.setTaskId(rs.getInt("taskID"));
-                task.setProjectId(rs.getInt("projectID"));
-                task.setTaskName(rs.getString("taskName"));
-                task.setDescription(rs.getString("description"));
-                task.setDeadline(rs.getString("deadline"));
-                task.setProjectManagerID(rs.getInt("projectManagerID"));
-                task.setStatus(rs.getString("status"));
-                task.setUserId(rs.getInt("userID"));
-                Project project = new Project();
-                project.setProjectId(rs.getInt("projectID"));
-                task.setProject(project);
-                tasks.add(task);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return tasks;
-    }
 
 
     public void updateTask(Task task) {
@@ -196,7 +164,6 @@ public class TaskRepository implements ITaskRepository {
                     task.setProjectManagerID(projectManagerID);
                 }
                 task.setStatus(rs.getString("status"));
-                task.setUserId(rs.getInt("userID"));
             }
 
         } catch (SQLException e) {
@@ -206,5 +173,37 @@ public class TaskRepository implements ITaskRepository {
         return task;
     }
 
+    public List<Task> getTasksByProjectId(int projectId) {
+        List<Task> tasks = new ArrayList<>();
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "SELECT t.taskID, t.projectID, t.taskName, t.description, t.deadline, t.projectManagerID, t.status, u.userID " +
+                    "FROM tasks t " +
+                    "LEFT JOIN employeeTasks et ON t.taskID = et.taskID " +
+                    "LEFT JOIN users u ON et.taskEmployeeID = u.userID " +
+                    "WHERE t.projectID = ?;";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, projectId);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Task task = new Task();
+                task.setTaskId(rs.getInt("taskID"));
+                task.setProjectId(rs.getInt("projectID"));
+                task.setTaskName(rs.getString("taskName"));
+                task.setDescription(rs.getString("description"));
+                task.setDeadline(rs.getString("deadline"));
+                task.setProjectManagerID(rs.getInt("projectManagerID"));
+                task.setStatus(rs.getString("status"));
+                task.setUserId(rs.getInt("userID"));
+                Project project = new Project();
+                project.setProjectId(rs.getInt("projectID"));
+                task.setProject(project);
+                tasks.add(task);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return tasks;
+    }
 
 }

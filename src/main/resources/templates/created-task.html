@@ -23,12 +23,12 @@
         <td th:text="${task.description}"></td>
         <td th:text="${task.deadline}"></td>
         <td>
-            <span th:if="${projectManager}">
+            <span th:if="${task.projectManagerID}">
                 <span th:text="${projectManagerFirstName}"></span>
                 <span> </span>
                 <span th:text="${projectManagerLastName}"></span>
             </span>
-            <span th:unless="${projectManager}">
+            <span th:unless="${task.projectManagerID}">
                 No project manager assigned.
             </span>
         </td>

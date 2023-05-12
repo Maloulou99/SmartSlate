@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RequestMapping("")
@@ -29,41 +28,33 @@ public class TaskController {
     }
     @GetMapping("/projects/{projectId}/createTask")
     public String createTaskForm(@PathVariable int projectId, Model model, HttpSession session) {
-        // Få bruger-id fra sessionen
         Integer userIdObj = (Integer) session.getAttribute("userId");
         if (userIdObj == null) {
             return "redirect:/login";
         }
-        int userId = userIdObj;
 
-        // Få bruger og projekt
-        User user = iUserRepository.getUser(userId);
-
-        Project project = iProjectRepository.getProjectById(projectId);
-
-
-        // Hent alle project managers med roleID = 2
-        List<User> projectManagers = iUserRepository.getAllProjectManagersByID();
-
-        // Find project manager for projektet
+        List<User> projectManagers = iUserRepository.getProjectManagersByRoleId();
         User projectManager = iUserRepository.getProjectManagerByProjectId(projectId);
+        Project project = iProjectRepository.getProjectById(projectId);
+        List<Task> tasks = iTaskRepository.getTasksByProjectId(projectId);
 
-        // Tilføj data til modellen
-        model.addAttribute("user", user);
         model.addAttribute("project", project);
         model.addAttribute("task", new Task());
         model.addAttribute("projectManagers", projectManagers);
         model.addAttribute("projectId", projectId);
         model.addAttribute("projectManagerId", projectManager);
+        model.addAttribute("tasks", tasks);
 
         return "create-task";
     }
 
 
 
+
     @PostMapping("/projects/{projectId}/createTask")
     public String createTask(@PathVariable int projectId,
                              @ModelAttribute Task task,
+                             @ModelAttribute Project project,
                              @RequestParam int projectManagerId,
                              Model model,
                              HttpSession session) {
@@ -73,41 +64,27 @@ public class TaskController {
         }
         int userId = userIdObj;
 
-        iTaskRepository.createTask(task.getTaskName(), task.getDescription(), task.getDeadline(), projectId, projectManagerId, task.getStatus());
-        System.out.println(projectId); //Printer korrekt ud = 3
-        System.out.println(projectManagerId); //printer korrekt ud = 2
+        // Opret opgave og hent dens ID
+        int taskId = iTaskRepository.createTask(task.getTaskName(), task.getDescription(), task.getDeadline(), projectId, projectManagerId, task.getStatus());
+
         // Hent User objektet baseret på projectManagerId
+
         User projectManager = iUserRepository.getProjectManagerById(projectManagerId);
-        System.out.println(projectManager); //Denne printer et objektnavn ud, da der ikke er toString
+
+        // Sæt project manager ID på opgave-objektet
+        task.setProjectManagerID(projectManagerId);
+        project.setProjectId(projectManagerId);
+
+        // Hent opgave objektet baseret på taskId
+        Task createdTask = iTaskRepository.getTaskById(taskId);
+
         // Tilføj attributterne til modellen
-        model.addAttribute("task", task);
+        model.addAttribute("task", createdTask);
         model.addAttribute("projectManagerFirstName", projectManager.getFirstName());
         model.addAttribute("projectManagerLastName", projectManager.getLastName());
-        System.out.println(projectManager.getFirstName() + " " + projectManager.getLastName() );
+
         return "created-task";
     }
-
-
-    /*@PostMapping("/tasks/create")
-    public String createTaskFromParams(@RequestParam("taskName") String taskName,
-                                       @RequestParam("description") String description,
-                                       @RequestParam("deadline") String deadline,
-                                       @RequestParam("status") String status,
-                                       @RequestParam("projectManagerId") int projectManagerId,
-                                       @RequestParam int projectId,
-                                       HttpSession session) {
-        Integer userIdObj = (Integer) session.getAttribute("userId");
-        if (userIdObj == null) {
-            return "redirect:/login";
-        }
-        int userId = userIdObj;
-        Task newTask = new Task(taskName, description, deadline, projectManagerId, status);
-        //iTaskRepository.createTask(newTask, projectId, projectManagerId);
-        return "created-task";
-    }*/
-
-
-
 
     // Update task
     @GetMapping("/tasks/{id}/update")
@@ -173,8 +150,8 @@ public class TaskController {
         List<Task> tasks = iTaskRepository.getTasksByProjectId(projectId);
         Project project = iProjectRepository.getProjectById(projectId);
         User projectManager = null;
-        if (project.getProjectManagerId() != 0) {
-            projectManager = iUserRepository.getUser(project.getProjectManagerId());
+        if (project.getUserID() != 0) {
+            projectManager = iUserRepository.getUser(project.getUserID());
         }
         model.addAttribute("projectManager", projectManager);
         model.addAttribute("tasks", tasks);

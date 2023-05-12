@@ -135,10 +135,11 @@ public class UserRepository implements IUserRepository{
         return users;
     }
 
-    public List<User> getProjectManagersByProjectId(int projectId) {
+
+    public List<User> getAllProjectManagersByID(int projectId) {
         List<User> projectManagers = new ArrayList<>();
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT u.* FROM users u INNER JOIN projects p ON u.userID = p.projectManagerID WHERE p.projectID = ?";
+            String SQL = "SELECT u.* FROM users u INNER JOIN projects p ON u.userID = p.userID WHERE p.projectID = ?";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setInt(1, projectId);
             ResultSet rs = pstmt.executeQuery();
@@ -181,7 +182,12 @@ public class UserRepository implements IUserRepository{
         return roleName;
     }
 
+    @Override
     public List<User> getAllProjectManagersByID() {
+        return null;
+    }
+
+    public List<User> getProjectManagersByRoleId() {
         List<User> projectManagers = new ArrayList<>();
         String query = "SELECT * FROM users WHERE roleID = 2";
         try(Connection con = DriverManager.getConnection(url, user_id, user_pwd)){
@@ -237,7 +243,7 @@ public class UserRepository implements IUserRepository{
     public User getProjectManagerByProjectId(int projectId) {
         User projectManager = null;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT * FROM users WHERE userID IN ( SELECT projectManagerID FROM projects WHERE projectID = ?)";
+            String SQL = "SELECT * FROM users WHERE userID IN ( SELECT userID FROM projects WHERE projectID = ?)";
 
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setInt(1, projectId);
