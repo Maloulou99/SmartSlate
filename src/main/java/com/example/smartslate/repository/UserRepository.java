@@ -206,4 +206,61 @@ public class UserRepository implements IUserRepository{
         }
         return projectManagers;
     }
+
+    public User getProjectManagerById(int projectManagerId) {
+        User projectManager = null;
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "SELECT * FROM users WHERE userID = ? AND roleID = 2;";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, projectManagerId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                projectManager = new User();
+                projectManager.setUserID(rs.getInt("userID"));
+                projectManager.setUsername(rs.getString("username"));
+                projectManager.setFirstName(rs.getString("firstName"));
+                projectManager.setLastName(rs.getString("lastName"));
+                projectManager.setEmail(rs.getString("email"));
+                projectManager.setPassword(rs.getString("password"));
+                projectManager.setPhoneNumber(rs.getString("phoneNumber"));
+                projectManager.setRoleID(rs.getInt("roleID"));
+                projectManager.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
+                projectManager.setUpdatedAt(rs.getTimestamp("updatedAt").toLocalDateTime());
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return projectManager;
+    }
+
+    public User getProjectManagerByProjectId(int projectId) {
+        User projectManager = null;
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "SELECT * FROM users WHERE userID IN ( SELECT projectManagerID FROM projects WHERE projectID = ?)";
+
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, projectId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                projectManager = new User();
+                projectManager.setUserID(rs.getInt("userID"));
+                projectManager.setUsername(rs.getString("username"));
+                projectManager.setFirstName(rs.getString("firstName"));
+                projectManager.setLastName(rs.getString("lastName"));
+                projectManager.setEmail(rs.getString("email"));
+                projectManager.setPassword(rs.getString("password"));
+                projectManager.setPhoneNumber(rs.getString("phoneNumber"));
+                projectManager.setRoleID(rs.getInt("roleID"));
+                projectManager.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
+                projectManager.setUpdatedAt(rs.getTimestamp("updatedAt").toLocalDateTime());
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return projectManager;
+    }
+
+
 }

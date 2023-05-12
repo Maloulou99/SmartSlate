@@ -38,19 +38,27 @@ public class TaskController {
 
         // Få bruger og projekt
         User user = iUserRepository.getUser(userId);
+
         Project project = iProjectRepository.getProjectById(projectId);
+
 
         // Hent alle project managers med roleID = 2
         List<User> projectManagers = iUserRepository.getAllProjectManagersByID();
+
+        // Find project manager for projektet
+        User projectManager = iUserRepository.getProjectManagerByProjectId(projectId);
 
         // Tilføj data til modellen
         model.addAttribute("user", user);
         model.addAttribute("project", project);
         model.addAttribute("task", new Task());
         model.addAttribute("projectManagers", projectManagers);
+        model.addAttribute("projectId", projectId);
+        model.addAttribute("projectManagerId", projectManager);
 
         return "create-task";
     }
+
 
 
     @PostMapping("/projects/{projectId}/createTask")
@@ -66,15 +74,16 @@ public class TaskController {
         int userId = userIdObj;
 
         iTaskRepository.createTask(task.getTaskName(), task.getDescription(), task.getDeadline(), projectId, projectManagerId, task.getStatus());
-
+        System.out.println(projectId); //Printer korrekt ud = 3
+        System.out.println(projectManagerId); //printer korrekt ud = 2
         // Hent User objektet baseret på projectManagerId
-        User projectManager = iUserRepository.getUser(projectManagerId);
-
+        User projectManager = iUserRepository.getProjectManagerById(projectManagerId);
+        System.out.println(projectManager); //Denne printer et objektnavn ud, da der ikke er toString
         // Tilføj attributterne til modellen
         model.addAttribute("task", task);
         model.addAttribute("projectManagerFirstName", projectManager.getFirstName());
         model.addAttribute("projectManagerLastName", projectManager.getLastName());
-
+        System.out.println(projectManager.getFirstName() + " " + projectManager.getLastName() );
         return "created-task";
     }
 

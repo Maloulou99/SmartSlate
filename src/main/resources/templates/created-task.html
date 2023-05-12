@@ -10,17 +10,25 @@
 <p>The following task has been created:</p>
 <table>
     <tr>
+        <th>Task ID</th>
+        <th>Task Name</th>
+        <th>Description</th>
+        <th>Deadline</th>
+        <th>Project Manager</th>
+        <th>Status</th>
+    </tr>
+    <tr>
         <td th:text="${task.taskId}"></td>
         <td th:text="${task.taskName}"></td>
         <td th:text="${task.description}"></td>
         <td th:text="${task.deadline}"></td>
         <td>
-            <span th:if="${task.projectManagerID}">
+            <span th:if="${projectManager}">
                 <span th:text="${projectManagerFirstName}"></span>
                 <span> </span>
                 <span th:text="${projectManagerLastName}"></span>
             </span>
-            <span th:unless="${task.projectManagerID}">
+            <span th:unless="${projectManager}">
                 No project manager assigned.
             </span>
         </td>

@@ -39,7 +39,7 @@ CREATE TABLE users
 CREATE TABLE projects
 (
     projectID        INTEGER      NOT NULL AUTO_INCREMENT,
-    projectManagerID INTEGER,
+    userID 			 INTEGER,
     projectName      VARCHAR(255) NOT NULL,
     description      VARCHAR(1000),
     startDate        DATE         NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE projects
     budget           DECIMAL(10, 2),
     status           VARCHAR(20)  NOT NULL,
     PRIMARY KEY (projectID),
-    FOREIGN KEY (projectManagerID) REFERENCES users (userID) ON DELETE SET NULL
+    FOREIGN KEY (userID) REFERENCES users (userID) ON DELETE SET NULL
 );
 
 CREATE TABLE tasks

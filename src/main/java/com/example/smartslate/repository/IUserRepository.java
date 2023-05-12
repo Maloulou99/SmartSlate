@@ -21,4 +21,7 @@ public interface IUserRepository {
     String getRoleName(int roleID);
 
     List<User> getAllProjectManagersByID();
+
+    User getProjectManagerById(int projectManagerId);
+    User getProjectManagerByProjectId(int projectId);
 }
