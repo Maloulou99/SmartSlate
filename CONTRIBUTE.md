@@ -3,7 +3,7 @@
 First off all, thank you for taking the time to contribute to SmartSlate! ❤️
 We recommend checking out the README.md file first. You can find it here:
 
----------------- link til readme ----------------
+(https://github.com/Maloulou99/SmartSlate/blob/main/README.md)
 
 Down below, there will be steps to follow if you should want to contribute to SmartSlate
 
