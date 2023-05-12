@@ -54,7 +54,7 @@ public class TaskController {
 
 
     @PostMapping("/projects/{projectId}/createTask")
-    public String createdTask(@PathVariable int projectId,
+    public String createTask(@PathVariable int projectId,
                              @ModelAttribute Task task,
                              @RequestParam int projectManagerId,
                              Model model,
@@ -64,8 +64,16 @@ public class TaskController {
             return "redirect:/login";
         }
         int userId = userIdObj;
+
         iTaskRepository.createTask(task.getTaskName(), task.getDescription(), task.getDeadline(), projectId, projectManagerId, task.getStatus());
+
+        // Hent User objektet baseret på projectManagerId
+        User projectManager = iUserRepository.getUser(projectManagerId);
+
+        // Tilføj attributterne til modellen
         model.addAttribute("task", task);
+        model.addAttribute("projectManagerFirstName", projectManager.getFirstName());
+        model.addAttribute("projectManagerLastName", projectManager.getLastName());
 
         return "created-task";
     }
