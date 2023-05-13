@@ -136,34 +136,6 @@ public class UserRepository implements IUserRepository{
     }
 
 
-    /*public List<User> getAllProjectManagersByID(int projectId) {
-        List<User> projectManagers = new ArrayList<>();
-        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT u.* FROM users u INNER JOIN projects p ON u.userID = p.userID WHERE p.projectID = ?";
-            PreparedStatement pstmt = con.prepareStatement(SQL);
-            pstmt.setInt(1, projectId);
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                User user = new User();
-                user.setUserID(rs.getInt("userID"));
-                user.setUsername(rs.getString("username"));
-                user.setPassword(rs.getString("password"));
-                user.setEmail(rs.getString("email"));
-                user.setFirstName(rs.getString("firstName"));
-                user.setLastName(rs.getString("lastName"));
-                user.setPhoneNumber(rs.getString("phoneNumber"));
-                user.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
-                user.setUpdatedAt(rs.getTimestamp("updatedAt").toLocalDateTime());
-                user.setRoleID(rs.getInt("roleID"));
-                projectManagers.add(user);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return projectManagers;
-    }*/
-
-
     public String getRoleName(int roleID){
         String roleName = null;
         try(Connection con = DriverManager.getConnection(url, user_id, user_pwd)){
@@ -264,7 +236,7 @@ public class UserRepository implements IUserRepository{
     }
 
     public int getUserIdByProjectId(int projectId) {
-        Integer userId = null;
+        int userId = 0;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
             String SQL = "SELECT userID FROM projects WHERE projectID = ?";
 
@@ -279,6 +251,42 @@ public class UserRepository implements IUserRepository{
             throw new RuntimeException(e);
         }
         return userId;
+    }
+
+    public User getUserFullNames(int userId) {
+        User user = null;
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "SELECT CONCAT(firstName, ' ', lastName) AS fullName FROM users WHERE userID = ?;";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                user = new User();
+                user.setLastName(rs.getString("fullName"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return user;
+    }
+
+    public User getProjectManagersFullNames(int userId) {
+        User user = null;
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "SELECT CONCAT(users.firstName, ' ', users.lastName) AS projectManagerName FROM projects JOIN users ON  projects.userID = users.userID WHERE projects.projectID = ?;";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                user = new User();
+                user.setLastName(rs.getString("projectManagerName"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return user;
     }
 
 

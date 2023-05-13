@@ -75,7 +75,7 @@ public class ProjectRepository implements IProjectRepository{
     public Project getProjectById(int projectId) {
         Project project = null;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT * FROM projects WHERE userID = ?";
+            String SQL = "SELECT * FROM projects WHERE projectID = ?";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setInt(1, projectId);
             ResultSet rs = pstmt.executeQuery();
@@ -144,6 +144,8 @@ public class ProjectRepository implements IProjectRepository{
         }
         return projects;
     }
+
+
 
 
 

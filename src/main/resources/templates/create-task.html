@@ -26,15 +26,15 @@
     <tr>
       <td><label for="projectManagers">Select An Available Project Manager:</label></td>
       <td>
-        <select id="projectManagers" name="projectManagerId">
+        <select id="projectManagers" name="projectManagerId" th:if="${projectManagers}">
           <option th:each="projectManager : ${projectManagers}"
                   th:if="${projectManager.roleID == 2}"
                   th:value="${projectManager.userID}"
                   th:text="${projectManager.firstName} + ' ' + ${projectManager.lastName}"
-                  th:selected="${task.projectManagerID != null and task.projectManagerID == projectManager.userID}">
+                  th:selected="${task.projectmanagerID != null and task.projectmanagerID == projectManager.userID}">
           </option>
         </select>
-
+        <p th:unless="${projectManagers}">No project managers available</p>
       </td>
     </tr>
     <tr>
@@ -50,6 +50,7 @@
   </table>
 
   <input type="hidden" id="projectID" name="projectID" th:value="${projectId}">
+  <input type="hidden" id="userID" name="userID" th:value="${task.userID}">
 
   <input type="submit" value="Create Task">
 </form>

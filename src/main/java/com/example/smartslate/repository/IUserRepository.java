@@ -25,4 +25,8 @@ public interface IUserRepository {
     User getProjectManagerByProjectId(int projectId);
 
     int getUserIdByProjectId(int projectId);
+
+    User getUserFullNames(int userId);
+
+    User getProjectManagersFullNames(int userId);
 }

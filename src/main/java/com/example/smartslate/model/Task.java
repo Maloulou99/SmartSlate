@@ -6,19 +6,21 @@ public class Task {
     private String taskName;
     private String description;
     private String deadline;
-    private int projectManagerID;
+    private int projectmanagerID;
+    private int userID;
     private String status;
     private Project project;
     private int userId; // Fremmednøgle til User-tabellen
 
 
-    public Task(int taskId, int projectId, String taskName, String description, String deadline, int projectManagerID, String status, Project project, int userId) {
+    public Task(int taskId, int projectId, String taskName, String description, String deadline, int projectmanagerID, int userID, String status, Project project, int userId) {
         this.taskId = taskId;
         this.projectId = projectId;
         this.taskName = taskName;
         this.description = description;
         this.deadline = deadline;
-        this.projectManagerID = projectManagerID;
+        this.projectmanagerID = projectmanagerID;
+        this.userID = userID;
         this.status = status;
         this.project = project;
         this.userId = userId;
@@ -28,11 +30,19 @@ public class Task {
 
     }
 
-    public Task(String taskName, String description, String deadline, int projectManagerID, String status) {
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    public Task(String taskName, String description, String deadline, int projectmanagerID, String status) {
         this.taskName = taskName;
         this.description = description;
         this.deadline = deadline;
-        this.projectManagerID = projectManagerID;
+        this.projectmanagerID = projectmanagerID;
         this.status = status;
     }
 
@@ -80,12 +90,12 @@ public class Task {
         return deadline;
     }
 
-    public int getProjectManagerID() {
-        return projectManagerID;
+    public int getProjectmanagerID() {
+        return projectmanagerID;
     }
 
-    public void setProjectManagerID(int projectManagerID) {
-        this.projectManagerID = projectManagerID;
+    public void setProjectmanagerID(int projectmanagerID) {
+        this.projectmanagerID = projectmanagerID;
     }
 
 
