@@ -188,6 +188,8 @@ public class TaskController {
         model.addAttribute("projectId", projectId);
         model.addAttribute("userFirstNames", userFirstNames);
         model.addAttribute("userLastNames", userLastNames);
+        model.addAttribute("userId", loggedInUserId);
+
 
         return "created-task";
     }
@@ -198,19 +200,25 @@ public class TaskController {
 
     //Sender brugeren tilbage på user-frontpage med alle information om projekter
     @GetMapping("/projects/tasks/{projectId}/{userId}")
-    public String showTasksForProject(@PathVariable int projectId, @PathVariable int userId, Model model) {
+    public String showTasksForProject(@PathVariable int projectId,@PathVariable int userId, Model model, HttpSession session) {
+        Integer loggedInUserIdObj = (Integer) session.getAttribute("userId");
+        if (loggedInUserIdObj == null) {
+            return "redirect:/login";
+        }
+        int loggedInUserId = loggedInUserIdObj;
+
         // code to fetch tasks for the given projectId from the database
         List<Task> tasks = iTaskRepository.getTasksByProjectManagerID(projectId);
-        // get the userId of the user who created the project
-        userId = iUserRepository.getUserIdByProjectId(projectId);
+
         // add tasks and projectId to the model
         model.addAttribute("tasks", tasks);
         model.addAttribute("projectId", projectId);
-        model.addAttribute("userId", userId);
+        model.addAttribute("userId", loggedInUserId);
 
         // redirect to the user-frontpage with the user id as a path variable
-        return "redirect:/smartslate/user/" + userId;
+        return "redirect:/smartslate/user/" + loggedInUserId;
     }
+
 
 
 

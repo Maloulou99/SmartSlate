@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" th:href="@{/frontsite.css}" />
-    <title>Tasks for Project "${projectName}"</title>
+    <title>Tasks for Project "${projectId}"</title>
 </head>
 <body>
-<h1>Tasks for Project <span th:text="${projectName}"></span></h1>
+<h1>Tasks for Project <span th:text="${projectId}"></span></h1>
 
 <p>The following tasks have been created:</p>
 <table>
@@ -46,7 +46,7 @@
 <input type="hidden" name="projectId" th:value="${projectId}" />
 <a th:href="@{'/projects/' + ${projectId} + '/createTask'}">Create another task for this project</a>
 <br><br>
-<a th:href="@{'/projects/' + ${projectId} + '/tasks'}">Back to Project Tasks</a>
+<a th:href="@{/projects/tasks/{projectId}/{userId}(projectId=${projectId},userId=${userId})}">Back to Your Frontpage</a>
 
 </body>
 </html>
