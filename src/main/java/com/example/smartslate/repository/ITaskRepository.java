@@ -6,11 +6,13 @@ import java.util.List;
 
 public interface ITaskRepository {
 
-    int createTask(String name, String desc, String deadline, int projectId, int projectManagerId, String status);
+    int createTask(Task task);
     List<Task> getTasksByProjectId(int projectId);
     void updateTask(Task task);
     void deleteTask(int taskId);
-    List<Task> getAllTasks();
+    List<Task> getAllTasks(int userID);
     List<Task> getTasksByProjectManagerID(int projectManagerID);
     Task getTaskById(int taskId);
+
+
 }

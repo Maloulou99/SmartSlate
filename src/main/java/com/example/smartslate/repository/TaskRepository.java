@@ -4,8 +4,8 @@ import com.example.smartslate.model.Project;
 import com.example.smartslate.model.Task;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.sound.midi.Soundbank;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,18 +27,20 @@ public class TaskRepository implements ITaskRepository {
     }
 
     // Create a task
-    public int createTask(String name, String desc, String deadline, int projectId, int projectManagerId, String status) {
-
+    public int createTask(Task task) {
         int taskId = 0;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "INSERT INTO tasks (projectID, taskName, description, deadline, projectManagerID, status) VALUES (?, ?, ?, ?, ?, ?)";
+            String SQL = "INSERT INTO tasks (projectID, taskName, description, deadline, projectManagerID, userID, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = con.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setInt(1, projectId);
-            pstmt.setString(2, name);
-            pstmt.setString(3, deadline);
-            pstmt.setString(4, deadline);
-            pstmt.setInt(5, projectManagerId);
-            pstmt.setString(6, status);
+            pstmt.setInt(1, task.getProjectId());
+            pstmt.setString(2, task.getTaskName());
+            pstmt.setString(3, task.getDescription());
+            pstmt.setString(4, task.getDeadline());
+            pstmt.setInt(5, task.getProjectmanagerID());
+            System.out.println(task.getProjectmanagerID());
+            pstmt.setInt(6, task.getUserId());
+            System.out.println(task.getUserID());
+            pstmt.setString(7, task.getStatus());
             pstmt.executeUpdate();
 
             ResultSet rs = pstmt.getGeneratedKeys();
@@ -52,9 +54,6 @@ public class TaskRepository implements ITaskRepository {
     }
 
 
-
-
-
     public void updateTask(Task task) {
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
             String SQL = "UPDATE tasks SET projectID = ?, taskName = ?, description = ?, deadline = ?, projectManagerID = ?, status = ? WHERE taskID = ? AND userID = ?";
@@ -63,7 +62,7 @@ public class TaskRepository implements ITaskRepository {
             pstmt.setString(2, task.getTaskName());
             pstmt.setString(3, task.getDescription());
             pstmt.setString(4, task.getDeadline());
-            pstmt.setInt(5, task.getProjectManagerID());
+            pstmt.setInt(5, task.getProjectmanagerID());
             pstmt.setString(6, task.getStatus());
             pstmt.setInt(7, task.getTaskId());
             pstmt.setInt(8, task.getUserId());
@@ -72,6 +71,7 @@ public class TaskRepository implements ITaskRepository {
             throw new RuntimeException(e);
         }
     }
+
 
 
     // Delete
@@ -87,12 +87,13 @@ public class TaskRepository implements ITaskRepository {
     }
 
 
-    public List<Task> getAllTasks() {
+    public List<Task> getAllTasks(int userID) {
         List<Task> tasks = new ArrayList<>();
 
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT * FROM tasks;";
+            String SQL = "SELECT * FROM tasks WHERE userID = ?";
             PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, userID);
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
@@ -102,7 +103,7 @@ public class TaskRepository implements ITaskRepository {
                 task.setTaskName(rs.getString("taskName"));
                 task.setDescription(rs.getString("description"));
                 task.setDeadline(rs.getString("deadline"));
-                task.setProjectManagerID(rs.getInt("projectManagerID"));
+                task.setProjectmanagerID(rs.getInt("userID"));
                 task.setStatus(rs.getString("status"));
                 tasks.add(task);
             }
@@ -118,7 +119,7 @@ public class TaskRepository implements ITaskRepository {
         List<Task> tasks = new ArrayList<>();
 
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT * FROM Tasks WHERE projectManagerID = ?";
+            String SQL = "SELECT * FROM Tasks WHERE userID = ?";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setInt(1, projectManagerID);
             ResultSet rs = pstmt.executeQuery();
@@ -130,7 +131,7 @@ public class TaskRepository implements ITaskRepository {
                 task.setTaskName(rs.getString("taskName"));
                 task.setDescription(rs.getString("description"));
                 task.setDeadline(rs.getString("deadline"));
-                task.setProjectManagerID(rs.getInt("projectManagerID"));
+                task.setProjectmanagerID(rs.getInt("userID"));
                 task.setStatus(rs.getString("status"));
                 tasks.add(task);
             }
@@ -141,6 +142,7 @@ public class TaskRepository implements ITaskRepository {
 
         return tasks;
     }
+
 
 
 
@@ -159,9 +161,9 @@ public class TaskRepository implements ITaskRepository {
                 task.setTaskName(rs.getString("taskName"));
                 task.setDescription(rs.getString("description"));
                 task.setDeadline(rs.getString("deadline"));
-                int projectManagerID = rs.getInt("projectManagerID");
+                int projectManagerID = rs.getInt("userID");
                 if (!rs.wasNull()) {
-                    task.setProjectManagerID(projectManagerID);
+                    task.setProjectmanagerID(projectManagerID);
                 }
                 task.setStatus(rs.getString("status"));
             }
@@ -176,11 +178,9 @@ public class TaskRepository implements ITaskRepository {
     public List<Task> getTasksByProjectId(int projectId) {
         List<Task> tasks = new ArrayList<>();
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT t.taskID, t.projectID, t.taskName, t.description, t.deadline, t.projectManagerID, t.status, u.userID " +
-                    "FROM tasks t " +
-                    "LEFT JOIN employeeTasks et ON t.taskID = et.taskID " +
-                    "LEFT JOIN users u ON et.taskEmployeeID = u.userID " +
-                    "WHERE t.projectID = ?;";
+            String SQL = "SELECT t.* FROM tasks t JOIN projects p ON t.projectID = p.projectID " +
+                    "JOIN users pm ON t.projectManagerID = pm.userID " +
+                    "JOIN users u ON t.userID = u.userID WHERE p.projectID = ?";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setInt(1, projectId);
             ResultSet rs = pstmt.executeQuery();
@@ -192,9 +192,9 @@ public class TaskRepository implements ITaskRepository {
                 task.setTaskName(rs.getString("taskName"));
                 task.setDescription(rs.getString("description"));
                 task.setDeadline(rs.getString("deadline"));
-                task.setProjectManagerID(rs.getInt("projectManagerID"));
-                task.setStatus(rs.getString("status"));
+                task.setProjectmanagerID(rs.getInt("projectManagerID"));
                 task.setUserId(rs.getInt("userID"));
+                task.setStatus(rs.getString("status"));
                 Project project = new Project();
                 project.setProjectId(rs.getInt("projectID"));
                 task.setProject(project);

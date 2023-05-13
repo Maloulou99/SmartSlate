@@ -49,15 +49,22 @@ public class SmartSlateController {
     }
 
     @GetMapping("/user/frontpage")
-    public String getUserFrontsite(Model model) {
+    public String getUserFrontsite(Model model, HttpSession session) {
         List<Project> projects = iProjectRepository.getAllProjects();
         model.addAttribute("projects", projects);
 
-        List<Task> tasks = iTaskRepository.getAllTasks();
+        Integer userId = (Integer) session.getAttribute("userId"); // Hent brugerens ID fra sessionen
+        List<Task> tasks = iTaskRepository.getAllTasks(userId);
         model.addAttribute("tasks", tasks);
 
         return "user-frontpage";
     }
+
+
+
+
+
+
 }
 
 
