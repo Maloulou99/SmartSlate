@@ -64,7 +64,6 @@ public class TaskController {
             return "redirect:/login";
         }
         int userId = userIdObj;
-        List<Task> tasks = iTaskRepository.getTasksByProjectId(projectId);
 
         // Set project manager ID and user ID on task object
         task.setProjectmanagerID(projectManagerId);
@@ -76,34 +75,15 @@ public class TaskController {
         // Get the newly created task
         Task createdTask = iTaskRepository.getTaskById(taskId);
 
-        // Get User object based on projectManagerId
-        User projectManager = iUserRepository.getProjectManagerById(projectManagerId);
+        // Add common model attributes
+        getCommonModelAttributes(model, projectId, userId);
 
-        // Get user object for the current user
-        User currentUser = iUserRepository.getUser(userId);
-
-        // Get user object for the project's creator
-        int projectCreatorId = iUserRepository.getUserIdByProjectId(projectId);
-        User projectCreator = iUserRepository.getUser(projectCreatorId);
-
-        tasks.add(createdTask);
-        // Add attributes to the model
+        // Add created task to model
         model.addAttribute("task", createdTask);
-        model.addAttribute("tasks", tasks);
-        model.addAttribute("userID", userId);
-        model.addAttribute("projectManagerFirstName", projectManager.getFirstName());
-        model.addAttribute("projectManagerLastName", projectManager.getLastName());
-        model.addAttribute("currentUserFirstName", currentUser.getFirstName());
-        model.addAttribute("currentUserLastName", currentUser.getLastName());
-        model.addAttribute("projectCreatorFirstName", projectCreator.getFirstName());
-        model.addAttribute("projectCreatorLastName", projectCreator.getLastName());
-        model.addAttribute("projectCreatorId", projectCreatorId);
-
+        model.addAttribute("task", task);
 
         return "created-task";
     }
-
-
     // Update task
     @GetMapping("/tasks/{taskId}/update")
     public String showUpdateTaskForm(@PathVariable("taskId") int taskId, Model model) {
@@ -118,7 +98,6 @@ public class TaskController {
 
         return "update-task";
     }
-
 
     @PostMapping("/tasks/{taskId}/update")
     public String updateTask(@ModelAttribute("task") Task task, @ModelAttribute("user") User user, @PathVariable("taskId") int taskId) {
@@ -157,20 +136,6 @@ public class TaskController {
             return "redirect:/login";
         }
 
-        Task task = iTaskRepository.getTaskById(taskId);
-        if (task == null) {
-            // Task not found, redirect to user page
-            return "redirect:/user/{userId}";
-        }
-        if (task.getProjectmanagerID() != userId) {
-            // User is not authorized to delete task, redirect to user page
-            return "redirect:/user/{userId}";
-        }
-        if (task.getProjectId() != projectId) {
-            // Task is not part of the specified project, redirect to project page
-            return "redirect:/projects/{projectId}";
-        }
-
         iTaskRepository.deleteTaskFromProject(projectId, taskId);
 
         String referer = request.getHeader("Referer");
@@ -180,50 +145,7 @@ public class TaskController {
         return "redirect:" + referer;
     }
 
-
-    @GetMapping("/projects/{projectId}/tasks")
-    public String getTasksByProjectId(@PathVariable int projectId, Model model, HttpSession session) {
-        Integer loggedInUserIdObj = (Integer) session.getAttribute("userId");
-        if (loggedInUserIdObj == null) {
-            return "redirect:/login";
-        }
-        int loggedInUserId = loggedInUserIdObj;
-
-        List<Task> tasks = iTaskRepository.getTasksByProjectId(projectId);
-        Project project = iProjectRepository.getProjectById(projectId);
-        User projectCreator = iUserRepository.getUser(iUserRepository.getUserIdByProjectId(projectId));
-        User projectManager = iUserRepository.getProjectManagerByProjectId(projectId);
-        List<String> userFirstNames = new ArrayList<>();
-        List<String> userLastNames = new ArrayList<>();
-
-        for (Task task : tasks) {
-            User user = iUserRepository.getUser(task.getUserId());
-            userFirstNames.add(user.getFirstName());
-            userLastNames.add(user.getLastName());
-        }
-
-        model.addAttribute("tasks", tasks);
-        model.addAttribute("projectName", project.getProjectName());
-        model.addAttribute("projectId", projectId);
-        model.addAttribute("userId", loggedInUserId);
-        model.addAttribute("projectCreatorFirstName", projectCreator.getFirstName());
-        model.addAttribute("projectCreatorLastName", projectCreator.getLastName());
-        model.addAttribute("projectManagerFirstName", projectManager.getFirstName());
-        model.addAttribute("projectManagerLastName", projectManager.getLastName());
-        model.addAttribute("userFirstNames", userFirstNames);
-        model.addAttribute("userLastNames", userLastNames);
-
-        return "created-task";
-    }
-
-    /*@GetMapping("/projects/{projectId}/tasks")
-    public String getTasksByProjectId(@PathVariable int projectId, Model model, HttpSession session) {
-        Integer loggedInUserIdObj = (Integer) session.getAttribute("userId");
-        if (loggedInUserIdObj == null) {
-            return "redirect:/login";
-        }
-        int loggedInUserId = loggedInUserIdObj;
-
+    private Model getCommonModelAttributes(Model model, int projectId, int userId) {
         List<Task> tasks = iTaskRepository.getTasksByProjectId(projectId);
         Project project = iProjectRepository.getProjectById(projectId);
         User projectCreator = iUserRepository.getUser(iUserRepository.getUserIdByProjectId(projectId));
@@ -240,12 +162,17 @@ public class TaskController {
             User pm = iUserRepository.getUser(task.getProjectmanagerID());
             pmFirstNames.add(pm.getFirstName());
             pmLastNames.add(pm.getLastName());
+
+            model.addAttribute("task", task);  // Add task object to model with a unique key based on task ID
         }
+
+        pmFirstNames.add(projectCreator.getFirstName());
+        pmLastNames.add(projectCreator.getLastName());
 
         model.addAttribute("tasks", tasks);
         model.addAttribute("projectName", project.getProjectName());
         model.addAttribute("projectId", projectId);
-        model.addAttribute("userId", loggedInUserId);
+        model.addAttribute("userId", userId);
         model.addAttribute("projectCreatorFirstName", projectCreator.getFirstName());
         model.addAttribute("projectCreatorLastName", projectCreator.getLastName());
         model.addAttribute("userFirstNames", userFirstNames);
@@ -253,8 +180,22 @@ public class TaskController {
         model.addAttribute("pmFirstNames", pmFirstNames);
         model.addAttribute("pmLastNames", pmLastNames);
 
+        return model;
+    }
+
+
+    @GetMapping("/projects/{projectId}/tasks")
+    public String getTasksByProjectId(@PathVariable int projectId, Model model, HttpSession session) {
+        Integer loggedInUserIdObj = (Integer) session.getAttribute("userId");
+        if (loggedInUserIdObj == null) {
+            return "redirect:/login";
+        }
+        int loggedInUserId = loggedInUserIdObj;
+
+        model = getCommonModelAttributes(model, projectId, loggedInUserId);
+
         return "created-task";
-    }*/
+    }
 
     //Sender brugeren tilbage på user-frontpage med alle information om projekter
     @GetMapping("/projects/tasks/{projectId}/{userId}")
