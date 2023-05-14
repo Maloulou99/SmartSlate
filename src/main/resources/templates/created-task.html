@@ -18,6 +18,7 @@
         <th>Project Manager</th>
         <th>Project created by</th>
         <th>Status</th>
+        <th>Actions</th>
     </tr>
     <tr th:each="task : ${tasks}">
         <td th:text="${task.taskId}"></td>
@@ -40,6 +41,13 @@
             <span th:text="${userLastNames}"></span>
         </td>
         <td th:text="${task.status}"></td>
+        <td>
+        <div class="task-buttons">
+            <a th:href="@{/tasks/{taskId}/delete}" class="button">Delete Task</a>
+            <a th:href="@{/tasks/{taskId}/update}" class="button">Update Task</a>
+            <a th:href="@{/tasks/{taskId}/createSubtask}" class="button">Create Subtask</a>
+        </div>
+        </td>
     </tr>
 </table>
 

@@ -1,24 +1,3 @@
-/* generel styling */
-body {
-    background-color: #f0f4f8;
-    font-family: Arial, sans-serif;
-}
-
-h1, h2 {
-    color: #3b82f6;
-}
-
-table {
-    border-collapse: collapse;
-    margin: 20px 0;
-    width: 100%;
-}
-
-table th, table td {
-    border: 1px solid #a5b4c4;
-    padding: 10px;
-}
-
 /* styling af brugerinformationer */
 table.user-info {
     margin: 40px 0;
@@ -30,20 +9,24 @@ table.user-info td:first-child {
 }
 
 /* styling af knapper */
-a {
+a.button {
     background-color: #3b82f6;
     border: none;
     border-radius: 5px;
     color: white;
     display: inline-block;
     font-size: 16px;
-    margin: 10px;
+    margin-right: 10px;
     padding: 10px 20px;
     text-align: center;
     text-decoration: none;
 }
 
-a:hover {
+a.button:last-child {
+    margin-right: 0;
+}
+
+a.button:hover {
     background-color: #2563eb;
 }
 
@@ -73,21 +56,18 @@ table.task-table td:last-child {
 
 .task-buttons {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
+    margin-top: 10px;
 }
 
-.task-buttons button {
-    background-color: #3b82f6;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    font-size: 16px;
-    margin: 10px;
+.task-buttons a {
+    margin-right: 10px;
+}
+
+.task-buttons a:last-child {
+    margin-right: 0;
+}
+
+.task-buttons a.button {
     padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-}
-
-.task-buttons button:hover {
-    background-color: #2563eb;
 }
