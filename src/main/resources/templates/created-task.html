@@ -36,17 +36,17 @@
             </span>
         </td>
         <td>
-            <span th:text="${userFirstNames}"></span>
+            <span th:text="${projectCreatorFirstName}"></span>
             <span> </span>
-            <span th:text="${userLastNames}"></span>
+            <span th:text="${projectCreatorLastName}"></span>
         </td>
         <td th:text="${task.status}"></td>
         <td>
-        <div class="task-buttons">
-            <a th:href="@{/tasks/{taskId}/delete}" class="button">Delete Task</a>
-            <a th:href="@{/tasks/{taskId}/update}" class="button">Update Task</a>
-            <a th:href="@{/tasks/{taskId}/createSubtask}" class="button">Create Subtask</a>
-        </div>
+            <div class="task-buttons">
+                <a th:href="@{/tasks/{taskId}/delete}" class="button">Delete Task</a>
+                <a th:href="@{/tasks/{taskId}/update}" class="button">Update Task</a>
+                <a th:href="@{/tasks/{taskId}/createSubtask}" class="button">Create Subtask</a>
+            </div>
         </td>
     </tr>
 </table>
