@@ -7,6 +7,7 @@ import com.example.smartslate.repository.ILoginRepository;
 import com.example.smartslate.repository.IProjectRepository;
 import com.example.smartslate.repository.ITaskRepository;
 import com.example.smartslate.repository.IUserRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -67,10 +68,14 @@ public class UserController {
     }
 
     @GetMapping("/user/update/{userId}")
-    public String updateUserForm(@PathVariable int userId, Model model) {
+    public String updateUserForm(@PathVariable int userId, Model model, HttpSession httpSession) {
+        Integer loggedUserId = (Integer) httpSession.getAttribute("userId");
+        if (loggedUserId == null || loggedUserId != userId) {
+            return "redirect:/login";
+        }
+
         User user = iUserRepository.getUser(userId);
         model.addAttribute("user", user);
-        System.out.println(userId);
         return "user-update";
     }
 
@@ -79,8 +84,9 @@ public class UserController {
         iUserRepository.updateUser(user);
         iProjectRepository.getProjectById(user.getUserID());
         model.addAttribute("id", user.getUserID());
-        return "user-frontpage";
+        return "redirect:/smartslate/user/" + user.getUserID();
     }
+
 
     @GetMapping("/deleteuser/{userId}")
     public String deleteUser(@PathVariable int userId) {
