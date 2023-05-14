@@ -1,0 +1,93 @@
+/* generel styling */
+body {
+    background-color: #f0f4f8;
+    font-family: Arial, sans-serif;
+}
+
+h1, h2 {
+    color: #3b82f6;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 20px 0;
+    width: 100%;
+}
+
+table th, table td {
+    border: 1px solid #a5b4c4;
+    padding: 10px;
+}
+
+/* styling af brugerinformationer */
+table.user-info {
+    margin: 40px 0;
+}
+
+table.user-info td:first-child {
+    font-weight: bold;
+    width: 150px;
+}
+
+/* styling af knapper */
+a {
+    background-color: #3b82f6;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+}
+
+a:hover {
+    background-color: #2563eb;
+}
+
+/* styling af tabel med projekter */
+table.project-table th {
+    background-color: #3b82f6;
+    color: white;
+}
+
+table.project-table td:last-child, table.project-table td:nth-last-child(2) {
+    text-align: center;
+}
+
+table.project-table td:last-child a, table.project-table td:nth-last-child(2) a {
+    margin: 0;
+}
+
+/* styling af tabel med opgaver */
+table.task-table th {
+    background-color: #3b82f6;
+    color: white;
+}
+
+table.task-table td:last-child {
+    text-align: center;
+}
+
+.task-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.task-buttons button {
+    background-color: #3b82f6;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    margin: 10px;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.task-buttons button:hover {
+    background-color: #2563eb;
+}

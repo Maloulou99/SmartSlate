@@ -2,7 +2,7 @@
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" th:href="@{/frontsite.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/task-style.css}" />
     <title>Tasks for Project "${projectId}"</title>
 </head>
 <body>
@@ -46,7 +46,7 @@
 <input type="hidden" name="projectId" th:value="${projectId}" />
 <a th:href="@{'/projects/' + ${projectId} + '/createTask'}">Create another task for this project</a>
 <br><br>
-<a th:href="@{/projects/tasks/{projectId}/{userId}(projectId=${projectId},userId=${userId})}">Back to Your Frontpage</a>
+<a th:href="@{/projects/tasks/{projectId}/{userId}(projectId=${projectId},userId=${userId})}" >Back to Your Frontpage</a>
 
 </body>
 </html>
