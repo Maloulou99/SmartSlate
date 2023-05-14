@@ -18,13 +18,7 @@ public class TaskRepository implements ITaskRepository {
     String user_id;
     @Value("${spring.datasource.password}")
     String user_pwd;
-    private UserRepository userRepository;
-    private ProjectRepository projectRepository;
 
-    public TaskRepository(UserRepository userRepository, ProjectRepository projectRepository) {
-        this.userRepository = userRepository;
-        this.projectRepository = projectRepository;
-    }
 
     // Create a task
     public int createTask(Task task) {
@@ -81,6 +75,24 @@ public class TaskRepository implements ITaskRepository {
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setInt(1, taskId);
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteTasksByProjectId(int projectId) {
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            // Første SQL-forespørgsel
+            String SQL1 = "UPDATE employeetasks SET taskID = NULL WHERE taskID IN (SELECT taskID FROM tasks WHERE projectID = ?)";
+            PreparedStatement pstmt1 = con.prepareStatement(SQL1);
+            pstmt1.setInt(1, projectId);
+            pstmt1.executeUpdate();
+
+            // Anden SQL-forespørgsel
+            String SQL2 = "DELETE FROM tasks WHERE projectID = ?";
+            PreparedStatement pstmt2 = con.prepareStatement(SQL2);
+            pstmt2.setInt(1, projectId);
+            pstmt2.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

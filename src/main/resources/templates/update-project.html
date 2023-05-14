@@ -2,46 +2,48 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Update Project</title>
+    <title>Opdater projekt</title>
+    <link rel="stylesheet" href="/project-task.css">
 </head>
 <body>
-<h1>Update Project</h1>
-<form action="/update/{id}" method="post">
+<h1>Update project</h1>
+<form th:action="@{/projects/update/{id}(id=${project.userID})}" method="post">
     <div class="form-group">
-        <label for="projectManagerID">Project Manager ID:</label>
-        <input type="number" class="form-control" id="projectManagerID" name="projectManagerID" value="{project.projectManagerID}" required>
+        <label for="userId">User ID</label>
+        <input type="text" id="userId" name="userId" th:value="${userFullName}" readonly>
     </div>
+
+
     <div class="form-group">
         <label for="projectName">Project Name:</label>
-        <input type="text" class="form-control" id="projectName" name="projectName" value="${project.projectName}" required>
+        <input type="text" class="form-control" id="projectName" name="projectName" th:value="${project.projectName}" required>
     </div>
     <div class="form-group">
         <label for="description">Description:</label>
-        <textarea class="form-control" id="description" name="description" rows="5">${project.description}</textarea>
+        <textarea class="form-control" id="description" name="description" rows="5" th:text="${project.description}"></textarea>
     </div>
 
     <div class="form-group">
         <label for="startDate">Start Date:</label>
-        <input type="date" class="form-control" id="startDate" name="startDate" value="{project.startDate}" required>
+        <input type="date" class="form-control" id="startDate" name="startDate" th:value="${project.startDate}" required>
     </div>
     <div class="form-group">
         <label for="endDate">End Date:</label>
-        <input type="date" class="form-control" id="endDate" name="endDate" value="{project.endDate}">
+        <input type="date" class="form-control" id="endDate" name="endDate" th:value="${project.endDate}">
     </div>
     <div class="form-group">
         <label for="budget">Budget:</label>
-        <input type="number" class="form-control" id="budget" name="budget" value="{project.budget}">
+        <input type="number" class="form-control" id="budget" name="budget" th:value="${project.budget}">
     </div>
     <div class="form-group">
         <label for="status">Status:</label>
-        <select class="form-control" id="status" name="status" required>
-            <option value="New" th:selected="${project.status == 'New'}">New</option>
+        <select id="status" name="status" th:value="${project.status}">
+            <option value="Planning" th:selected="${project.status == 'Planning'}">Planning</option>
             <option value="In Progress" th:selected="${project.status == 'In Progress'}">In Progress</option>
             <option value="Completed" th:selected="${project.status == 'Completed'}">Completed</option>
         </select>
     </div>
-    <button type="submit" class="btn btn-primary">Update Project</button>
+    <button type="submit" class="btn btn-primary">Update project</button>
 </form>
-
 </body>
 </html>

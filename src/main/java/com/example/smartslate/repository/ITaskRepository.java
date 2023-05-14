@@ -14,5 +14,6 @@ public interface ITaskRepository {
     List<Task> getTasksByProjectManagerID(int projectManagerID);
     Task getTaskById(int taskId);
 
+    void deleteTasksByProjectId(int projectId);
 
 }

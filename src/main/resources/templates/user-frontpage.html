@@ -54,8 +54,8 @@
     <td th:text="${project.projectId}"></td>
     <td th:text="${project.projectName}"></td>
     <td th:text="${project.description}"></td>
-    <td th:text="${project.startDate}"></td>
-    <td th:text="${project.endDate}"></td>
+    <td th:text="${#temporals.format(project.startDate, 'dd-MM-yyyy')}"></td>
+    <td th:text="${#temporals.format(project.endDate, 'dd-MM-yyyy')}"></td>
     <td th:text="${project.budget}"></td>
     <td th:text="${project.status}"></td>
     <td>
