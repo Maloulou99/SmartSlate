@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface ISubTask {
 
-    public void createSubTask(Subtask subtask);
-    public Subtask getSubtaskById(int subtaskID);
-    public void updateSubtask(Subtask subtask);
-    public void deleteSubtask(int subtaskId);
-    public List<Subtask> getAllSubtasks();
+     void createSubTask(Subtask subtask);
+     Subtask getSubtaskById(int subtaskID);
+     void updateSubtask(Subtask subtask);
+     void deleteSubtask(int subtaskId);
+     List<Subtask> getAllSubtasks();
 }

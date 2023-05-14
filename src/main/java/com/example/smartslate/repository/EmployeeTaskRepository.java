@@ -74,7 +74,7 @@ public class EmployeeTaskRepository implements IEmployeeTask {
         }
     }
 
-    public void deleteEmployeeTask(int employeeTaskID) throws SQLException {
+    public void deleteEmployeeTask(int employeeTaskID) {
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd);
              PreparedStatement pstmt = con.prepareStatement(
                      "DELETE FROM employee_tasks WHERE employeeTaskID=?")) {
