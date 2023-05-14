@@ -6,6 +6,7 @@ import com.example.smartslate.model.User;
 import com.example.smartslate.repository.IProjectRepository;
 import com.example.smartslate.repository.ITaskRepository;
 import com.example.smartslate.repository.IUserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -124,40 +125,40 @@ public class TaskController {
 
 
     // Delete task
-    /*@PostMapping("/tasks/{id}/delete")
-    public String deleteTask(@PathVariable("id") int taskId, RedirectAttributes redirectAttributes) {
-        int userId = iTaskRepository.getTaskById(taskId).getUserId();
-        iTaskRepository.deleteTask(taskId);
-        redirectAttributes.addAttribute("userId", userId);
-        return "redirect:/user/{userId}";
-    }*/
-    @PostMapping("/tasks/{id}/delete")
-    public String deleteTask(@PathVariable("id") int taskId, RedirectAttributes redirectAttributes, HttpSession session) {
-        Integer userIdObj = (Integer) session.getAttribute("userId");
-        if (userIdObj == null) {
+    @PostMapping("/projects/{projectId}/tasks/{taskId}/delete")
+    public String deleteTask(@PathVariable int projectId,
+                             @PathVariable int taskId,
+                             HttpSession session,
+                             HttpServletRequest request) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        if (userId == null) {
             return "redirect:/login";
         }
-        int userId = userIdObj;
 
         Task task = iTaskRepository.getTaskById(taskId);
         if (task == null) {
             // Task not found, redirect to user page
-            redirectAttributes.addAttribute("userId", userId);
             return "redirect:/user/{userId}";
         }
-
         if (task.getProjectmanagerID() != userId) {
             // User is not authorized to delete task, redirect to user page
-            redirectAttributes.addAttribute("userId", userId);
             return "redirect:/user/{userId}";
         }
+        if (task.getProjectId() != projectId) {
+            // Task is not part of the specified project, redirect to project page
+            return "redirect:/projects/{projectId}";
+        }
 
-        // Delete task
-        iTaskRepository.deleteTask(taskId);
+        iTaskRepository.deleteTaskFromProject(projectId, taskId);
 
-        redirectAttributes.addAttribute("userId", userId);
-        return "redirect:/user/{userId}";
+        String referer = request.getHeader("Referer");
+        if (referer == null || !referer.contains("/projects/" + projectId + "/tasks")) {
+            return "redirect:/projects/" + projectId + "/tasks";
+        }
+        return "redirect:" + referer;
     }
+
+
 
     @GetMapping("/projects/{projectId}/tasks")
     public String getTasksByProjectId(@PathVariable int projectId, Model model, HttpSession session) {
@@ -218,7 +219,7 @@ public class TaskController {
         //model.addAttribute("userId", loggedInUserId);
 
         // redirect to the user-frontpage with the user id as a path variable
-        return "redirect:/smartslate/user/" + loggedInUserId;
+        return "redirect:/smartslate/user/" + userId;
     }
 
 

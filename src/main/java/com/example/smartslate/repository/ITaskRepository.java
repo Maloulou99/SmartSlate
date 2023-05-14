@@ -9,11 +9,10 @@ public interface ITaskRepository {
     int createTask(Task task);
     List<Task> getTasksByProjectId(int projectId);
     void updateTask(Task task);
-    void deleteTask(int taskId);
     List<Task> getAllTasks(int userID);
     List<Task> getTasksByProjectManagerID(int projectManagerID);
     Task getTaskById(int taskId);
 
-    void deleteTasksByProjectId(int projectId);
+    void deleteTaskFromProject(int projectId, int taskId);
 
 }

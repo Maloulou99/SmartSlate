@@ -68,35 +68,26 @@ public class TaskRepository implements ITaskRepository {
 
 
 
-    // Delete
-    public void deleteTask(int taskId) {
+    // Delete one task from a project
+    public void deleteTaskFromProject(int projectId, int taskId) {
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "DELETE FROM Tasks WHERE TaskID = ?";
-            PreparedStatement pstmt = con.prepareStatement(SQL);
-            pstmt.setInt(1, taskId);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void deleteTasksByProjectId(int projectId) {
-        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            // Første SQL-forespørgsel
-            String SQL1 = "UPDATE employeetasks SET taskID = NULL WHERE taskID IN (SELECT taskID FROM tasks WHERE projectID = ?)";
+            // Slet task fra tasks tabellen
+            String SQL1 = "DELETE FROM tasks WHERE projectID = ? AND taskID = ?";
             PreparedStatement pstmt1 = con.prepareStatement(SQL1);
             pstmt1.setInt(1, projectId);
+            pstmt1.setInt(2, taskId);
             pstmt1.executeUpdate();
 
-            // Anden SQL-forespørgsel
-            String SQL2 = "DELETE FROM tasks WHERE projectID = ?";
+            // Opdater employeetasks tabellen for at fjerne task fra alle employeetasks
+            String SQL2 = "UPDATE employeetasks SET taskID = NULL WHERE taskID = ?";
             PreparedStatement pstmt2 = con.prepareStatement(SQL2);
-            pstmt2.setInt(1, projectId);
+            pstmt2.setInt(1, taskId);
             pstmt2.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
 
 
     public List<Task> getAllTasks(int userID) {

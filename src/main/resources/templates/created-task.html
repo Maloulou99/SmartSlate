@@ -43,7 +43,7 @@
         <td th:text="${task.status}"></td>
         <td>
             <div class="task-buttons">
-                <a th:href="@{/tasks/{taskId}/delete}" class="button">Delete Task</a>
+                <a th:href="@{/projects/{projectId}/tasks/{taskId}/delete(projectId=${projectId}, taskId=${task.taskId})}" class="button">Delete Task</a>
                 <a th:href="@{/tasks/{taskId}/update}" class="button">Update Task</a>
                 <a th:href="@{/tasks/{taskId}/createSubtask}" class="button">Create Subtask</a>
             </div>

@@ -97,12 +97,11 @@ public class ProjectController {
     }
 
 
-
-    @GetMapping("/delete/{id}/{userid}")
-    public String deleteProject(@PathVariable("id") int id, @PathVariable("userid") int userID) {
-        iTaskRepository.deleteTasksByProjectId(id); // Slet tilknyttede tasks først
-        iProjectRepository.deleteProject(id);
+    @GetMapping("/delete/{taskId}/{userid}")
+    public String deleteProject(@PathVariable("taskId") int taskId, @PathVariable("userid") int userID) {
+        iProjectRepository.deleteProject(taskId);
         return "redirect:/smartslate/user/" + userID;
     }
+
 
 }
