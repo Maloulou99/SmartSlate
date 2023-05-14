@@ -87,18 +87,24 @@ public class ProjectController {
 
     @PostMapping("/update/{id}")
     public String updateProject(@ModelAttribute Project project, @PathVariable("id") int id, HttpSession session) {
+        // Set project ID from path variable
         project.setProjectId(id);
 
         // Set user ID from HttpSession
         int userId = (int) session.getAttribute("userId");
         project.setUserID(userId);
+
+        // Update project in database
         iProjectRepository.updateProject(project);
+
+        // Redirect to user's project page
         return "redirect:/smartslate/user/" + userId;
     }
 
 
-    @GetMapping("/delete/{taskId}/{userid}")
-    public String deleteProject(@PathVariable("taskId") int taskId, @PathVariable("userid") int userID) {
+
+    @GetMapping("/delete/{projectId}/{userid}")
+    public String deleteProject(@PathVariable("projectId") int taskId, @PathVariable("userid") int userID) {
         iProjectRepository.deleteProject(taskId);
         return "redirect:/smartslate/user/" + userID;
     }

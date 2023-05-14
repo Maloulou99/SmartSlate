@@ -17,7 +17,6 @@ public class ProjectRepository implements IProjectRepository{
     @Value("${spring.datasource.password}")
     String user_pwd;
 
-
     public int createProject(Project project) {
         int projectId = 0;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
@@ -51,7 +50,7 @@ public class ProjectRepository implements IProjectRepository{
             pstmt.setString(2, project.getProjectName());
             pstmt.setString(3, project.getDescription());
             pstmt.setDate(4, Date.valueOf(project.getStartDate()));
-            pstmt.setDate(5, Date.valueOf(project.getEndDate()));
+            pstmt.setDate(5, project.getEndDate() != null ? Date.valueOf(project.getEndDate()) : null);
             pstmt.setString(6, project.getBudget());
             pstmt.setString(7, project.getStatus());
             pstmt.setInt(8, project.getProjectId());
@@ -77,7 +76,6 @@ public class ProjectRepository implements IProjectRepository{
         }
     }
 
-
     public Project getProjectById(int projectId) {
         Project project = null;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
@@ -92,7 +90,7 @@ public class ProjectRepository implements IProjectRepository{
                 project.setProjectName(rs.getString("projectName"));
                 project.setDescription(rs.getString("description"));
                 project.setStartDate(rs.getDate("startDate").toLocalDate());
-                project.setEndDate(rs.getDate("endDate").toLocalDate());
+                project.setEndDate(rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null);
                 project.setBudget(rs.getString("budget"));
                 project.setStatus(rs.getString("status"));
             }
@@ -102,29 +100,29 @@ public class ProjectRepository implements IProjectRepository{
         return project;
     }
 
-    public List<Project> getAllProjects() {
-        List<Project> projects = new ArrayList<>();
-        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT * FROM projects";
-            PreparedStatement pstmt = con.prepareStatement(SQL);
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                Project project = new Project();
-                project.setProjectId(rs.getInt("projectID"));
-                project.setUserID(rs.getInt("userID"));
-                project.setProjectName(rs.getString("projectName"));
-                project.setDescription(rs.getString("description"));
-                project.setStartDate(rs.getDate("startDate").toLocalDate());
-                project.setEndDate(rs.getDate("endDate").toLocalDate());
-                project.setBudget(rs.getString("budget"));
-                project.setStatus(rs.getString("status"));
-                projects.add(project);
+        public List<Project> getAllProjects () {
+            List<Project> projects = new ArrayList<>();
+            try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+                String SQL = "SELECT * FROM projects";
+                PreparedStatement pstmt = con.prepareStatement(SQL);
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    Project project = new Project();
+                    project.setProjectId(rs.getInt("projectID"));
+                    project.setUserID(rs.getInt("userID"));
+                    project.setProjectName(rs.getString("projectName"));
+                    project.setDescription(rs.getString("description"));
+                    project.setStartDate(rs.getDate("startDate").toLocalDate());
+                    project.setEndDate(rs.getDate("endDate").toLocalDate() != null ? rs.getDate("endDate").toLocalDate() : null);
+                    project.setBudget(rs.getString("budget"));
+                    project.setStatus(rs.getString("status"));
+                    projects.add(project);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return projects;
         }
-        return projects;
-    }
 
     public List<Project> getAllProjectsByUserId(int userId) {
         List<Project> projects = new ArrayList<>();
@@ -140,7 +138,7 @@ public class ProjectRepository implements IProjectRepository{
                 project.setProjectName(rs.getString("projectName"));
                 project.setDescription(rs.getString("description"));
                 project.setStartDate(rs.getDate("startDate").toLocalDate());
-                project.setEndDate(rs.getDate("endDate").toLocalDate());
+                project.setEndDate(rs.getDate("endDate") != null ? rs.getDate("endDate").toLocalDate() : null);
                 project.setBudget(rs.getString("budget"));
                 project.setStatus(rs.getString("status"));
                 projects.add(project);
@@ -150,10 +148,6 @@ public class ProjectRepository implements IProjectRepository{
         }
         return projects;
     }
-
-
-
-
 
 
 }
