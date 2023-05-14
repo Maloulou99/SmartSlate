@@ -5,7 +5,7 @@
   <title>Update task</title>
 </head>
 <body>
-<form th:action="@{/tasks/{id}/update(id=${task.taskId})}" th:method="post" th:object="${task}">
+<form th:action="@{/tasks/{taskId}/update(taskId=${task.taskId})}" th:method="post" th:object="${task}">
 
   <div>
     <input type="hidden" id="projectId" th:field="*{projectId}">
@@ -28,20 +28,25 @@
 
 
   <div>
-    <label for="assignedTo">Assigned To</label>
-    <select id="assignedTo" th:field="*{assignedTo}">
-      <option value="">-- None --</option>
-      <option th:each="user : ${users}" th:value="${user.userID}" th:text="${user.username}"></option>
-    </select>
+      <label for="projectManagerId">Project Manager:</label>
+      <select id="projectManagerId" name="projectManagerId" required>
+        <option th:each="projectManager : ${projectManagers}"
+                th:if="${projectManager.roleID == 2}"
+                th:value="${projectManager.userID}"
+                th:text="${projectManager.firstName} + ' ' + ${projectManager.lastName}"
+                th:selected="${projectManager.userID == task.projectmanagerID}">
+        </option>
+      </select>
+      <p th:unless="${projectManagers}">No project managers available</p>
   </div>
 
 
-  <label for="status">Status:</label>
   <div>
+    <label for="status">Status:</label>
     <select id="status" name="status" th:field="*{status}">
-      <option value="New">New</option>
-      <option value="In Progress">In Progress</option>
-      <option value="Completed">Completed</option>
+      <option value="Planning" th:selected="${task.status == 'Planning'}">Planning</option>
+      <option value="In Progress" th:selected="${task.status == 'In Progress'}">In Progress</option>
+      <option value="Completed" th:selected="${task.status == 'Completed'}">Completed</option>
     </select>
   </div>
 
