@@ -22,11 +22,11 @@ CREATE TABLE roles
 CREATE TABLE users
 (
     userID       INTEGER             NOT NULL AUTO_INCREMENT,
-    username     VARCHAR(255) UNIQUE NOT NULL,
-    password     VARCHAR(255)        NOT NULL,
-    email        VARCHAR(255) UNIQUE,
-    firstName    VARCHAR(255),
-    lastName     VARCHAR(255),
+    username     VARCHAR(20) UNIQUE NOT NULL,
+    password     VARCHAR(20)        NOT NULL,
+    email        VARCHAR(20) UNIQUE,
+    firstName    VARCHAR(20),
+    lastName     VARCHAR(20),
     phoneNumber VARCHAR(20),
     createdAt    DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updatedAt    DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -40,7 +40,7 @@ CREATE TABLE projects
 (
     projectID        INTEGER      NOT NULL AUTO_INCREMENT,
     userID 			 INTEGER,
-    projectName      VARCHAR(255) NOT NULL,
+    projectName      VARCHAR(20) NOT NULL,
     description      VARCHAR(1000),
     startDate        DATE         NOT NULL,
     endDate          DATE,
@@ -61,7 +61,7 @@ CREATE TABLE tasks
     userID           INTEGER, -- Tilføjet kolonne for userID
     status           VARCHAR(20)  NOT NULL,
     PRIMARY KEY (taskID),
-    FOREIGN KEY (projectID) REFERENCES projects(userID),
+    FOREIGN KEY (projectID) REFERENCES projects(projectID),
     FOREIGN KEY (projectManagerID) REFERENCES users (userID),
     FOREIGN KEY (userID) REFERENCES users (userID) -- Tilføjet fremmednøgle for userID
 );
