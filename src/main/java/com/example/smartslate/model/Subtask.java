@@ -23,6 +23,9 @@ public class Subtask {
         this.status = status;
     }
 
+    public Subtask(){
+
+    }
     public int getSubtaskID() {
         return subtaskID;
     }

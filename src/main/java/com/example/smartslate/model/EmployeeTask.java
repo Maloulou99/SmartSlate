@@ -1,19 +1,22 @@
 package com.example.smartslate.model;
 
-public class EmployeeTasks {
+public class EmployeeTask {
 
     private int employeeTaskID;
     private int taskEmployeeID;
     private int taskID;
     private String hours;
 
-    public EmployeeTasks(int employeeTaskID, int taskEmployeeID, int taskID, String hours) {
+    public EmployeeTask(int employeeTaskID, int taskEmployeeID, int taskID, String hours) {
         this.employeeTaskID = employeeTaskID;
         this.taskEmployeeID = taskEmployeeID;
         this.taskID = taskID;
         this.hours = hours;
     }
 
+    public EmployeeTask() {
+
+    }
     public int getEmployeeTaskID() {
         return employeeTaskID;
     }
