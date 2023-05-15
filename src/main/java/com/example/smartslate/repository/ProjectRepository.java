@@ -63,14 +63,20 @@ public class ProjectRepository implements IProjectRepository{
 
     public void deleteProject(int projectId) {
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "DELETE FROM projects WHERE projectID = ?";
-            PreparedStatement pstmt = con.prepareStatement(SQL);
-            pstmt.setInt(1, projectId);
-            pstmt.executeUpdate();
+            try (PreparedStatement pstmt1 = con.prepareStatement("DELETE FROM tasks WHERE projectID = ?")) {
+                pstmt1.setInt(1, projectId);
+                pstmt1.executeUpdate();
+            }
+
+            try (PreparedStatement pstmt2 = con.prepareStatement("DELETE FROM projects WHERE projectID = ?")) {
+                pstmt2.setInt(1, projectId);
+                pstmt2.executeUpdate();
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
 
     public Project getProjectById(int projectId) {
         Project project = null;

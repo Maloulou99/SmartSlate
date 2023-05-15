@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" th:href="@{/frontsite.css}" />
-    <title>Tasks for Project "${projectName}"</title>
+    <title>Tasks for Project "${projectId}"</title>
 </head>
 <body>
-<h1>Tasks for Project <span th:text="${projectName}"></span></h1>
+<h1>Tasks for Project <span th:text="${projectId}"></span></h1>
 
 <p>The following tasks have been created:</p>
 <table>
@@ -18,6 +18,7 @@
         <th>Project Manager</th>
         <th>Project created by</th>
         <th>Status</th>
+        <th>Actions</th>
     </tr>
     <tr th:each="task : ${tasks}">
         <td th:text="${task.taskId}"></td>
@@ -35,18 +36,25 @@
             </span>
         </td>
         <td>
-            <span th:text="${userFirstNames}"></span>
+            <span th:text="${projectCreatorFirstName}"></span>
             <span> </span>
-            <span th:text="${userLastNames}"></span>
+            <span th:text="${projectCreatorLastName}"></span>
         </td>
         <td th:text="${task.status}"></td>
+        <td>
+            <div class="task-buttons">
+                <a th:href="@{/projects/{projectId}/tasks/{taskId}/delete(projectId=${projectId}, taskId=${task.taskId})}" class="button">Delete Task</a>
+                <a th:href="@{/tasks/{taskId}/update}" class="button">Update Task</a>
+                <a th:href="@{/tasks/{taskId}/createSubtask}" class="button">Create Subtask</a>
+            </div>
+        </td>
     </tr>
 </table>
 
 <input type="hidden" name="projectId" th:value="${projectId}" />
 <a th:href="@{'/projects/' + ${projectId} + '/createTask'}">Create another task for this project</a>
 <br><br>
-<a th:href="@{'/projects/' + ${projectId} + '/tasks'}">Back to Project Tasks</a>
+<a th:href="@{/projects/tasks/{projectId}/{userId}(projectId=${projectId},userId=${userId})}" >Back to Your Frontpage</a>
 
 </body>
 </html>

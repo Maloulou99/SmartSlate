@@ -3,6 +3,7 @@ package com.example.smartslate.controller;
 import com.example.smartslate.model.Project;
 import com.example.smartslate.model.User;
 import com.example.smartslate.repository.IProjectRepository;
+import com.example.smartslate.repository.ITaskRepository;
 import com.example.smartslate.repository.IUserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -17,10 +18,12 @@ public class ProjectController {
 
     private IProjectRepository iProjectRepository;
     private IUserRepository iUserRepository;
+    private ITaskRepository iTaskRepository;
 
-    public ProjectController(IProjectRepository iProjectRepository, IUserRepository iUserRepository) {
+    public ProjectController(IProjectRepository iProjectRepository, IUserRepository iUserRepository, ITaskRepository iTaskRepository) {
         this.iProjectRepository = iProjectRepository;
         this.iUserRepository = iUserRepository;
+        this.iTaskRepository = iTaskRepository;
     }
 
     @GetMapping("/all-projects")
@@ -63,24 +66,41 @@ public class ProjectController {
     }
 
     @GetMapping("/update/{id}")
-    public String updateProjectForm(@PathVariable("id") int id, Model model) {
+    public String updateProjectForm(@PathVariable("id") int id, Model model, HttpSession session) {
+        Integer userIdObj = (Integer) session.getAttribute("userId"); // Hent brugerens ID fra session
+        if (userIdObj == null) {
+            // Brugeren er ikke logget ind, så redirect til login siden eller vis en fejlmeddelelse
+            return "redirect:/login";
+        }
         Project project = iProjectRepository.getProjectById(id);
-        System.out.println(id);
         model.addAttribute("project", project);
+
+        // Get user information from HttpSession
+        int userId = (int) session.getAttribute("userId");
+        User user = iUserRepository.getUser(userId);
+        String fullName = user.getFirstName() + " " + user.getLastName();
+        model.addAttribute("userFullName", fullName);
+
         return "update-project";
     }
 
     @PostMapping("/update/{id}")
-    public String updateProject(@ModelAttribute Project project, @PathVariable("id") int id) {
+    public String updateProject(@ModelAttribute Project project, @PathVariable("id") int id, HttpSession session) {
         project.setProjectId(id);
+
+        // Set user ID from HttpSession
+        int userId = (int) session.getAttribute("userId");
+        project.setUserID(userId);
         iProjectRepository.updateProject(project);
-        return "redirect:/user-frontpage";
+        return "redirect:/smartslate/user/" + userId;
     }
 
 
-    @GetMapping("/delete/{id}/{userid}")
-    public String deleteProject(@PathVariable("id") int id, @PathVariable("userid") int userID) {
-        iProjectRepository.deleteProject(id);
+    @GetMapping("/delete/{taskId}/{userid}")
+    public String deleteProject(@PathVariable("taskId") int taskId, @PathVariable("userid") int userID) {
+        iProjectRepository.deleteProject(taskId);
         return "redirect:/smartslate/user/" + userID;
     }
+
+
 }
