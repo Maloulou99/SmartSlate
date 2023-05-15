@@ -11,7 +11,6 @@ DROP TABLE IF EXISTS projects;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS roles;
 
-
 CREATE TABLE roles
 (
     roleID    INTEGER NOT NULL AUTO_INCREMENT,
@@ -23,12 +22,12 @@ CREATE TABLE roles
 CREATE TABLE users
 (
     userID       INTEGER             NOT NULL AUTO_INCREMENT,
-    username     VARCHAR(20) UNIQUE NOT NULL,
-    password     VARCHAR(20)        NOT NULL,
-    email        VARCHAR(20) UNIQUE,
-    firstName    VARCHAR(20),
-    lastName     VARCHAR(20),
-    phoneNumber VARCHAR(20),
+    username     VARCHAR(50) UNIQUE NOT NULL,
+    password     VARCHAR(50)        NOT NULL,
+    email        VARCHAR(50) UNIQUE,
+    firstName    VARCHAR(50),
+    lastName     VARCHAR(50),
+    phoneNumber VARCHAR(50),
     createdAt    DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updatedAt    DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     roleID       INTEGER             NOT NULL,
