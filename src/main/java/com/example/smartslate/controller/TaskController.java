@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RequestMapping("")
 @Controller
@@ -150,24 +152,12 @@ public class TaskController {
         Project project = iProjectRepository.getProjectById(projectId);
         User projectCreator = iUserRepository.getUser(iUserRepository.getUserIdByProjectId(projectId));
 
-        List<String> userFirstNames = new ArrayList<>();
-        List<String> userLastNames = new ArrayList<>();
-        List<String> pmFirstNames = new ArrayList<>();
-        List<String> pmLastNames = new ArrayList<>();
-
+        List<String> pmNames = new ArrayList<>();
         for (Task task : tasks) {
-            User user = iUserRepository.getUser(task.getUserId());
-            userFirstNames.add(user.getFirstName());
-            userLastNames.add(user.getLastName());
             User pm = iUserRepository.getUser(task.getProjectmanagerID());
-            pmFirstNames.add(pm.getFirstName());
-            pmLastNames.add(pm.getLastName());
-
+            pmNames.add(pm.getFirstName() + " " + pm.getLastName());
             model.addAttribute("task", task);  // Add task object to model with a unique key based on task ID
         }
-
-        pmFirstNames.add(projectCreator.getFirstName());
-        pmLastNames.add(projectCreator.getLastName());
 
         model.addAttribute("tasks", tasks);
         model.addAttribute("projectName", project.getProjectName());
@@ -175,10 +165,7 @@ public class TaskController {
         model.addAttribute("userId", userId);
         model.addAttribute("projectCreatorFirstName", projectCreator.getFirstName());
         model.addAttribute("projectCreatorLastName", projectCreator.getLastName());
-        model.addAttribute("userFirstNames", userFirstNames);
-        model.addAttribute("userLastNames", userLastNames);
-        model.addAttribute("pmFirstNames", pmFirstNames);
-        model.addAttribute("pmLastNames", pmLastNames);
+        model.addAttribute("pmNames", pmNames);
 
         return model;
     }
