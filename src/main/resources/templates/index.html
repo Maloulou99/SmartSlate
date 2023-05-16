@@ -2,10 +2,18 @@
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
 <head>
   <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="/style.css">
+  <style>
+    .img-smart {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
   <title>My Website</title>
 </head>
-<body>
+<body >
 
 <h1>Welcome To SmartSlate</h1>
 <h2>The smart way to work together</h2>
@@ -19,13 +27,30 @@
   </ul>
 </nav>
 
-<div class="box">
-  <p>SmartSlate er et kalkulationsværktøj, som gør det nemt for brugere at foretage beregninger af omkostninger og budgetter til forskellige projekter. Med en brugervenlig grænseflade og en bred vifte af funktioner er SmartSlate ideel til både private og erhvervskunder. Navnet SmartSlate afspejler programmets evne til at hjælpe brugere med at "tænke nyt" og opnå bedre resultater gennem effektiv planlægning og kalkulation.</p>
-</div>
+<section class="container" id="hero-section">
+  <div class="row">
+    <div class="col-md-6 text-container" id="hero-text">
+      <p>SmartSlate is a calculation tool that makes it easy for users to perform cost and budget calculations for different projects.
+        With a user-friendly interface and a wide range of features, SmartSlate is ideal for both individuals and businesses.
+        The name SmartSlate reflects the program's ability to help users "think anew" and achieve better results through effective planning and calculation.</p>
+    </div>
+
+    <div class="col-md-6">
+      <img
+              src="SS.png"
+              alt="Hero Image"
+              class="img-fluid img-smart"
+      />
+    </div>
+  </div>
+</section>
+<section class="brand-section">
+  <h1>JOIN 35,000+ HIGHLY PRODUCTIVE TEAMS</h1>
+</section>
 
 
 <footer>
-  <p>&copy; My Website 2023</p>
+  <p>&copy; SmartSlate 2023</p>
 </footer>
 </body>
 </html>

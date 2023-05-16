@@ -1,39 +1,39 @@
 /* Reset styles */
-
-{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
 /* Additional styles */
 h2 {
-    font-size: 28px;
+    font-size: 24px;
     text-align: center;
-    margin: 50px 0 20px;
-    color: #007FFF;
+    margin: 30px 0 20px;
+    color: white;
 }
 
 /* Change navigation background color */
 nav a {
-    background-color: #007FFF;
-    border-color: #007FFF;
+    background-color: mediumpurple;
+    border-color: mediumpurple;
 }
 
 /* Body styles */
 body {
-    font-family: "Open Sans", sans-serif;
+    font-family: Arial, sans-serif;
     font-size: 16px;
     line-height: 1.5;
-    color: #333;
-    background-color: #F6F8F9;
+    background: rgb(7,0,36);
+    background: linear-gradient(90deg, rgba(7,0,36,1) 0%, rgba(66,204,136,1) 50%, rgba(160,0,255,1) 73%);
 }
 
 /* Header styles */
 h1 {
-    font-size: 42px;
+    font-size: 36px;
     text-align: center;
-    margin: 50px 0 20px;
-    color: #007FFF;
+    margin: 50px 0 30px;
+    color: white;
 }
 
 /* Navigation styles */
@@ -41,6 +41,9 @@ nav {
     display: flex;
     justify-content: center;
     margin: 0 auto;
+    background: rgb(7,0,36);
+    background: linear-gradient(90deg, rgba(7,0,36,1) 0%, rgba(66,204,136,1) 50%, rgba(160,0,255,1) 73%);
+    padding: 10px 0;
 }
 
 nav ul {
@@ -60,42 +63,48 @@ nav a {
     text-transform: uppercase;
     padding: 10px 15px;
     border-radius: 5px;
-    border: 1px solid #007FFF;
-    background-color: #007FFF;
+    border: 1px solid mediumpurple;
+    background-color: mediumpurple;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 nav a:hover {
-    background-color: #fff;
-    color: #007FFF;
+    background-color: purple;
+    color: limegreen;
 }
 
 /* Main content styles */
-.box {
-    max-width: 700px;
-    margin: 50px auto;
+.container {
+    max-width: 800px;
+    margin: 0 auto;
     padding: 40px;
-    background-color: #fff;
-    border: 1px solid #DDE2E6;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.box p {
+.container p {
     margin-bottom: 20px;
-    font-size: 18px;
-    color: #333;
+    font-size: 16px;
+    color: white;
     line-height: 1.6;
+}
+
+.img-fluid {
+    margin-top: -60px;
+    width: 200%;
+    height: auto;
 }
 
 /* Footer styles */
 footer {
     text-align: center;
     padding: 20px;
-    background-color: #007FFF;
+    background: rgb(7,0,36);
+    background: linear-gradient(90deg, rgba(7,0,36,1) 0%, rgba(66,204,136,1) 50%, rgba(160,0,255,1) 73%);
     color: #fff;
+    font-size: 14px;
 }
 
-
-
-
-
+footer p {
+    margin: 0;
+}
