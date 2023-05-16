@@ -30,64 +30,70 @@ public class LoginRepository implements ILoginRepository {
                 int roleID = rs.getInt("roleID");
                 if (roleID == 1) {
                     // Admin
-                    String adminSQL = "SELECT roleID FROM users WHERE roleID = ?";
+                    String adminSQL = "SELECT * FROM roles " +
+                            "JOIN users ON roles.roleID = users.roleID " +
+                            "WHERE roles.roleID = ?";
                     PreparedStatement adminPstmt = con.prepareStatement(adminSQL);
-                    adminPstmt.setInt(1, rs.getInt("userID"));
+                    adminPstmt.setInt(1, rs.getInt("roleID"));
                     ResultSet adminRs = adminPstmt.executeQuery();
 
                     if (adminRs.next()) {
                         user = new User();
-                        user.setUserID(rs.getInt("userID"));
-                        user.setUsername(rs.getString("username"));
-                        user.setEmail(rs.getString("email"));
-                        user.setPassword(rs.getString("password"));
-                        user.setFirstName(rs.getString("firstName"));
-                        user.setLastName(rs.getString("lastName"));
-                        user.setPhoneNumber(rs.getString("phoneNumber"));
-                        user.setCreatedAt(rs.getDate("createdAt").toLocalDate().atStartOfDay());
-                        user.setUpdatedAt(rs.getDate("updatedAt").toLocalDate().atStartOfDay());
-                        user.setRoleID(rs.getInt("roleID"));
+                        user.setUserID(adminRs.getInt("userID"));
+                        user.setUsername(adminRs.getString("Username"));
+                        user.setEmail(adminRs.getString("Email"));
+                        user.setPassword(adminRs.getString("Password"));
+                        user.setFirstName(adminRs.getString("firstName")); // Include the "firstName" column
+                        user.setLastName(adminRs.getString("lastName"));
+                        user.setPhoneNumber(adminRs.getString("phoneNumber"));
+                        user.setCreatedAt(adminRs.getDate("createdAt").toLocalDate().atStartOfDay()); // Fix the column name and convert to LocalDate
+                        user.setUpdatedAt(adminRs.getDate("updatedAt").toLocalDate().atStartOfDay()); // Fix the column name and convert to LocalDate
+                        user.setRoleID(adminRs.getInt("roleID"));
                     }
+
                 } else if (roleID == 2) {
                     // Employee
-                    String employeeSQL = "SELECT roleID FROM users WHERE roleID = ?";
+                    String employeeSQL = "SELECT * FROM roles " +
+                            "JOIN users ON roles.roleID = users.roleID " +
+                            "WHERE roles.roleID = ?";
                     PreparedStatement employeePstmt = con.prepareStatement(employeeSQL);
-                    employeePstmt.setInt(1, rs.getInt("userID"));
+                    employeePstmt.setInt(1, rs.getInt("roleID"));
                     ResultSet employeeRs = employeePstmt.executeQuery();
 
                     if (employeeRs.next()) {
                         user = new User();
-                        user.setUserID(rs.getInt("userID"));
-                        user.setUsername(rs.getString("username"));
-                        user.setEmail(rs.getString("email"));
-                        user.setPassword(rs.getString("password"));
-                        user.setFirstName(rs.getString("firstName"));
-                        user.setLastName(rs.getString("lastName"));
-                        user.setPhoneNumber(rs.getString("phoneNumber"));
-                        user.setCreatedAt(rs.getDate("createdAt").toLocalDate().atStartOfDay());
-                        user.setUpdatedAt(rs.getDate("updatedAt").toLocalDate().atStartOfDay());
-                        user.setRoleID(rs.getInt("roleID"));
+                        user.setUserID(employeeRs.getInt("userID"));
+                        user.setUsername(employeeRs.getString("Username"));
+                        user.setEmail(employeeRs.getString("Email"));
+                        user.setPassword(employeeRs.getString("Password"));
+                        user.setFirstName(employeeRs.getString("firstName")); 
+                        user.setLastName(employeeRs.getString("lastName"));
+                        user.setPhoneNumber(employeeRs.getString("phoneNumber"));
+                        user.setCreatedAt(employeeRs.getDate("createdAt").toLocalDate().atStartOfDay()); // Fix the column name and convert to LocalDate
+                        user.setUpdatedAt(employeeRs.getDate("updatedAt").toLocalDate().atStartOfDay()); // Fix the column name and convert to LocalDate
+                        user.setRoleID(employeeRs.getInt("roleID"));
                     }
                 } else if (roleID == 3) {
-                    System.out.println(roleID);
                     // Project Manager
-                    String managerSQL = "SELECT roleID FROM users WHERE roleID = ?";
+                    String managerSQL = "SELECT * FROM roles " +
+                            "JOIN users ON roles.roleID = users.roleID " +
+                            "WHERE roles.roleID = ? ";
                     PreparedStatement managerPstmt = con.prepareStatement(managerSQL);
-                    managerPstmt.setInt(1, rs.getInt("userID"));
+                    managerPstmt.setInt(1, rs.getInt("roleID"));
                     ResultSet managerRs = managerPstmt.executeQuery();
 
                     if (managerRs.next()) {
                         user = new User();
-                        user.setUserID(rs.getInt("userID"));
-                        user.setUsername(rs.getString("username"));
-                        user.setEmail(rs.getString("email"));
-                        user.setPassword(rs.getString("password"));
-                        user.setFirstName(rs.getString("firstName"));
-                        user.setLastName(rs.getString("lastName"));
-                        user.setPhoneNumber(rs.getString("phoneNumber"));
-                        user.setCreatedAt(rs.getDate("createdAt").toLocalDate().atStartOfDay());
-                        user.setUpdatedAt(rs.getDate("updatedAt").toLocalDate().atStartOfDay());
-                        user.setRoleID(rs.getInt("roleID"));
+                        user.setUserID(managerRs.getInt("userID"));
+                        user.setUsername(managerRs.getString("Username"));
+                        user.setEmail(managerRs.getString("Email"));
+                        user.setPassword(managerRs.getString("Password"));
+                        user.setFirstName(managerRs.getString("firstName"));
+                        user.setLastName(managerRs.getString("lastName"));
+                        user.setPhoneNumber(managerRs.getString("phoneNumber"));
+                        user.setCreatedAt(managerRs.getDate("createdAt").toLocalDate().atStartOfDay()); // Fix the column name and convert to LocalDate
+                        user.setUpdatedAt(managerRs.getDate("updatedAt").toLocalDate().atStartOfDay()); // Fix the column name and convert to LocalDate
+                        user.setRoleID(managerRs.getInt("roleID"));
                     }
                 }
             }
@@ -96,4 +102,5 @@ public class LoginRepository implements ILoginRepository {
         }
         return user;
     }
-}
+
+                    }

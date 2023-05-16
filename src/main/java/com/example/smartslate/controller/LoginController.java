@@ -1,26 +1,28 @@
 package com.example.smartslate.controller;
 
+import com.example.smartslate.model.Project;
 import com.example.smartslate.model.User;
-import com.example.smartslate.repository.ILoginRepository;
-import com.example.smartslate.repository.IUserRepository;
-import com.example.smartslate.repository.LoginRepository;
-import com.example.smartslate.repository.UserRepository;
+import com.example.smartslate.repository.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("/")
 @Controller
 public class LoginController {
     private ILoginRepository iLoginRepository;
     private IUserRepository iUserRepository;
+    private IProjectRepository iProjectRepository;
     private int current_userId;
 
 
-    public LoginController(ILoginRepository iLoginRepository, IUserRepository iUserRepository) {
+    public LoginController(ILoginRepository iLoginRepository, IUserRepository iUserRepository, IProjectRepository iProjectRepository) {
         this.iLoginRepository = iLoginRepository;
         this.iUserRepository = iUserRepository;
+        this.iProjectRepository = iProjectRepository;
     }
 
     protected boolean isLoggedIn(HttpSession session, int uid) {
@@ -37,28 +39,13 @@ public class LoginController {
         model.addAttribute("userId", null);
         return "user-login";
     }
-/*
-    @GetMapping("/login")
-    public String showLoginForm(Model model, @RequestParam(required = false) int roleID) {
-        User user = iLoginRepository.checkLogin(roleID);
-        if (user != null) {
-            int userRoleID = user.getRoleID();
-            if (userRoleID == 1) {
-                return "admin-page";
-            } else if (userRoleID == 2 || userRoleID == 3) {
-                return "user-login";
-            }
-        }
-        model.addAttribute("userId", roleID);
-        return "user-login";
-    }*/
 
     @PostMapping("/login")
     public String processLoginForm(@RequestParam("usernameOrEmail") String username, @RequestParam("password") String password, HttpSession session, Model model) {
         User user = iLoginRepository.findByUsernameOrEmailAndPassword(username, password);
 
         if (user != null) {
-            Integer roleID = user.getRoleID(); // Brug Integer i stedet for int for at kunne kontrollere for null-værdi
+            Integer roleID = user.getRoleID();
 
             if (roleID != null) {
                 if (roleID == 1) {
@@ -67,9 +54,14 @@ public class LoginController {
                     session.setMaxInactiveInterval(200);
                     return "admin-page";
                 } else if (roleID == 2) {
+                    List<Project> projects = iProjectRepository.getAllProjectsByUserId(user.getUserID());
                     // Project Manager
                     session.setAttribute("userId", user.getUserID());
                     session.setMaxInactiveInterval(200);
+                    model.addAttribute("user", user);
+                    model.addAttribute("project", projects);
+                    model.addAttribute("roleName", user.getRoleID());
+                    model.addAttribute("projects", iProjectRepository.getAllProjectsByUserId(user.getUserID()));
                     return "user-frontpage";
                 } else if (roleID == 3) {
                     // Employee
@@ -80,10 +72,8 @@ public class LoginController {
             }
         }
 
-        // Brugeren findes ikke i databasen eller rolID er null, vis en fejlmeddelelse
-        model.addAttribute("errorMessage", "Invalid username/email or password.");
-        model.addAttribute("user", user);
-        return "user-login";
+
+        return "redirect:user-login";
     }
     @GetMapping("/logout")
     public String logout(HttpSession session) {
