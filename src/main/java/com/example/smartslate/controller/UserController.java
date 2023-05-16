@@ -51,10 +51,6 @@ public class UserController {
 
         return "pm-frontpage";
     }
-
-
-
-
     @PostMapping("/adduser")
     public String addUser(@ModelAttribute User newUser, Model model) {
         int userId = iUserRepository.createUser(newUser);
@@ -70,7 +66,6 @@ public class UserController {
         model.addAttribute("role", iUserRepository.getRoleName(newUser.getRoleID())); // get role name instead of role id
         return "user-created";
     }
-
     @GetMapping("/user/update/{userId}")
     public String updateUserForm(@PathVariable int userId, Model model, HttpSession httpSession) {
         Integer loggedUserId = (Integer) httpSession.getAttribute("userId");
@@ -82,7 +77,6 @@ public class UserController {
         model.addAttribute("user", user);
         return "user-update";
     }
-
     @PostMapping("/user/update")
     public String updateUser(@ModelAttribute User user, Model model) {
         iUserRepository.updateUser(user);
@@ -90,8 +84,6 @@ public class UserController {
         model.addAttribute("id", user.getUserID());
         return "redirect:/smartslate/user/" + user.getUserID();
     }
-
-
     @GetMapping("/deleteuser/{userId}")
     public String deleteUser(@PathVariable int userId) {
         iUserRepository.deleteUser(userId);

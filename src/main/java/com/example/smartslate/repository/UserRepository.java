@@ -289,5 +289,78 @@ public class UserRepository implements IUserRepository{
         return user;
     }
 
+    public User getEmployeesFullNames(int userId) {
+        User user = null;
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "SELECT CONCAT(users.firstName, ' ', users.lastName) AS employeeName FROM tasks JOIN users ON  tasks.userID = users.userID WHERE tasks.taskID = ?;";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                user = new User();
+                user.setLastName(rs.getString("employeeName"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return user;
+    }
+
+
+    public List<User> getEmployeesByRoleId() {
+        List<User> employees = new ArrayList<>();
+        String query = "SELECT * FROM users WHERE roleID = 3";
+        try(Connection con = DriverManager.getConnection(url, user_id, user_pwd)){
+            PreparedStatement pr = con.prepareStatement(query);
+            ResultSet rs = pr.executeQuery();
+            while (rs.next()) {
+                User user = new User();
+                user.setUserID(rs.getInt("userID"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setEmail(rs.getString("email"));
+                user.setFirstName(rs.getString("firstName"));
+                user.setLastName(rs.getString("lastName"));
+                user.setPhoneNumber(rs.getString("phoneNumber"));
+                user.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
+                user.setUpdatedAt(rs.getTimestamp("updatedAt").toLocalDateTime());
+                user.setRoleID(rs.getInt("roleID"));
+                employees.add(user);
+            }
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
+        return employees;
+    }
+
+    public List<User> getEmployeesByProjectId(int projectId) {
+        List<User> employees = new ArrayList<>();
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "SELECT * FROM users WHERE userID IN (SELECT userID FROM tasks WHERE projectID = ?)";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, projectId);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                User user = new User();
+                user.setUserID(rs.getInt("userID"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setEmail(rs.getString("email"));
+                user.setFirstName(rs.getString("firstName"));
+                user.setLastName(rs.getString("lastName"));
+                user.setPhoneNumber(rs.getString("phoneNumber"));
+                user.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
+                user.setUpdatedAt(rs.getTimestamp("updatedAt").toLocalDateTime());
+                user.setRoleID(rs.getInt("roleID"));
+                employees.add(user);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return employees;
+    }
+
 
 }
