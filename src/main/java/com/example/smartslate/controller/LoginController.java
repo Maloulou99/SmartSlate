@@ -46,12 +46,12 @@ public class LoginController {
 
         if (user != null) {
             Integer roleID = user.getRoleID();
-
             if (roleID != null) {
                 if (roleID == 1) {
                     // Admin
                     session.setAttribute("userId", user.getUserID());
                     session.setMaxInactiveInterval(200);
+                    model.addAttribute("user", user);
                     return "admin-page";
                 } else if (roleID == 2) {
                     List<Project> projects = iProjectRepository.getAllProjectsByUserId(user.getUserID());
@@ -67,6 +67,7 @@ public class LoginController {
                     // Employee
                     session.setAttribute("userId", user.getUserID());
                     session.setMaxInactiveInterval(200);
+                    model.addAttribute("user", user);
                     return "employee-page";
                 }
             }

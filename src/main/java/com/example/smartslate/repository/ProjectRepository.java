@@ -100,7 +100,7 @@ public class ProjectRepository implements IProjectRepository{
         return project;
     }
 
-        public List<Project> getAllProjects () {
+        public List<Project> getAllProjects() {
             List<Project> projects = new ArrayList<>();
             try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
                 String SQL = "SELECT * FROM projects";

@@ -31,6 +31,7 @@ public class UserRepository implements IUserRepository{
             pstmt.setString(5, newUser.getPassword());
             pstmt.setString(6, newUser.getPhoneNumber());
             pstmt.setInt(7, newUser.getRoleID());
+            System.out.println(newUser);
             pstmt.executeUpdate();
 
             ResultSet rs = pstmt.getGeneratedKeys();
@@ -104,7 +105,6 @@ public class UserRepository implements IUserRepository{
             throw new RuntimeException(e);
         }
     }
-
 
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
@@ -361,6 +361,4 @@ public class UserRepository implements IUserRepository{
         }
         return employees;
     }
-
-
 }
