@@ -17,6 +17,9 @@ public class User {
     private int roleID;
     private String roleName;
 
+    public User() {
+    }
+
     public User(int userID, String username, String password, String email, String firstName, String lastName, String phoneNumber, LocalDateTime createdAt, LocalDateTime updatedAt, int roleID, String roleName) {
         this.userID = userID;
         this.username = username;
@@ -31,9 +34,10 @@ public class User {
         this.roleName = roleName;
     }
 
-    public User() {
+    public User(int userID, int roleID) {
+        this.userID = userID;
+        this.roleID = roleID;
     }
-
 
     // getters and setters
     public int getUserID() {

@@ -3,6 +3,8 @@ package com.example.smartslate.controller;
 import com.example.smartslate.model.User;
 import com.example.smartslate.repository.ILoginRepository;
 import com.example.smartslate.repository.IUserRepository;
+import com.example.smartslate.repository.LoginRepository;
+import com.example.smartslate.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,30 +37,54 @@ public class LoginController {
         model.addAttribute("userId", null);
         return "user-login";
     }
+/*
+    @GetMapping("/login")
+    public String showLoginForm(Model model, @RequestParam(required = false) int roleID) {
+        User user = iLoginRepository.checkLogin(roleID);
+        if (user != null) {
+            int userRoleID = user.getRoleID();
+            if (userRoleID == 1) {
+                return "admin-page";
+            } else if (userRoleID == 2 || userRoleID == 3) {
+                return "user-login";
+            }
+        }
+        model.addAttribute("userId", roleID);
+        return "user-login";
+    }*/
 
     @PostMapping("/login")
-    public String processLoginForm(
-            @RequestParam("usernameOrEmail") String username,
-            @RequestParam("password") String password,
-            HttpSession session,
-            Model model) {
-
+    public String processLoginForm(@RequestParam("usernameOrEmail") String username, @RequestParam("password") String password, HttpSession session, Model model) {
         User user = iLoginRepository.findByUsernameOrEmailAndPassword(username, password);
 
-        if (user == null) {
-            // Brugeren findes ikke i databasen, vis en fejlmeddelelse
-            model.addAttribute("errorMessage", "Invalid username/email or password.");
-            return "user-login";
+        if (user != null) {
+            Integer roleID = user.getRoleID(); // Brug Integer i stedet for int for at kunne kontrollere for null-værdi
+
+            if (roleID != null) {
+                if (roleID == 1) {
+                    // Admin
+                    session.setAttribute("userId", user.getUserID());
+                    session.setMaxInactiveInterval(200);
+                    return "admin-page";
+                } else if (roleID == 2) {
+                    // Project Manager
+                    session.setAttribute("userId", user.getUserID());
+                    session.setMaxInactiveInterval(200);
+                    return "user-frontpage";
+                } else if (roleID == 3) {
+                    // Employee
+                    session.setAttribute("userId", user.getUserID());
+                    session.setMaxInactiveInterval(200);
+                    return "employee-page";
+                }
+            }
         }
 
-        // Brugeren er logget ind, gem brugerens ID i sessionen
-        session.setAttribute("userId", user.getUserID());
-        session.setMaxInactiveInterval(200);
-
-        // Redirect brugeren til "Min side"
-        return "redirect:/smartslate/user/" + user.getUserID();
+        // Brugeren findes ikke i databasen eller rolID er null, vis en fejlmeddelelse
+        model.addAttribute("errorMessage", "Invalid username/email or password.");
+        model.addAttribute("user", user);
+        return "user-login";
     }
-
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         // invalidate session and return landing page

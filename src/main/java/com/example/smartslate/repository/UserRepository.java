@@ -139,7 +139,7 @@ public class UserRepository implements IUserRepository{
     public String getRoleName(int roleID){
         String roleName = null;
         try(Connection con = DriverManager.getConnection(url, user_id, user_pwd)){
-            String sql = "SELECT RoleName FROM ROLES WHERE RoleID = ?";
+            String sql = "SELECT roleName FROM roles WHERE roleID = ?";
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, roleID);
             ResultSet rs = pstmt.executeQuery();
