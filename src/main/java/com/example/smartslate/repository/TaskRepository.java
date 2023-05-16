@@ -71,24 +71,22 @@ public class TaskRepository implements ITaskRepository {
     // Delete one task from a project
     public void deleteTaskFromProject(int projectId, int taskId) {
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            // Slet task fra tasks tabellen
-            String SQL1 = "DELETE FROM tasks WHERE projectID = ? AND taskID = ?";
-            PreparedStatement pstmt1 = con.prepareStatement(SQL1);
-            pstmt1.setInt(1, projectId);
-            pstmt1.setInt(2, taskId);
-            pstmt1.executeUpdate();
+            // Opdater employeetasks tabellen for at fjerne relationen til tasken
+            String updateSQL = "DELETE FROM employeetasks WHERE taskID = ?";
+            PreparedStatement updateStmt = con.prepareStatement(updateSQL);
+            updateStmt.setInt(1, taskId);
+            updateStmt.executeUpdate();
 
-            // Opdater employeetasks tabellen for at fjerne task fra alle employeetasks
-            String SQL2 = "UPDATE employeetasks SET taskID = NULL WHERE taskID = ?";
-            PreparedStatement pstmt2 = con.prepareStatement(SQL2);
-            pstmt2.setInt(1, taskId);
-            pstmt2.executeUpdate();
+            // Slet task fra tasks tabellen
+            String deleteSQL = "DELETE FROM tasks WHERE taskID = ? AND projectID = ?";
+            PreparedStatement deleteStmt = con.prepareStatement(deleteSQL);
+            deleteStmt.setInt(1, taskId);
+            deleteStmt.setInt(2, projectId);
+            deleteStmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-
-
 
     public List<Task> getAllTasks(int userID) {
         List<Task> tasks = new ArrayList<>();

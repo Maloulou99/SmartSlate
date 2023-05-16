@@ -11,12 +11,9 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @RequestMapping("")
 @Controller
@@ -84,7 +81,7 @@ public class TaskController {
         model.addAttribute("task", createdTask);
         model.addAttribute("task", task);
 
-        return "created-task";
+        return "show-tasks";
     }
     // Update task
     @GetMapping("/tasks/{taskId}/update")
@@ -181,7 +178,7 @@ public class TaskController {
 
         model = getCommonModelAttributes(model, projectId, loggedInUserId);
 
-        return "created-task";
+        return "show-tasks";
     }
 
     //Sender brugeren tilbage på user-frontpage med alle information om projekter

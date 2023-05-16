@@ -89,3 +89,20 @@ body {
     flex: 0 0 66.666667%;
     max-width: 66.666667%;
 }
+
+.project-box {
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.project-details {
+    margin-bottom: 10px;
+}
+
+.project-actions {
+    text-align: center;
+}
+.smaller-title {
+    font-size: 1.0rem;
+}

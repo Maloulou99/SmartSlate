@@ -1,6 +1,7 @@
 package com.example.smartslate.controller;
 
 import com.example.smartslate.model.Project;
+import com.example.smartslate.model.Task;
 import com.example.smartslate.model.User;
 import com.example.smartslate.repository.IProjectRepository;
 import com.example.smartslate.repository.ITaskRepository;
@@ -46,15 +47,12 @@ public class ProjectController {
         if (loggedInUserId == null || loggedInUserId != userId) {
             return "redirect:/login";
         }
-
         User user = iUserRepository.getUser(userId);
-        String roleName = iUserRepository.getRoleName(user.getRoleID());
 
         List<Project> userProjects = iProjectRepository.getAllProjectsByUserId(userId);
         model.addAttribute("projects", userProjects);
         model.addAttribute("user", user);
         model.addAttribute("userId", userId);
-        model.addAttribute("roleName", roleName);
         return "project-information";
     }
 
@@ -109,6 +107,18 @@ public class ProjectController {
         iProjectRepository.deleteProject(taskId);
         return "redirect:/smartslate/user/" + userID;
     }
+
+    @GetMapping("/show/project/{projectId}")
+    public String getProjectById(@PathVariable int projectId, Model model) {
+        Project project = iProjectRepository.getProjectById(projectId);
+        User user = iUserRepository.getUser(project.getUserID());
+        List<Task> tasks = iTaskRepository.getTasksByProjectId(projectId);
+        model.addAttribute("project", project);
+        model.addAttribute("user", user);
+        model.addAttribute("tasks", tasks);
+        return "show-one-project";
+    }
+
 
 
 }

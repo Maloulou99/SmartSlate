@@ -42,7 +42,7 @@ public class SmartSlateController {
 
         // Tjek om brugeren er logget ind
         if (session.getAttribute("loggedInUserId") != null && (int) session.getAttribute("loggedInUserId") == uid) {
-            return "user-frontpage"; // Hvis brugeren er logget ind, vis hovedsiden
+            return "pm-frontpage"; // Hvis brugeren er logget ind, vis hovedsiden
         } else {
             return "redirect:/"; // Hvis brugeren ikke er logget ind, send brugeren til login-siden
         }
@@ -57,7 +57,7 @@ public class SmartSlateController {
         List<Task> tasks = iTaskRepository.getAllTasks(userId);
         model.addAttribute("tasks", tasks);
 
-        return "user-frontpage";
+        return "pm-frontpage";
     }
 
 

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.plaf.IconUIResource;
 import java.util.List;
 
 @RequestMapping("/smartslate")
@@ -40,15 +39,20 @@ public class UserController {
     @GetMapping("/user/{userId}")
     public String getUser(@PathVariable int userId, Model model) {
         User user = iUserRepository.getUser(userId);
-        String roleName = iUserRepository.getRoleName(user.getRoleID()); // Henter rolle-navnet
+        String roleName = iUserRepository.getRoleName(user.getRoleID());
         List<Project> projects = iProjectRepository.getAllProjectsByUserId(userId);
         List<Task> tasks = iTaskRepository.getTasksByProjectManagerID(user.getUserID());
+
+        user.setRoleName(roleName);
         model.addAttribute("user", user);
-        model.addAttribute("roleName", roleName); // Tilføjer rolle-navnet til model
+        model.addAttribute("roleName", roleName);
         model.addAttribute("projects", projects);
         model.addAttribute("tasks", tasks);
-        return "user-frontpage";
+
+        return "pm-frontpage";
     }
+
+
 
 
     @PostMapping("/adduser")

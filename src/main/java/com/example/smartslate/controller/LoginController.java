@@ -62,7 +62,7 @@ public class LoginController {
                     model.addAttribute("project", projects);
                     model.addAttribute("roleName", user.getRoleID());
                     model.addAttribute("projects", iProjectRepository.getAllProjectsByUserId(user.getUserID()));
-                    return "user-frontpage";
+                    return "pm-frontpage";
                 } else if (roleID == 3) {
                     // Employee
                     session.setAttribute("userId", user.getUserID());

@@ -2,7 +2,7 @@
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" th:href="@{/Taskfrontsite.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/task-frontsite.css}"/>
     <title>Tasks for Project "${projectId}"</title>
 </head>
 <body>
@@ -49,6 +49,7 @@
                     <input type="submit" value="Update Task"/>
                 </form>
                 <a th:href="@{/tasks/{taskId}/createSubtask}" class="button">Create Subtask</a>
+                <a th:href="@{/employees/{employeeId}/calculate}" class="button">Calculate Salary and Time</a>
             </div>
         </td>
     </tr>

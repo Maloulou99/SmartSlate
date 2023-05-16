@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Profile</title>
-  <!-- Bootstrap CSS -->
+
   <link rel="stylesheet" href="/user-profile.css">
 </head>
 <body>
@@ -47,27 +47,35 @@
                 <p class="text-muted" th:text="${user.phoneNumber}"></p>
               </div>
               <div class="user-profile-details-item">
-                <label>Role:</label>
-                <p class="text-muted" th:text="${roleName}"></p>
+                  <label>Role:</label>
+                  <p class="text-muted" th:text="${roleName}"></p>
+                </div>
+              </div>
+        </div>
+          <div class="card mb-4">
+            <div class="card-header">
+              <h4 class="card-title smaller-title">Your Projects</h4>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-4" th:each="project : ${projects}">
+                  <div class="project-box">
+                    <div class="project-details">
+                      <h5>Project ID: <span th:text="${project.projectId}"></span></h5>
+                      <h5>Project Name: <span th:text="${project.projectName}"></span></h5>
+                    </div>
+                    <div class="project-actions">
+                      <a th:href="@{/projects/show/project/{projectId}(projectId=${project.projectId})}" class="btn btn-primary">Show Project Information</a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-        </div>
-        <div class="card mb-4">
-          <div class="card-header">
-            <h4 class="card-title">User Projects</h4>
-          </div>
-          <div class="card-body">
-            <ul class="list-group">
-              <div class="user-profile-projects">
-                <label>Your Projects:</label>
-                <a th:href="@{/projects/projects/{userId}(userId=${user.userID})}" class="btn btn-primary">View Projects</a>
-              </div>
-            </ul>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
+        </div>
+        </div>
+        </div>
 </section>
 </body>
 </html>
