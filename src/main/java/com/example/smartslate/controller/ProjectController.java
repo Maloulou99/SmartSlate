@@ -26,13 +26,6 @@ public class ProjectController {
         this.iTaskRepository = iTaskRepository;
     }
 
-    @GetMapping("/all-projects")
-    public String getAllProjects(Model model) {
-        List<Project> projects = iProjectRepository.getAllProjects();
-        model.addAttribute("projects", projects);
-        return "user-frontpage"; // navn på din Thymeleaf visningsside for projektlisten
-    }
-
     @GetMapping("/create")
     public String createProjectForm(Model model, HttpSession session) {
         model.addAttribute("project", new Project());
@@ -47,13 +40,22 @@ public class ProjectController {
         return "create-project";
     }
 
-
     @GetMapping("/projects/{userId}")
-    public String getUserProjects(@PathVariable("userId") int userId, Model model) {
+    public String getUserProjects(@PathVariable("userId") int userId, Model model, HttpSession session) {
+        Integer loggedInUserId = (Integer) session.getAttribute("userId");
+        if (loggedInUserId == null || loggedInUserId != userId) {
+            return "redirect:/login";
+        }
+
+        User user = iUserRepository.getUser(userId);
+        String roleName = iUserRepository.getRoleName(user.getRoleID());
+
         List<Project> userProjects = iProjectRepository.getAllProjectsByUserId(userId);
         model.addAttribute("projects", userProjects);
-        model.addAttribute("user", iUserRepository.getUser(userId));
-        return "user-frontpage";
+        model.addAttribute("user", user);
+        model.addAttribute("userId", userId);
+        model.addAttribute("roleName", roleName);
+        return "project-information";
     }
 
 

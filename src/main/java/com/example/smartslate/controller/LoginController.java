@@ -71,8 +71,6 @@ public class LoginController {
                 }
             }
         }
-
-
         return "redirect:user-login";
     }
     @GetMapping("/logout")
