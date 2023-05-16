@@ -13,8 +13,8 @@
         <td th:text="${project.projectId}"></td>
     </tr>
     <tr>
-        <th>User ID</th>
-        <td th:text="${project.userID}"></td>
+        <th>Project Manager</th>
+        <td th:text="${projectManager.firstName} + ' ' + ${projectManager.lastName}"></td>
     </tr>
     <tr>
         <th>Project Name</th>
@@ -40,17 +40,19 @@
         <th>Status</th>
         <td th:text="${project.status}"></td>
     </tr>
-    <td>
-        <a th:href="@{'/projects/update/' + ${project.projectId}}">Update Project</a>
-        <a th:href="@{/projects/delete/{projectId}/{userid}(projectId=${project.projectId}, userid=${user.userID})}" onclick="return confirm('Are you sure you want to delete this project?')">Delete Project</a>
-        <th:block th:if="${not #lists.isEmpty(tasks)}">
-            <a th:href="@{'/projects/' + ${project.projectId} + '/tasks'}">Show Tasks</a>
-        </th:block>
-        <th:block th:if="${#lists.isEmpty(tasks)}">
-            <a th:href="@{'/projects/' + ${project.projectId} + '/createTask'}">Create Task</a>
-        </th:block>
-    </td>
-
 </table>
+
+<a th:href="@{'/projects/update/' + ${project.projectId}}">Update Project</a>
+<a th:href="@{/projects/delete/{projectId}/{userid}(projectId=${project.projectId}, userid=${user.userID})}" onclick="return confirm('Are you sure you want to delete this project?')">Delete Project</a>
+<th:block th:if="${not #lists.isEmpty(tasks)}">
+    <a th:href="@{'/projects/' + ${project.projectId} + '/tasks'}">Show Tasks</a>
+</th:block>
+<th:block th:if="${#lists.isEmpty(tasks)}">
+    <a th:href="@{'/projects/' + ${project.projectId} + '/createTask'}">Create Task</a>
+</th:block>
+
+<input type="hidden" name="projectManagerId" value="2" />
+<a th:href="@{/smartslate/user/{userId}(userId=${user.userID})}">Go to User Page</a>
+
 </body>
 </html>

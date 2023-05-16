@@ -206,4 +206,26 @@ public class TaskRepository implements ITaskRepository {
         }
         return tasks;
     }
+
+    public void associateEmployeesWithTask(int taskId, List<Integer> employeeIds) {
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            // Slet eksisterende tilknytninger mellem opgaven og medarbejdere
+            String deleteQuery = "DELETE FROM employeeTasks WHERE taskID = ?";
+            PreparedStatement deleteStmt = con.prepareStatement(deleteQuery);
+            deleteStmt.setInt(1, taskId);
+            deleteStmt.executeUpdate();
+
+            // Opret nye tilknytninger mellem opgaven og valgte medarbejdere
+            String insertQuery = "INSERT INTO employeeTasks (taskEmployeeID, taskID) VALUES (?, ?)";
+            PreparedStatement insertStmt = con.prepareStatement(insertQuery);
+            for (int employeeId : employeeIds) {
+                insertStmt.setInt(1, employeeId);
+                insertStmt.setInt(2, taskId);
+                insertStmt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

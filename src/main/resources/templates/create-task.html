@@ -25,15 +25,15 @@
     </tr>
     <tr>
       <td>
-      <label for="projectManagerId">Project Manager:</label>
-      <select id="projectManagerId" name="projectManagerId" required>
-        <option th:each="projectManager : ${projectManagers}"
-                th:if="${projectManager.roleID == 2}"
-                th:value="${projectManager.userID}"
-                th:text="${projectManager.firstName} + ' ' + ${projectManager.lastName}">
-        </option>
-      </select>
-        <p th:unless="${projectManagers}">No project managers available</p>
+        <label for="employeeIds">Employees:</label>
+        <select id="employeeIds" name="employeeIds" required multiple>
+          <option th:each="employee : ${employees}"
+                  th:if="${employee.roleID == 3}"
+                  th:value="${employee.userID}"
+                  th:text="${employee.firstName} + ' ' + ${employee.lastName}">
+          </option>
+        </select>
+        <p th:unless="${employees}">No employees available</p>
       </td>
     </tr>
     <tr>

@@ -56,7 +56,6 @@ public class ProjectController {
         return "project-information";
     }
 
-
     @PostMapping("/create")
     public String createProject(@ModelAttribute Project project, HttpSession httpSession) {
         int user = (int) httpSession.getAttribute("userId");
@@ -100,8 +99,6 @@ public class ProjectController {
         return "redirect:/smartslate/user/" + userId;
     }
 
-
-
     @GetMapping("/delete/{projectId}/{userid}")
     public String deleteProject(@PathVariable("projectId") int taskId, @PathVariable("userid") int userID) {
         iProjectRepository.deleteProject(taskId);
@@ -109,15 +106,26 @@ public class ProjectController {
     }
 
     @GetMapping("/show/project/{projectId}")
-    public String getProjectById(@PathVariable int projectId, Model model) {
+    public String getProjectById(@PathVariable int projectId, Model model, HttpSession session) {
+        Integer userIdObj = (Integer) session.getAttribute("userId");
+        if (userIdObj == null) {
+            return "redirect:/login";
+        }
+        int userId = userIdObj;
+
         Project project = iProjectRepository.getProjectById(projectId);
-        User user = iUserRepository.getUser(project.getUserID());
+        User projectManager = iUserRepository.getProjectManagerByProjectId(projectId);
         List<Task> tasks = iTaskRepository.getTasksByProjectId(projectId);
+        User user = iUserRepository.getUser(userId);
+
         model.addAttribute("project", project);
-        model.addAttribute("user", user);
+        model.addAttribute("projectManager", projectManager);
         model.addAttribute("tasks", tasks);
+        model.addAttribute("user", user);
         return "show-one-project";
     }
+
+
 
 
 

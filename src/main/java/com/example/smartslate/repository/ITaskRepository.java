@@ -1,6 +1,7 @@
 package com.example.smartslate.repository;
 
 import com.example.smartslate.model.Task;
+import com.example.smartslate.model.User;
 
 import java.util.List;
 
@@ -14,5 +15,7 @@ public interface ITaskRepository {
     Task getTaskById(int taskId);
 
     void deleteTaskFromProject(int projectId, int taskId);
+    void associateEmployeesWithTask(int taskId, List<Integer> employeeIds);
+
 
 }

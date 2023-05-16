@@ -35,15 +35,15 @@ public class TaskController {
             return "redirect:/login";
         }
 
-        List<User> projectManagers = iUserRepository.getProjectManagersByRoleId();
+        List<User> employees = iUserRepository.getEmployeesByRoleId();
         Project project = iProjectRepository.getProjectById(projectId);
         List<Task> tasks = iTaskRepository.getTasksByProjectId(projectId);
-        int projectCreatorId = iUserRepository.getUserIdByProjectId(projectId); // henter brugerid'et for den bruger som har oprettet projektet
+        int projectCreatorId = iUserRepository.getUserIdByProjectId(projectId);
         User projectCreator = iUserRepository.getUser(projectCreatorId);
 
         model.addAttribute("project", project);
         model.addAttribute("task", new Task());
-        model.addAttribute("projectManagers", projectManagers);
+        model.addAttribute("employees", employees);
         model.addAttribute("projectId", projectId);
         model.addAttribute("tasks", tasks);
         model.addAttribute("projectCreatorFirstName", projectCreator.getFirstName());
@@ -56,6 +56,7 @@ public class TaskController {
     public String createTask(@PathVariable int projectId,
                              @ModelAttribute Task task,
                              @RequestParam int projectManagerId,
+                             @RequestParam(value = "selectedEmployees", required = false) List<Integer> selectedEmployees,
                              Model model,
                              HttpSession session) {
         Integer userIdObj = (Integer) session.getAttribute("userId");
@@ -63,26 +64,28 @@ public class TaskController {
             return "redirect:/login";
         }
         int userId = userIdObj;
-
         // Set project manager ID and user ID on task object
         task.setProjectmanagerID(projectManagerId);
-        task.setUserId(userId);
+        task.setUserID(userId);
 
         // Create task and get its ID
         int taskId = iTaskRepository.createTask(task);
+
+        // If selectedEmployees is not null or empty, associate employees with the task
+        if (selectedEmployees != null && !selectedEmployees.isEmpty()) {
+            iTaskRepository.associateEmployeesWithTask(taskId, selectedEmployees);
+        }
 
         // Get the newly created task
         Task createdTask = iTaskRepository.getTaskById(taskId);
 
         // Add common model attributes
         getCommonModelAttributes(model, projectId, userId);
-
         // Add created task to model
         model.addAttribute("task", createdTask);
-        model.addAttribute("task", task);
-
         return "show-tasks";
     }
+
     // Update task
     @GetMapping("/tasks/{taskId}/update")
     public String showUpdateTaskForm(@PathVariable("taskId") int taskId, Model model) {
@@ -122,7 +125,6 @@ public class TaskController {
         // Redirect to task details page
         return "redirect:/tasks/" + taskId;
     }
-
 
     // Delete task
     @PostMapping("/projects/{projectId}/tasks/{taskId}/delete")
@@ -166,8 +168,6 @@ public class TaskController {
 
         return model;
     }
-
-
     @GetMapping("/projects/{projectId}/tasks")
     public String getTasksByProjectId(@PathVariable int projectId, Model model, HttpSession session) {
         Integer loggedInUserIdObj = (Integer) session.getAttribute("userId");
@@ -190,17 +190,21 @@ public class TaskController {
         }
         int loggedInUserId = loggedInUserIdObj;
 
-        // code to fetch tasks for the given projectId from the database
+        // Hent tasks for det angivne projectId fra databasen
         List<Task> tasks = iTaskRepository.getTasksByProjectManagerID(projectId);
 
-        // add tasks and projectId to the model
+        // Hent medarbejdere for det angivne projectId fra databasen
+        List<User> employees = iUserRepository.getEmployeesByProjectId(projectId);
+
+        // Tilføj tasks, projectId og employees til modellen
         model.addAttribute("tasks", tasks);
         model.addAttribute("projectId", projectId);
-        //model.addAttribute("userId", loggedInUserId);
+        model.addAttribute("employees", employees);
 
-        // redirect to the user-frontpage with the user id as a path variable
+        // Omdirigér til brugerens forside med bruger-id som en path-variabel
         return "redirect:/smartslate/user/" + userId;
     }
+
 
 
 }
