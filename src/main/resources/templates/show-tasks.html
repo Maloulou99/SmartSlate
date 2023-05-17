@@ -58,7 +58,9 @@
 <input type="hidden" name="projectId" th:value="${projectId}"/>
 <a th:href="@{'/projects/' + ${projectId} + '/createTask'}">Create another task for this project</a>
 <br><br>
-<a th:href="@{/projects/tasks/{projectId}/{userId}(projectId=${projectId},userId=${userId})}">Back to Your Frontpage</a>
+<form th:action="@{/smartslate/user/{userid}(userid=${userId})}" method="get">
+    <button type="submit">Back to Your Frontpage</button>
+</form>
 
 </body>
 </html>
