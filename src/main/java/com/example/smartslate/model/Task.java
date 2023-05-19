@@ -1,5 +1,7 @@
 package com.example.smartslate.model;
 
+import java.time.LocalTime;
+
 public class Task {
     private int taskId;
     private int projectId;
@@ -11,6 +13,7 @@ public class Task {
     private String status;
     private Project project;
     private int userId; // Fremmednøgle til User-tabellen
+    private LocalTime timeSpent;
 
 
     public Task(int taskId, int projectId, String taskName, String description, String deadline, int projectmanagerID, int userID, String status, Project project, int userId) {
@@ -26,7 +29,7 @@ public class Task {
         this.userId = userId;
     }
 
-    public Task(){
+    public Task() {
 
     }
 
@@ -117,6 +120,13 @@ public class Task {
 
     public void setDeadline(String deadline) {
         this.deadline = deadline;
+    }
+
+    public LocalTime getTimeSpent() {
+        return timeSpent;
+    }
+    public void setTimeSpent(LocalTime timeSpent) {
+        this.timeSpent = timeSpent;
     }
 
 

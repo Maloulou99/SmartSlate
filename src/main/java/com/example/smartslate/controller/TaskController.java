@@ -259,9 +259,6 @@ public class TaskController {
         // Omdirigér til brugerens forside med bruger-id som en path-variabel
         return "redirect:/smartslate/user/" + userId;
     }
-
-
-
 }
 
 

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task details</title>
+</head>
+<body>
+<h1>Task List</h1>
+
+<table>
+    <tr>
+        <th>Task ID</th>
+        <th>Task Name</th>
+        <th>Time Spent</th>
+    </tr>
+
+    <tr th:each="task : ${tasks}">
+        <td th:text="${task.taskId}"></td>
+        <td th:text="${task.taskName}"></td>
+        <td th:text="${task.timeSpent}"></td>
+    </tr>
+
+    <a th:href="@{/employees/{employeeId}/calculate(employeeId=${employeeId})}" class="button">Calculate Salary and Time</a>
+
+</table>
+</body>
+</html>
