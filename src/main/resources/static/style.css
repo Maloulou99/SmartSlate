@@ -42,8 +42,8 @@ nav {
     display: flex;
     justify-content: center;
     margin: 0 auto;
-    background: rgb(7,0,36);
-    background: linear-gradient(90deg, rgba(7,0,36,1) 0%, rgba(66,204,136,1) 50%, rgba(160,0,255,1) 73%);
+    /*background: rgb(7,0,36);
+    background: linear-gradient(90deg, rgba(7,0,36,1) 0%, rgba(66,204,136,1) 50%, rgba(160,0,255,1) 73%);*/
     padding: 10px 0;
 }
 

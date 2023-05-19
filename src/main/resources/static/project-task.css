@@ -1,6 +1,7 @@
 body {
-    background-color: #f2f2f2;
-    font-family: Arial, sans-serif;
+    background: rgb(7, 0, 36);
+    background: linear-gradient(90deg, rgba(7, 0, 36, 1) 0%, rgba(66, 204, 136, 1) 50%, rgba(160, 0, 255, 1) 73%);
+    color: white;
 }
 
 h2 {

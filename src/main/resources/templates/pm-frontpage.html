@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Profile</title>
-
   <link rel="stylesheet" href="/user-profile.css">
 </head>
 <body>
@@ -28,54 +27,62 @@
         </div>
       </div>
       <div class="col-lg-8">
-        <div class="card mb-4">
-          <div class="card-header">
-            <h4 class="card-title">User Details</h4>
-          </div>
-          <div class="card-body">
-            <div class="user-profile-details">
-              <div class="user-profile-details-item">
-                <label>Full Name:</label>
-                <p class="text-muted" th:text="${user.firstName + ' ' + user.lastName}"></p>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card mb-4">
+              <div class="card-header">
+                <h4 class="card-title smaller-title">Your Projects</h4>
               </div>
-              <div class="user-profile-details-item">
-                <label>Email:</label>
-                <p class="text-muted" th:text="${user.email}"></p>
-              </div>
-              <div class="user-profile-details-item">
-                <label>Phone:</label>
-                <p class="text-muted" th:text="${user.phoneNumber}"></p>
-              </div>
-              <div class="user-profile-details-item">
-                  <label>Role:</label>
-                  <p class="text-muted" th:text="${roleName}"></p>
-                </div>
-              </div>
-        </div>
-          <div class="card mb-4">
-            <div class="card-header">
-              <h4 class="card-title smaller-title">Your Projects</h4>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-4" th:each="project : ${projects}">
-                  <div class="project-box">
-                    <div class="project-details">
-                      <h5>Project ID: <span th:text="${project.projectId}"></span></h5>
-                      <h5>Project Name: <span th:text="${project.projectName}"></span></h5>
-                    </div>
-                    <div class="project-actions">
-                      <a th:href="@{/projects/show/project/{projectId}(projectId=${project.projectId})}" class="btn btn-primary">Show Project Information</a>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-12" th:each="project : ${projects}">
+                    <div class="project-box">
+                      <div class="project-details">
+                        <h5>Project ID: <span th:text="${project.projectId}"></span></h5>
+                        <h5>Project Name: <span th:text="${project.projectName}"></span></h5>
+                      </div>
+                      <div class="project-actions">
+                        <nav>
+                          <ul>
+                            <li><a th:href="@{/projects/show/project/{projectId}(projectId=${project.projectId})}">Project info</a></li>
+                          </ul>
+                        </nav>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+          <div class="col-md-6">
+            <div class="card mb-4">
+              <div class="card-body">
+                <h4 class="card-title">User Details</h4>
+                <div class="user-profile-details">
+                  <div class="user-profile-details-item">
+                    <label>Full Name:</label>
+                    <p class="text-muted" th:text="${user.firstName + ' ' + user.lastName}"></p>
+                  </div>
+                  <div class="user-profile-details-item">
+                    <label>Email:</label>
+                    <p class="text-muted" th:text="${user.email}"></p>
+                  </div>
+                  <div class="user-profile-details-item">
+                    <label>Phone:</label>
+                    <p class="text-muted" th:text="${user.phoneNumber}"></p>
+                  </div>
+                  <div class="user-profile-details-item">
+                    <label>Role:</label>
+                    <p class="text-muted" th:text="${roleName}"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        </div>
-        </div>
-        </div>
+      </div>
+    </div>
+  </div>
 </section>
 </body>
 </html>
