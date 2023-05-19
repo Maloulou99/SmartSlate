@@ -29,7 +29,8 @@ public interface IUserRepository {
     User getUserFullNames(int userId);
 
     User getProjectManagersFullNames(int userId);
-    List<User> getEmployeesByRoleId();
+    int getEmployeeUserId(int employeeId);
     User getEmployeesFullNames(int userId);
     List<User> getEmployeesByProjectId(int projectId);
+    User getProjectManagerByRoleName(String roleName);
 }

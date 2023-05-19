@@ -308,31 +308,26 @@ public class UserRepository implements IUserRepository{
     }
 
 
-    public List<User> getEmployeesByRoleId() {
-        List<User> employees = new ArrayList<>();
-        String query = "SELECT * FROM users WHERE roleID = 3";
-        try(Connection con = DriverManager.getConnection(url, user_id, user_pwd)){
-            PreparedStatement pr = con.prepareStatement(query);
-            ResultSet rs = pr.executeQuery();
-            while (rs.next()) {
-                User user = new User();
-                user.setUserID(rs.getInt("userID"));
-                user.setUsername(rs.getString("username"));
-                user.setPassword(rs.getString("password"));
-                user.setEmail(rs.getString("email"));
-                user.setFirstName(rs.getString("firstName"));
-                user.setLastName(rs.getString("lastName"));
-                user.setPhoneNumber(rs.getString("phoneNumber"));
-                user.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
-                user.setUpdatedAt(rs.getTimestamp("updatedAt").toLocalDateTime());
-                user.setRoleID(rs.getInt("roleID"));
-                employees.add(user);
+    public int getEmployeeUserId(int employeeId) {
+        String query = "SELECT userID FROM users WHERE userID = ?";
+
+        try (Connection connection = DriverManager.getConnection(url, user_id, user_pwd);
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setInt(1, employeeId);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("userID");
+                }
             }
-        } catch (Exception e){
-            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            System.out.print("No userid found");
         }
-        return employees;
+
+        return 0; // Return a default value if no user ID is found
     }
+
 
     public List<User> getEmployeesByProjectId(int projectId) {
         List<User> employees = new ArrayList<>();
@@ -361,4 +356,25 @@ public class UserRepository implements IUserRepository{
         }
         return employees;
     }
+
+    public User getProjectManagerByRoleName(String roleName) {
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "SELECT * FROM users WHERE roleID = (SELECT roleID FROM roles WHERE roleName = ?)";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setString(1, roleName);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                User projectManager = new User();
+                projectManager.setUserID(rs.getInt("userID"));
+                projectManager.setUsername(rs.getString("username"));
+                // Sæt resten af brugerens attributter efter behov
+                return projectManager;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null; // Hvis der ikke findes en projektleder med den angivne rolle
+    }
+
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ITaskRepository {
 
-    int createTask(Task task);
+    int createTask(int userID, String taskName, String description, String deadline, int projectID, int projectManagerID, String status);
     List<Task> getTasksByProjectId(int projectId);
     void updateTask(Task task);
     List<Task> getAllTasks(int userID);
@@ -16,6 +16,7 @@ public interface ITaskRepository {
 
     void deleteTaskFromProject(int projectId, int taskId);
     void associateEmployeesWithTask(int taskId, List<Integer> employeeIds);
-
+    List<User> getEmployeesWithRoleThreeByUserId(int userId);
+    void associateProjectManagerWithTask(int taskId, Integer projectManagerId);
 
 }

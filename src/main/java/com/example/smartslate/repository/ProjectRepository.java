@@ -149,5 +149,21 @@ public class ProjectRepository implements IProjectRepository{
         return projects;
     }
 
+    public int getProjectManagerIdByProjectId(int projectId) {
+        int projectManagerId = 0;
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "SELECT userID FROM projects WHERE projectID = ?";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, projectId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                projectManagerId = rs.getInt("userID");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return projectManagerId;
+    }
+
 
 }

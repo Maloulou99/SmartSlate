@@ -39,6 +39,19 @@ public class User {
         this.roleID = roleID;
     }
 
+    public User(int userID, String username, String password, String email, String firstName, String lastName, String phoneNumber, LocalDateTime createdAt, LocalDateTime updatedAt, int roleID) {
+        this.userID = userID;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.roleID = roleID;
+    }
+
     // getters and setters
     public int getUserID() {
         return userID;

@@ -12,4 +12,5 @@ public interface IProjectRepository {
     Project getProjectById(int projectId);
     List<Project> getAllProjects();
     List<Project> getAllProjectsByUserId(int userId);
+    int getProjectManagerIdByProjectId(int projectId);
 }

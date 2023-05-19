@@ -6,8 +6,8 @@ public class Task {
     private String taskName;
     private String description;
     private String deadline;
-    private int projectmanagerID;
-    private int userID;
+    private Integer projectmanagerID;
+    private Integer userID;
     private String status;
     private Project project;
     private int userId; // Fremmednøgle til User-tabellen
@@ -30,11 +30,11 @@ public class Task {
 
     }
 
-    public int getUserID() {
+    public Integer getUserID() {
         return userID;
     }
 
-    public void setUserID(int userID) {
+    public void setUserID(Integer userID) {
         this.userID = userID;
     }
 
@@ -90,11 +90,11 @@ public class Task {
         return deadline;
     }
 
-    public int getProjectmanagerID() {
+    public Integer getProjectmanagerID() {
         return projectmanagerID;
     }
 
-    public void setProjectmanagerID(int projectmanagerID) {
+    public void setProjectmanagerID(Integer projectmanagerID) {
         this.projectmanagerID = projectmanagerID;
     }
 
@@ -107,11 +107,11 @@ public class Task {
         this.status = status;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 

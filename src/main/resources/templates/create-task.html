@@ -13,47 +13,43 @@
   <table>
     <tr>
       <td><label for="taskName">Task Name:</label></td>
-      <td><input type="text" id="taskName" name="taskName" th:value="${task.taskName}"></td>
+      <td><input type="text" id="taskName" name="taskName" th:value="${task.taskName}" required></td>
     </tr>
     <tr>
       <td><label for="description">Task Description:</label></td>
-      <td><textarea id="description" name="description" th:text="${task.description}"></textarea></td>
+      <td><textarea id="description" name="description" th:text="${task.description}" required></textarea></td>
     </tr>
     <tr>
       <td><label for="deadline">Task Estimated Time:</label></td>
-      <td><input type="time" id="deadline" name="deadline" th:value="${task.deadline}"></td>
-    </tr>
-    <tr>
-      <td>
-        <label for="employeeIds">Employees:</label>
-        <select id="employeeIds" name="employeeIds" required multiple>
-          <option th:each="employee : ${employees}"
-                  th:if="${employee.roleID == 3}"
-                  th:value="${employee.userID}"
-                  th:text="${employee.firstName} + ' ' + ${employee.lastName}">
-          </option>
-        </select>
-        <p th:unless="${employees}">No employees available</p>
-      </td>
+      <td><input type="time" id="deadline" name="deadline" th:value="${task.deadline}" required></td>
     </tr>
     <tr>
       <td><label for="status">Status:</label></td>
       <td>
-        <select id="status" name="status" th:value="${task.status}">
+        <select id="status" name="status" th:value="${task.status}" required>
           <option value="Planning">Planning</option>
           <option value="In Progress">In Progress</option>
           <option value="Completed">Completed</option>
         </select>
       </td>
     </tr>
+    <tr>
+      <td>
+        <label for="employeeId">Employee:</label>
+        <select id="employeeId" name="employeeId" required>
+          <option th:each="employee : ${employees}"
+                  th:value="${employee.userID}"
+                  th:text="${employee.firstName} + ' ' + ${employee.lastName}">
+          </option>
+        </select>
+      </td>
+    </tr>
   </table>
 
-  <input type="hidden" id="projectID" name="projectID" th:value="${projectId}">
-  <input type="hidden" id="userID" name="userID" th:value="${task.userID}">
-
+  <input type="hidden" id="projectId" name="projectId" th:value="${projectId}">
+  <input type="hidden" id="projectManagerId" name="projectmanagerID" th:value="${task.projectmanagerID}">
   <input type="submit" value="Create Task">
 </form>
-
 
 </body>
 </html>

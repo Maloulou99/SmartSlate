@@ -45,34 +45,32 @@ public class LoginController {
         User user = iLoginRepository.findByUsernameOrEmailAndPassword(username, password);
 
         if (user != null) {
-            Integer roleID = user.getRoleID();
-            if (roleID != null) {
-                if (roleID == 1) {
-                    // Admin
-                    session.setAttribute("userId", user.getUserID());
-                    session.setMaxInactiveInterval(200);
-                    model.addAttribute("user", user);
-                    return "admin-page";
-                } else if (roleID == 2) {
-                    List<Project> projects = iProjectRepository.getAllProjectsByUserId(user.getUserID());
-                    // Project Manager
-                    session.setAttribute("userId", user.getUserID());
-                    session.setMaxInactiveInterval(200);
-                    model.addAttribute("user", user);
-                    model.addAttribute("project", projects);
-                    model.addAttribute("roleName", user.getRoleID());
-                    model.addAttribute("projects", iProjectRepository.getAllProjectsByUserId(user.getUserID()));
-                    return "pm-frontpage";
-                } else if (roleID == 3) {
-                    // Employee
-                    session.setAttribute("userId", user.getUserID());
-                    session.setMaxInactiveInterval(200);
-                    model.addAttribute("user", user);
-                    return "employee-page";
-                }
+            int roleID = user.getRoleID();
+            if (roleID == 1) {
+                // Admin
+                session.setAttribute("userId", user.getUserID());
+                session.setMaxInactiveInterval(200);
+                model.addAttribute("user", user);
+                return "admin-page";
+            } else if (roleID == 2) {
+                List<Project> projects = iProjectRepository.getAllProjectsByUserId(user.getUserID());
+                // Project Manager
+                session.setAttribute("userId", user.getUserID());
+                session.setMaxInactiveInterval(200);
+                model.addAttribute("user", user);
+                model.addAttribute("project", projects);
+                model.addAttribute("roleName", user.getRoleID());
+                model.addAttribute("projects", iProjectRepository.getAllProjectsByUserId(user.getUserID()));
+                return "pm-frontpage";
+            } else if (roleID == 3) {
+                // Employee
+                session.setAttribute("userId", user.getUserID());
+                session.setMaxInactiveInterval(200);
+                model.addAttribute("user", user);
+                return "employee-page";
             }
         }
-        return "redirect:user-login";
+        return "redirect:/login";
     }
     @GetMapping("/logout")
     public String logout(HttpSession session) {

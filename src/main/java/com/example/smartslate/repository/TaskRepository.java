@@ -2,11 +2,12 @@ package com.example.smartslate.repository;
 
 import com.example.smartslate.model.Project;
 import com.example.smartslate.model.Task;
+import com.example.smartslate.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import javax.sound.midi.Soundbank;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,31 +22,31 @@ public class TaskRepository implements ITaskRepository {
 
 
     // Create a task
-    public int createTask(Task task) {
-        int taskId = 0;
-        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "INSERT INTO tasks (projectID, taskName, description, deadline, projectManagerID, userID, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement pstmt = con.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setInt(1, task.getProjectId());
-            pstmt.setString(2, task.getTaskName());
-            pstmt.setString(3, task.getDescription());
-            pstmt.setString(4, task.getDeadline());
-            pstmt.setInt(5, task.getProjectmanagerID());
-            System.out.println(task.getProjectmanagerID());
-            pstmt.setInt(6, task.getUserId());
-            System.out.println(task.getUserID());
-            pstmt.setString(7, task.getStatus());
-            pstmt.executeUpdate();
+    public int createTask(int userID, String taskName, String description, String deadline, int projectID, int projectManagerID, String status) {
+        String sql = "INSERT INTO tasks (userID, taskName, description, deadline, projectID, projectManagerID, status) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-            ResultSet rs = pstmt.getGeneratedKeys();
-            if (rs.next()) {
-                taskId = rs.getInt(1);
-            }
+        try (Connection connection = DriverManager.getConnection(url, user_id, user_pwd);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, userID);
+            statement.setString(2, taskName);
+            statement.setString(3, description);
+            statement.setString(4, deadline);
+            statement.setInt(5, projectID);
+            statement.setInt(6, projectManagerID);
+            statement.setString(7, status);
+
+            statement.executeUpdate();
+
+            System.out.println("Task created successfully!");
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            // Handle any exceptions appropriately
         }
-        return taskId;
+        return userID;
     }
+
 
 
     public void updateTask(Task task) {
@@ -227,5 +228,52 @@ public class TaskRepository implements ITaskRepository {
             throw new RuntimeException(e);
         }
     }
+    public void associateProjectManagerWithTask(int taskId, Integer projectManagerId) {
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "INSERT INTO task_project_managers (taskId, projectManagerId) VALUES (?, ?)";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, taskId);
+            pstmt.setInt(2, projectManagerId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    public List<User> getEmployeesWithRoleThreeByUserId(int userId) {
+        List<User> employees = new ArrayList<>();
+
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "SELECT u.* FROM users u " +
+                    "INNER JOIN employeeTasks et ON u.userID = et.userID " +
+                    "INNER JOIN tasks t ON et.taskID = t.taskID " +
+                    "WHERE u.roleID = 3 AND t.userID = ?";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                int employeeId = rs.getInt("userID");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                String email = rs.getString("email");
+                String firstName = rs.getString("firstName");
+                String lastName = rs.getString("lastName");
+                String phoneNumber = rs.getString("phoneNumber");
+                LocalDateTime createdAt = rs.getTimestamp("createdAt").toLocalDateTime();
+                LocalDateTime updatedAt = rs.getTimestamp("updatedAt").toLocalDateTime();
+                int roleId = rs.getInt("roleID");
+
+                User employee = new User(userId, username, password, email, firstName, lastName, phoneNumber, createdAt, updatedAt, roleId);
+                employees.add(employee);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return employees;
+    }
+
 
 }
