@@ -1,6 +1,7 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #F2F2F2;
+    background: rgb(7,0,36);
+    background: linear-gradient(90deg, rgba(7,0,36,1) 0%, rgba(66,204,136,1) 50%, rgba(160,0,255,1) 73%);
 }
 
 h1 {
@@ -13,9 +14,8 @@ h1 {
 form {
     max-width: 300px;
     margin: 0 auto;
-    background-color: #fff;
     padding: 20px;
-    border: 1px solid #EAEAEA;
+    border: mediumpurple;
     border-radius: 5px;
 }
 
@@ -30,7 +30,7 @@ input[type="password"] {
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
-    border: 1px solid #007FFF; /* Add blue border color */
+    border: mediumpurple; /* Add blue border color */
     border-radius: 3px;
 }
 
@@ -38,7 +38,7 @@ input[type="password"] {
 input[type="submit"] {
     width: 100%;
     padding: 10px;
-    background-color: #007FFF;
+    background-color:mediumpurple;
     color: #fff;
     border: none;
     border-radius: 3px;
