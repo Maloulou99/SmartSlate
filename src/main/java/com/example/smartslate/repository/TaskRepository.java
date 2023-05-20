@@ -87,13 +87,12 @@ public class TaskRepository implements ITaskRepository {
         }
     }
 
-    public List<Task> getAllTasks(int userID) {
+    public List<Task> getAllTasks() {
         List<Task> tasks = new ArrayList<>();
 
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT * FROM tasks WHERE userID = ?";
+            String SQL = "SELECT * FROM tasks";
             PreparedStatement pstmt = con.prepareStatement(SQL);
-            pstmt.setInt(1, userID);
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {

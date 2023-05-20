@@ -1,6 +1,7 @@
 package com.example.smartslate.controller;
 
 import com.example.smartslate.model.Project;
+import com.example.smartslate.model.Task;
 import com.example.smartslate.model.User;
 import com.example.smartslate.repository.*;
 import jakarta.servlet.http.HttpSession;
@@ -16,16 +17,18 @@ public class LoginController {
     private ILoginRepository iLoginRepository;
     private IUserRepository iUserRepository;
     private IProjectRepository iProjectRepository;
-    private int current_userId;
+    private ITaskRepository iTaskRepository;
 
 
-    public LoginController(ILoginRepository iLoginRepository, IUserRepository iUserRepository, IProjectRepository iProjectRepository) {
+    public LoginController(ILoginRepository iLoginRepository, IUserRepository iUserRepository, IProjectRepository iProjectRepository, ITaskRepository iTaskRepository) {
         this.iLoginRepository = iLoginRepository;
         this.iUserRepository = iUserRepository;
         this.iProjectRepository = iProjectRepository;
+        this.iTaskRepository = iTaskRepository;
     }
 
     protected boolean isLoggedIn(HttpSession session, int uid) {
+        int current_userId = 0;
         return session.getAttribute("user") != null && current_userId == uid;
     }
 
@@ -47,10 +50,18 @@ public class LoginController {
         if (user != null) {
             int roleID = user.getRoleID();
             if (roleID == 1) {
+                List<Project> projects = iProjectRepository.getAllProjects();
+                List<User> users = iUserRepository.getAllUsers();
+                List<Task> tasks = iTaskRepository.getAllTasks();
                 // Admin
                 session.setAttribute("userId", user.getUserID());
                 session.setMaxInactiveInterval(200);
                 model.addAttribute("user", user);
+                model.addAttribute("project", projects);
+                model.addAttribute("roleName", iUserRepository.getRoleName(1));
+                model.addAttribute("projects", projects);
+                model.addAttribute("users", users);
+                model.addAttribute("tasks", tasks);
                 return "admin-page";
             } else if (roleID == 2) {
                 List<Project> projects = iProjectRepository.getAllProjectsByUserId(user.getUserID());

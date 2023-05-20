@@ -10,7 +10,7 @@ public interface ITaskRepository {
     int createTask(int userID, String taskName, String description, String deadline, int projectID, int projectManagerID, String status);
     List<Task> getTasksByProjectId(int projectId);
     void updateTask(Task task);
-    List<Task> getAllTasks(int userID);
+    List<Task> getAllTasks();
     List<Task> getTasksByProjectManagerID(int projectManagerID);
     Task getTaskById(int taskId);
 

@@ -52,11 +52,9 @@ public class ProjectManagerController {
     public String getUserFrontsite(Model model, HttpSession session) {
         List<Project> projects = iProjectRepository.getAllProjects();
         Integer userId = (Integer) session.getAttribute("userId"); // Hent brugerens ID fra sessionen
-        List<Task> tasks = iTaskRepository.getAllTasks(userId);
 
         String roleName = iUserRepository.getRoleName(2);
         model.addAttribute("roleName", roleName);
-        model.addAttribute("tasks", tasks);
         model.addAttribute("projects", projects);
         return "pm-frontpage";
     }

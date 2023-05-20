@@ -53,7 +53,7 @@ public class EmployeeTaskController {
 
     @GetMapping("/tasks")
     public String showTasks(@RequestParam("userId") int userId, Model model) {
-        List<Task> tasks = iTaskRepository.getAllTasks(userId);
+        List<Task> tasks = iTaskRepository.getAllTasks();
         model.addAttribute("tasks", tasks);
         return "calculate-time";
     }
