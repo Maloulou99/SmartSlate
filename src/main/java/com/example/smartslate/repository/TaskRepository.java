@@ -48,10 +48,9 @@ public class TaskRepository implements ITaskRepository {
     }
 
 
-
     public void updateTask(Task task) {
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "UPDATE tasks SET projectID = ?, taskName = ?, description = ?, deadline = ?, projectManagerID = ?, status = ? WHERE taskID = ? AND userID = ?";
+            String SQL = "UPDATE tasks SET projectID = ?, taskName = ?, description = ?, deadline = ?, projectManagerID = ?, status = ? WHERE taskID = ?";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setInt(1, task.getProjectId());
             pstmt.setString(2, task.getTaskName());
@@ -60,7 +59,6 @@ public class TaskRepository implements ITaskRepository {
             pstmt.setInt(5, task.getProjectmanagerID());
             pstmt.setString(6, task.getStatus());
             pstmt.setInt(7, task.getTaskId());
-            pstmt.setInt(8, task.getUserId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -146,8 +144,6 @@ public class TaskRepository implements ITaskRepository {
     }
 
 
-
-
     public Task getTaskById(int taskId) {
         Task task = null;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
@@ -217,7 +213,7 @@ public class TaskRepository implements ITaskRepository {
             deleteStmt.executeUpdate();
 
             // Opret nye tilknytninger mellem opgaven og valgte medarbejdere
-            String insertQuery = "INSERT INTO employeeTasks (taskEmployeeID, taskID) VALUES (?, ?)";
+            String insertQuery = "INSERT INTO employeeTasks (employeeTaskID, taskID) VALUES (?, ?)";
             PreparedStatement insertStmt = con.prepareStatement(insertQuery);
             for (int employeeId : employeeIds) {
                 insertStmt.setInt(1, employeeId);
@@ -228,6 +224,7 @@ public class TaskRepository implements ITaskRepository {
             throw new RuntimeException(e);
         }
     }
+
     public void associateProjectManagerWithTask(int taskId, Integer projectManagerId) {
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
             String SQL = "INSERT INTO task_project_managers (taskId, projectManagerId) VALUES (?, ?)";
@@ -265,7 +262,7 @@ public class TaskRepository implements ITaskRepository {
                 LocalDateTime updatedAt = rs.getTimestamp("updatedAt").toLocalDateTime();
                 int roleId = rs.getInt("roleID");
 
-                User employee = new User(userId, username, password, email, firstName, lastName, phoneNumber, createdAt, updatedAt, roleId);
+                User employee = new User(employeeId, username, password, email, firstName, lastName, phoneNumber, createdAt, updatedAt, roleId);
                 employees.add(employee);
             }
         } catch (SQLException e) {
@@ -274,6 +271,85 @@ public class TaskRepository implements ITaskRepository {
 
         return employees;
     }
+
+    public List<Task> getTasksByEmployeeId(int employeeId) {
+        List<Task> tasks = new ArrayList<>();
+
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "SELECT t.* FROM tasks t " +
+                    "INNER JOIN employeeTasks et ON t.taskID = et.taskID " +
+                    "WHERE et.userID = ?";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, employeeId);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                int taskId = rs.getInt("taskID");
+                String taskName = rs.getString("taskName");
+                String description = rs.getString("description");
+                String deadline = rs.getString("deadline");
+                String status = rs.getString("status");
+                int projectId = rs.getInt("projectID");
+                int projectManagerId = rs.getInt("projectManagerID");
+                int userId = rs.getInt("userID");
+
+                Task task = new Task(taskId, taskName, description, deadline, status, projectId, projectManagerId, userId);
+                tasks.add(task);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return tasks;
+    }
+
+    public List<User> getEmployeesWithRoleThree() {
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String query = "SELECT * FROM users WHERE roleID = 3";
+            PreparedStatement stmt = con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+
+            List<User> employees = new ArrayList<>();
+            while (rs.next()) {
+                int userId = rs.getInt("userID");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                String email = rs.getString("email");
+                String firstName = rs.getString("firstName");
+                String lastName = rs.getString("lastName");
+                LocalDateTime createdAt = rs.getDate("createdAt").toLocalDate().atStartOfDay();
+                LocalDateTime updatedAt = rs.getDate("updatedAt").toLocalDate().atStartOfDay();
+                String phoneNumber = rs.getString("phoneNumber");
+                int roleId = rs.getInt("roleID");
+
+                User employee = new User(userId, username, password, email, firstName, lastName, phoneNumber, createdAt, updatedAt, roleId);
+                employees.add(employee);
+            }
+
+            return employees;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public int getProjectIdByTaskId(int taskId) {
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String sql = "SELECT projectID FROM tasks WHERE taskID = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setInt(1, taskId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("projectID");
+            } else {
+                // Handle case where taskId is not found
+                throw new IllegalArgumentException("Invalid taskId: " + taskId);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 
 }

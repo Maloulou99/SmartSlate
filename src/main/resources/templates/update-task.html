@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="/project-task.css">
   <title>Update task</title>
 </head>
 <body>
-<form th:action="@{/tasks/{taskId}/update(taskId=${task.taskId})}" th:method="post" th:object="${task}">
-
+  <form th:object="${task}" th:action="@{/tasks/{taskId}/update/{projectId}(taskId=${task.taskId}, projectId=${task.projectId})}" method="post"  >
   <div>
     <input type="hidden" id="projectId" th:field="*{projectId}">
   </div>
@@ -14,32 +14,36 @@
   <div>
     <input type="hidden" id="taskId" th:field="*{taskId}">
   </div>
+  <div>
+    <input type="hidden" id="projectmanagerID" th:field="*{projectmanagerID}">
+  </div>
+
+  <div>
+    <label for="taskName">Task Name</label>
+    <textarea name="taskName" id="taskName" th:field="*{taskName}"></textarea>
+  </div>
 
   <div>
     <label for="taskDescription">Description</label>
     <textarea name="description" id="taskDescription" cols="30" rows="10" th:field="*{description}" required></textarea>
   </div>
 
-
   <div>
     <label for="deadline">Deadline:</label>
-    <input type="date" id="deadline" th:field="*{deadline}">
+    <input type="time" id="deadline" th:field="*{deadline}">
   </div>
-
 
   <div>
-      <label for="projectManagerId">Project Manager:</label>
-      <select id="projectManagerId" name="projectManagerId" required>
-        <option th:each="projectManager : ${projectManagers}"
-                th:if="${projectManager.roleID == 2}"
-                th:value="${projectManager.userID}"
-                th:text="${projectManager.firstName} + ' ' + ${projectManager.lastName}"
-                th:selected="${projectManager.userID == task.projectmanagerID}">
-        </option>
-      </select>
-      <p th:unless="${projectManagers}">No project managers available</p>
+    <label for="employeeId">Employee:</label>
+    <select id="employeeId" name="employeeId" required>
+      <option th:each="employee : ${employees}"
+              th:value="${employee.userID}"
+              th:text="${employee.firstName + ' ' + employee.lastName}"
+              th:selected="${employee.userID == task.userID}">
+      </option>
+    </select>
+    <p th:if="${employees.isEmpty()}">No employees available</p>
   </div>
-
 
   <div>
     <label for="status">Status:</label>
@@ -54,6 +58,5 @@
     <button type="submit">Update task</button>
   </div>
 </form>
-
 </body>
 </html>

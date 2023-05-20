@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
 <head>
-  <link rel="stylesheet" href="/project-task.css">
   <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" th:href="@{/project-task.css}"/>
   <title>Create Task</title>
 </head>
 <body>
 
-<h2>Task Details</h2>
+<h2>Create Task</h2>
 
 <form method="post" th:object="${task}" th:action="@{/projects/{projectId}/createTask(projectId=${projectId})}">
   <table>
@@ -17,37 +17,39 @@
     </tr>
     <tr>
       <td><label for="description">Task Description:</label></td>
-      <td><textarea id="description" name="description" th:text="${task.description}" required></textarea></td>
+      <td><textarea id="description" name="description" required th:text="${task.description}"></textarea></td>
     </tr>
     <tr>
-      <td><label for="deadline">Task Estimated Time:</label></td>
+      <td><label for="deadline">Deadline:</label></td>
       <td><input type="time" id="deadline" name="deadline" th:value="${task.deadline}" required></td>
     </tr>
     <tr>
       <td><label for="status">Status:</label></td>
       <td>
-        <select id="status" name="status" th:value="${task.status}" required>
-          <option value="Planning">Planning</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Completed">Completed</option>
+        <select id="status" name="status" required>
+          <option value="Planning" th:selected="${task.status == 'Planning'}">Planning</option>
+          <option value="In Progress" th:selected="${task.status == 'In Progress'}">In Progress</option>
+          <option value="Completed" th:selected="${task.status == 'Completed'}">Completed</option>
         </select>
       </td>
     </tr>
     <tr>
+
       <td>
-        <label for="employeeId">Employee:</label>
-        <select id="employeeId" name="employeeId" required>
-          <option th:each="employee : ${employees}"
-                  th:value="${employee.userID}"
-                  th:text="${employee.firstName} + ' ' + ${employee.lastName}">
+        <label for="selectedEmployee"></label><select id="selectedEmployee" name="selectedEmployee" required multiple>
+          <option value="" disabled selected>Select Employee(s)</option>
+          <option th:each="employee : ${employees}" th:value="${employee.userID}"
+                  th:text="${employee.firstName + ' ' + employee.lastName}">
           </option>
         </select>
       </td>
+
     </tr>
   </table>
 
   <input type="hidden" id="projectId" name="projectId" th:value="${projectId}">
-  <input type="hidden" id="projectManagerId" name="projectmanagerID" th:value="${task.projectmanagerID}">
+  <input type="hidden" id="projectManagerId" name="projectManagerId" th:value="${task.projectmanagerID}">
+
   <input type="submit" value="Create Task">
 </form>
 

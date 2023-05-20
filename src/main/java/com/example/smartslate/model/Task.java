@@ -1,6 +1,9 @@
 package com.example.smartslate.model;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Task {
     private int taskId;
@@ -13,10 +16,10 @@ public class Task {
     private String status;
     private Project project;
     private int userId; // Fremmednøgle til User-tabellen
-    private LocalTime timeSpent;
+    private List<User> employees = new ArrayList<>();
 
 
-    public Task(int taskId, int projectId, String taskName, String description, String deadline, int projectmanagerID, int userID, String status, Project project, int userId) {
+    public Task(int taskId, int projectId, String taskName, String description, String deadline, Integer projectmanagerID, Integer userID, String status, Project project, int userId) {
         this.taskId = taskId;
         this.projectId = projectId;
         this.taskName = taskName;
@@ -28,10 +31,29 @@ public class Task {
         this.project = project;
         this.userId = userId;
     }
+    public Task(List<User> employees){
+        this.employees = employees;
+    }
 
     public Task() {
 
     }
+
+    public Task(int taskId, String taskName, String description, String deadline, String status, int projectId, Integer projectManagerId, Integer userId) {
+        this.taskId = taskId;
+        this.projectId = projectId;
+        this.taskName = taskName;
+        this.description = description;
+        this.deadline = deadline;
+        this.projectmanagerID = projectManagerId;
+        this.userID = userId;
+        this.status = status;
+        this.userId = userId;
+
+    }
+
+
+
 
     public Integer getUserID() {
         return userID;
@@ -47,6 +69,14 @@ public class Task {
         this.deadline = deadline;
         this.projectmanagerID = projectmanagerID;
         this.status = status;
+    }
+
+    public List<User> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<User> employees) {
+        this.employees = employees;
     }
 
     public String getTaskName() {
@@ -122,12 +152,8 @@ public class Task {
         this.deadline = deadline;
     }
 
-    public LocalTime getTimeSpent() {
-        return timeSpent;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
-    public void setTimeSpent(LocalTime timeSpent) {
-        this.timeSpent = timeSpent;
-    }
-
 
 }

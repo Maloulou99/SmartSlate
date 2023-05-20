@@ -377,4 +377,24 @@ public class UserRepository implements IUserRepository{
         return null; // Hvis der ikke findes en projektleder med den angivne rolle
     }
 
+    public int getProjectManagerByTaskId(int taskId) {
+        int projectManagerId = 0; // Initialisér variablen til en standardværdi, f.eks. 0
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "SELECT projectmanagerID FROM tasks WHERE taskID = ?";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, taskId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                projectManagerId = rs.getInt("projectmanagerID");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return projectManagerId;
+    }
+
+
+
+
 }

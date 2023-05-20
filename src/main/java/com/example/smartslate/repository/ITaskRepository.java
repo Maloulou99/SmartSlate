@@ -18,5 +18,8 @@ public interface ITaskRepository {
     void associateEmployeesWithTask(int taskId, List<Integer> employeeIds);
     List<User> getEmployeesWithRoleThreeByUserId(int userId);
     void associateProjectManagerWithTask(int taskId, Integer projectManagerId);
+    public List<Task> getTasksByEmployeeId(int employeeId);
+    List<User> getEmployeesWithRoleThree();
+    int getProjectIdByTaskId(int taskId);
 
 }

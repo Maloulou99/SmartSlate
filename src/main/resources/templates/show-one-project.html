@@ -70,14 +70,13 @@
 <th:block th:if="${#lists.isEmpty(tasks)}">
     <a th:href="@{'/projects/' + ${project.projectId} + '/createTask'}">Create Task</a>
 </th:block>
-
-<input type="hidden" name="projectManagerId" value="2" />
-
 <nav>
     <ul>
         <li><a th:href="@{/smartslate/user/{userId}(userId=${user.userID})}">Go to User Page</a></li>
     </ul>
 </nav>
+
+<input type="hidden" name="projectManagerById" value="projectManagerById" />
 
 </body>
 </html>

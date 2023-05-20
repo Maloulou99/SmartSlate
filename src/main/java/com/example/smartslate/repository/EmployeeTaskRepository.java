@@ -1,10 +1,13 @@
 package com.example.smartslate.repository;
 
 import com.example.smartslate.model.EmployeeTask;
+import com.example.smartslate.model.Task;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class EmployeeTaskRepository implements IEmployeeTask {
@@ -90,4 +93,7 @@ public class EmployeeTaskRepository implements IEmployeeTask {
             System.out.println(e);
         }
     }
+
+
+
 }

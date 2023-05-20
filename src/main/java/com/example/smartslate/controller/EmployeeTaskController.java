@@ -9,8 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @RequestMapping("/")
@@ -31,40 +31,31 @@ public class EmployeeTaskController {
 
     @GetMapping("/employees/{employeeId}/calculate")
     public String calculateTime(@PathVariable("employeeId") int employeeId, Model model) {
-        List<Task> tasks = iTaskRepository.getTasksByProjectId(employeeId);
+        List<Task> tasks = iTaskRepository.getTasksByEmployeeId(employeeId);
         int totalTimeSpent = calculateTotalTimeSpent(tasks);
         model.addAttribute("totalTimeSpent", totalTimeSpent);
-        return "redirect:/tasks/";
+        return "calculate-time";
     }
+
     private int calculateTotalTimeSpent(List<Task> tasks) {
         int totalTimeSpent = 0;
+        LocalDate currentDate = LocalDate.now();
+
         for (Task task : tasks) {
-            totalTimeSpent += task.getTimeSpent();
+            String deadline = task.getDeadline();
+            LocalDate taskDeadline = LocalDate.parse(deadline);
+            long daysUntilDeadline = ChronoUnit.DAYS.between(currentDate, taskDeadline);
+            totalTimeSpent += daysUntilDeadline;
         }
+
         return totalTimeSpent;
     }
 
-
     @GetMapping("/tasks")
-    public String showTasks(int userId, Model model) {
+    public String showTasks(@RequestParam("userId") int userId, Model model) {
         List<Task> tasks = iTaskRepository.getAllTasks(userId);
         model.addAttribute("tasks", tasks);
-        return "task-list";
+        return "calculate-time";
     }
 
-    @PostMapping("/tasks/{taskId}/updateTime")
-    public String updateTime(@PathVariable("taskId") int taskId, @RequestParam("employeeId") int employeeId, @RequestParam("updatedTime") LocalTime updatedTime) {
-
-        Task task = iTaskRepository.getTaskById(taskId);
-        LocalTime currentTime = task.getTimeSpent();
-
-        LocalTime newTime = currentTime.plusHours(updatedTime.getHour())
-                .plusMinutes(updatedTime.getMinute())
-                .plusSeconds(updatedTime.getSecond());
-
-        task.setTimeSpent(newTime);
-        iTaskRepository.updateTask(task);
-
-        return "redirect:/tasks/" + taskId;
-    }
 }

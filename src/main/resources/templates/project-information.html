@@ -18,9 +18,6 @@
     <th>Status</th>
     <th>Actions</th>
   </tr>
-  <tr th:if="${projects.isEmpty()}">
-    <td colspan="8">No projects found... Create a new project!</td>
-  </tr>
 
   <tr th:each="project : ${projects}">
     <td th:text="${project.projectId}"></td>
@@ -42,6 +39,5 @@
     </td>
   </tr>
 </table>
-<a href="/projects/create">Create Project</a>
 </body>
 </html>

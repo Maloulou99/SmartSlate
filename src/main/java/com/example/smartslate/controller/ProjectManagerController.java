@@ -15,12 +15,12 @@ import java.util.List;
 
 @RequestMapping("smartslate")
 @Controller
-public class SmartSlateController {
+public class ProjectManagerController {
     private IUserRepository iUserRepository;
     private IProjectRepository iProjectRepository;
     private ITaskRepository iTaskRepository;
 
-    public SmartSlateController(IUserRepository iUserRepository, IProjectRepository iProjectRepository, ITaskRepository iTaskRepository) {
+    public ProjectManagerController(IUserRepository iUserRepository, IProjectRepository iProjectRepository, ITaskRepository iTaskRepository) {
         this.iUserRepository = iUserRepository;
         this.iProjectRepository = iProjectRepository;
         this.iTaskRepository = iTaskRepository;
@@ -51,12 +51,13 @@ public class SmartSlateController {
     @GetMapping("/user/frontpage")
     public String getUserFrontsite(Model model, HttpSession session) {
         List<Project> projects = iProjectRepository.getAllProjects();
-        model.addAttribute("projects", projects);
-
         Integer userId = (Integer) session.getAttribute("userId"); // Hent brugerens ID fra sessionen
         List<Task> tasks = iTaskRepository.getAllTasks(userId);
-        model.addAttribute("tasks", tasks);
 
+        String roleName = iUserRepository.getRoleName(2);
+        model.addAttribute("roleName", roleName);
+        model.addAttribute("tasks", tasks);
+        model.addAttribute("projects", projects);
         return "pm-frontpage";
     }
 

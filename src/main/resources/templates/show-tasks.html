@@ -25,13 +25,14 @@
         <td th:text="${task.description}"></td>
         <td th:text="${task.deadline}"></td>
         <td>
-            <span th:if="${selectedUserId}">
-                <span th:each="employeeName : ${selectedUserIds}">
-                    <span th:each="employeeName : ${employeeNamesByTask[task.taskId]}" th:utext="${employeeName}"></span>
-                </span>
-            </span>
-            <span th:unless="${selectedUserId}">No employees assigned.</span>
+    <span th:if="${selectedUserIds != null}">
+        <span th:each="employeeId : ${selectedUserIds}">
+            <span th:text="${selectedEmployeeName}"></span>
+        </span>
+    </span>
+            <span th:unless="${selectedUserIds != null}">No employees assigned.</span>
         </td>
+
         <td th:text="${task.status}"></td>
         <td>
             <div class="task-buttons">
@@ -41,9 +42,7 @@
                         Delete Task
                     </button>
                 </form>
-                <form th:action="@{/tasks/{taskID}/update(taskId=${task.taskId})}" method="post">
-                    <input type="submit" value="Update Task"/>
-                </form>
+                <a th:href="@{/tasks/{taskId}/update(taskId=${task.taskId})}" class="button">Update Task </a>
                 <a th:href="@{/tasks/{taskId}/createSubtask}" class="button">Create Subtask</a>
                 <a th:href="@{/employees/{employeeId}/calculate}" class="button">Calculate Salary and Time</a>
             </div>
@@ -52,7 +51,9 @@
 </table>
 
 <input type="hidden" name="projectId" th:value="${projectId}"/>
-<input type="hidden" name="projectManagerID" th:value="${task.projectmanagerID}"/>
+<input type="hidden" name="projectManagerID" th:value="${projectManager}" />
+<input type="hidden" name="selectedEmployeeId" th:value="${selectedEmployeeId}" />
+
 <a th:href="@{'/projects/' + ${projectId} + '/createTask'}">Create another task for this project</a>
 <br><br>
 <form th:action="@{/smartslate/user/{userid}(userid=${userId})}" method="get">

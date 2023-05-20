@@ -12,10 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequestMapping("")
@@ -32,13 +29,12 @@ public class TaskController {
     }
 
     @GetMapping("/projects/{projectId}/createTask")
-    public String createTaskForm(@PathVariable int projectId, Model model, HttpSession session) {
+    public String createTaskForm(@PathVariable int projectId, Model model, @RequestParam(required = false) Integer selectedEmployeeId, HttpSession session) {
         Integer userIdObj = (Integer) session.getAttribute("userId");
         if (userIdObj == null) {
             return "redirect:/login";
         }
 
-        List<User> employees = iUserRepository.getEmployeesByProjectId(projectId);
         Task task = new Task();
         task.setProjectId(projectId);
 
@@ -46,60 +42,32 @@ public class TaskController {
         int projectManagerId = iProjectRepository.getProjectManagerIdByProjectId(projectId);
         task.setProjectmanagerID(projectManagerId);
 
+        if (selectedEmployeeId != null) {
+            User employee = iUserRepository.getUser(selectedEmployeeId);
+            if (employee != null) {
+                String fullName = employee.getFirstName() + " " + employee.getLastName();
+                task.setUserID(employee.getUserID());
+            }
+        }
+
+        // Hent listen over employees med roleID 3
+        List<User> employees = iTaskRepository.getEmployeesWithRoleThree();
+
         // Fjern projektlederen fra listen over ansatte
         employees = employees.stream().filter(e -> e.getUserID() != projectManagerId).collect(Collectors.toList());
+
 
         model.addAttribute("task", task);
         model.addAttribute("employees", employees);
         model.addAttribute("projectId", projectId);
+        model.addAttribute("projectManagerId", projectManagerId);
 
         return "create-task";
     }
-
-
-   /* @PostMapping("/projects/{projectId}/createTask")
-    public String createTask(@PathVariable int projectId,
-                             @ModelAttribute Task task,
-                             @RequestParam int projectManagerId,
-                             @RequestParam(value = "selectedEmployees", required = false) List<Integer> selectedEmployees,
-                             Model model,
-                             HttpSession session) {
-        Integer userIdObj = (Integer) session.getAttribute("userId");
-        if (userIdObj == null) {
-            return "redirect:/login";
-        }
-        int userId = userIdObj;
-
-        // Set project manager ID on task object
-        task.setProjectmanagerID(projectManagerId);
-
-        // Create task in the repository
-        int taskId = iTaskRepository.createTask(userId, task.getTaskName(), task.getDescription(), task.getDeadline(),
-                projectId, task.getProjectmanagerID(), task.getStatus());
-
-        // If selectedEmployees is not null or empty, associate employees with the task
-        if (selectedEmployees != null && !selectedEmployees.isEmpty()) {
-            iTaskRepository.associateEmployeesWithTask(taskId, selectedEmployees);
-        }
-
-        // Get the newly created task
-        Task createdTask = iTaskRepository.getTaskById(taskId);
-
-        // Add common model attributes
-        getCommonModelAttributes(model, projectId, userId);
-        // Add created task to model
-        model.addAttribute("task", createdTask);
-        model.addAttribute("selectedUserIds", selectedEmployees);
-        return "show-tasks";
-    }*/
-
-
-
     @PostMapping("/projects/{projectId}/createTask")
     public String createTask(@PathVariable int projectId,
                              @ModelAttribute Task task,
-                             @RequestParam int projectManagerId,
-                             @RequestParam(value = "selectedEmployees", required = false) List<Integer> selectedEmployees,
+                             @RequestParam(value = "selectedEmployee") int selectedEmployeeId,
                              Model model,
                              HttpSession session) {
         Integer userIdObj = (Integer) session.getAttribute("userId");
@@ -108,74 +76,91 @@ public class TaskController {
         }
         int userId = userIdObj;
 
-        // Set project manager ID and user ID on task object
+        // Get project details
+        Project project = iProjectRepository.getProjectById(projectId);
+        if (project == null) {
+            throw new IllegalArgumentException("Project with ID " + projectId + " does not exist.");
+        }
+
+        // Set project manager ID
+        int projectManagerId = iProjectRepository.getProjectManagerIdByProjectId(projectId);
         task.setProjectmanagerID(projectManagerId);
+
+        // Set user ID
+        task.setUserId(selectedEmployeeId);
 
         // Create task in the repository
         int taskId = iTaskRepository.createTask(userId, task.getTaskName(), task.getDescription(), task.getDeadline(),
-                projectId, task.getProjectmanagerID(), task.getStatus());
+                projectId, projectManagerId, task.getStatus());
 
-        // If selectedEmployees is not null or empty, associate employees with the task
-        int selectedUserId = 0;
-        if (selectedEmployees != null && !selectedEmployees.isEmpty()) {
-            selectedUserId = selectedEmployees.get(0);
-            iTaskRepository.associateEmployeesWithTask(taskId, selectedEmployees);
-            task.setUserID(selectedUserId);
+        // Hvis selectedEmployeeId ikke er 0, associer medarbejderen med opgaven
+        if (selectedEmployeeId != 0) {
+            List<Integer> userIds = Collections.singletonList(selectedEmployeeId);
+            iTaskRepository.getEmployeesWithRoleThreeByUserId(taskId);
         }
 
         // Get the newly created task
         Task createdTask = iTaskRepository.getTaskById(taskId);
-        model.addAttribute("selectedUserId", selectedUserId);
+
+        // Get the selected employee
+        User selectedEmployee = iUserRepository.getUser(selectedEmployeeId);
+        String selectedEmployeeName = selectedEmployee != null ? selectedEmployee.getFirstName() + " " + selectedEmployee.getLastName() : "";
+
+        // Get a list of employees
+        List<User> employees = iTaskRepository.getEmployeesWithRoleThreeByUserId(selectedEmployeeId);
+
         // Add common model attributes
         getCommonModelAttributes(model, projectId, userId);
         // Add created task to model
         model.addAttribute("task", createdTask);
-        model.addAttribute("selectedUserIds", selectedEmployees);
-        model.addAttribute("projectId", projectId);
-        model.addAttribute("userId", userId);
+        model.addAttribute("selectedEmployeeId", selectedEmployeeId);
+        model.addAttribute("selectedUserIds", selectedEmployeeId != 0 ? Collections.singletonList(selectedEmployeeId) : null);
+        model.addAttribute("selectedEmployeeName", selectedEmployeeName);
+        model.addAttribute("employees", employees);
         return "show-tasks";
     }
 
-
-
-    // Update task
     @GetMapping("/tasks/{taskId}/update")
     public String showUpdateTaskForm(@PathVariable("taskId") int taskId, Model model) {
         Task task = iTaskRepository.getTaskById(taskId);
         model.addAttribute("task", task);
 
-        User projectManager = new User();
-        model.addAttribute("projectManager", projectManager);
+        // Set project manager ID
+        int projectManagerId = iUserRepository.getProjectManagerByTaskId(taskId);
+        task.setProjectmanagerID(projectManagerId);
 
-        List<User> projectManagers = iUserRepository.getProjectManagersByRoleId();
-        model.addAttribute("projectManagers", projectManagers);
+        // Get the current datetime value and set it in the model
+        String currentDateTime = task.getDeadline();
+        model.addAttribute("currentDateTime", currentDateTime);
+
+        List<User> employees = iTaskRepository.getEmployeesWithRoleThree();
+        model.addAttribute("employees", employees);
+        model.addAttribute("projectManagerId", projectManagerId);
 
         return "update-task";
     }
 
-    @PostMapping("/tasks/{taskId}/update")
-    public String updateTask(@ModelAttribute("task") Task task, @ModelAttribute("user") User user, @PathVariable("taskId") int taskId) {
-        // Set task ID
-        task.setTaskId(taskId);
+    @PostMapping("/tasks/{taskId}/update/{projectId}")
+    public String updateTask(@ModelAttribute("task") Task updatedTask, @PathVariable("taskId") int taskId, @PathVariable("projectId") int projectId) {
 
-        // Get all users with role ID 2
-        List<User> projectManagers = iUserRepository.getProjectManagersByRoleId();
+        Task existingTask = iTaskRepository.getTaskById(taskId);
 
-        // Set projectManagerID to first project manager found and get full name
-        if (!projectManagers.isEmpty()) {
-            User projectManager = projectManagers.get(0);
-            task.setProjectmanagerID(projectManager.getUserID());
-            User projectManagerUser = iUserRepository.getUser(projectManager.getUserID());
-            String projectManagerFirstName = projectManagerUser.getFirstName();
-            String projectManagerLastName = projectManagerUser.getLastName();
-            user.setFirstName(projectManagerFirstName);
-            user.setLastName(projectManagerLastName);
-        }
+        // Set the updated values
+        int projectManagerId = iUserRepository.getProjectManagerByTaskId(taskId);
+        updatedTask.setProjectmanagerID(projectManagerId);
+        updatedTask.setTaskId(taskId);
+        existingTask.setTaskName(updatedTask.getTaskName());
+        existingTask.setDescription(updatedTask.getDescription());
+        existingTask.setDeadline(updatedTask.getDeadline());
+        List<User> updatedEmployees = updatedTask.getEmployees();
+        existingTask.getEmployees().addAll(updatedEmployees);
 
-        iTaskRepository.updateTask(task);
+        existingTask.setStatus(updatedTask.getStatus());
+
+        iTaskRepository.updateTask(existingTask);
 
         // Redirect to task details page
-        return "redirect:/tasks/" + taskId;
+        return "redirect:/projects/" + projectId + "/tasks";
     }
 
     // Delete task
@@ -204,15 +189,12 @@ public class TaskController {
         Map<Integer, List<String>> employeeNamesByTask = new HashMap<>(); // Ny map til medarbejdernavne efter taskID
 
         for (Task task : tasks) {
-
-            List<User> employees = iTaskRepository.getEmployeesWithRoleThreeByUserId(task.getTaskId());
+            List<User> employees = iTaskRepository.getEmployeesWithRoleThreeByUserId(task.getUserId());
             List<String> employeeNames = new ArrayList<>();
             for (User employee : employees) {
                 employeeNames.add(employee.getFirstName() + " " + employee.getLastName());
             }
             employeeNamesByTask.put(task.getTaskId(), employeeNames);
-
-            model.addAttribute("task", task); // Tilføj opgaveobjekt til model med en unik nøgle baseret på taskID
         }
 
         model.addAttribute("tasks", tasks);
@@ -220,8 +202,8 @@ public class TaskController {
         model.addAttribute("projectId", projectId);
         model.addAttribute("userId", userId);
         model.addAttribute("employeeNamesByTask", employeeNamesByTask); // Tilføj employeeNamesByTask til model
-
     }
+
 
     @GetMapping("/projects/{projectId}/tasks")
     public String getTasksByProjectId(@PathVariable int projectId, Model model, HttpSession session) {
@@ -231,10 +213,19 @@ public class TaskController {
         }
         int loggedInUserId = loggedInUserIdObj;
 
-       getCommonModelAttributes(model, projectId, loggedInUserId);
+        List<Task> tasks = iTaskRepository.getTasksByProjectId(projectId);
+        int projectManagerId = iProjectRepository.getProjectManagerIdByProjectId(projectId);
 
+        // Set project manager ID for each task
+        for (Task task : tasks) {
+            task.setProjectmanagerID(projectManagerId);
+        }
+
+        getCommonModelAttributes(model, projectId, loggedInUserId);
+        model.addAttribute("projectManager", projectManagerId);
         return "show-tasks";
     }
+
 
     //Sender brugeren tilbage på user-frontpage med alle information om projekter
     @GetMapping("/projects/tasks/{projectId}/{userId}")
@@ -250,11 +241,13 @@ public class TaskController {
 
         // Hent medarbejdere for det angivne projectId fra databasen
         List<User> employees = iUserRepository.getEmployeesByProjectId(projectId);
+        User projectManagers = iUserRepository.getProjectManagerByProjectId(projectId);
 
         // Tilføj tasks, projectId og employees til modellen
         model.addAttribute("tasks", tasks);
         model.addAttribute("projectId", projectId);
         model.addAttribute("employees", employees);
+        model.addAttribute("projectManagers", projectManagers);
 
         // Omdirigér til brugerens forside med bruger-id som en path-variabel
         return "redirect:/smartslate/user/" + userId;

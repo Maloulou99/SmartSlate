@@ -59,7 +59,7 @@ public class LoginController {
                 session.setMaxInactiveInterval(200);
                 model.addAttribute("user", user);
                 model.addAttribute("project", projects);
-                model.addAttribute("roleName", user.getRoleID());
+                model.addAttribute("roleName", iUserRepository.getRoleName(2));
                 model.addAttribute("projects", iProjectRepository.getAllProjectsByUserId(user.getUserID()));
                 return "pm-frontpage";
             } else if (roleID == 3) {

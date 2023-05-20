@@ -33,4 +33,5 @@ public interface IUserRepository {
     User getEmployeesFullNames(int userId);
     List<User> getEmployeesByProjectId(int projectId);
     User getProjectManagerByRoleName(String roleName);
+    int getProjectManagerByTaskId(int taskId);
 }
