@@ -1,0 +1,145 @@
+/* Reset styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Additional styles */
+h2 {
+    font-size: 24px;
+    text-align: center;
+    margin: 30px 0 20px;
+    color: white;
+}
+
+/* Change navigation background color */
+nav a {
+    background-color: mediumpurple;
+    border-color: mediumpurple;
+}
+
+/* Body styles */
+body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    background: rgb(7,0,36);
+    background: linear-gradient(90deg, rgba(7,0,36,1) 0%, rgba(66,204,136,1) 50%, rgba(160,0,255,1) 73%);
+    color: white;
+}
+
+/* Header styles */
+h1 {
+    font-size: 36px;
+    text-align: start;
+    margin: 50px 0 30px;
+    color: white;
+}
+
+/* Navigation styles */
+
+nav {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    padding: 10px 0;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav li {
+    margin: 0 20px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: 1px solid mediumpurple;
+    background-color: mediumpurple;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+nav a:hover {
+    background-color: purple;
+    color: limegreen;
+}
+
+/* Main content styles */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.container p {
+    margin-bottom: 20px;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.img-fluid {
+    margin-top: -60px;
+    width: 200%;
+    height: auto;
+}
+
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background: rgb(7,0,36);
+    background: linear-gradient(90deg, rgba(7,0,36,1) 0%, rgba(66,204,136,1) 50%, rgba(160,0,255,1) 73%);
+    color: #fff;
+    font-size: 14px;
+}
+
+footer p {
+    margin: 0;
+}
+/* Container styles */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    padding: 40px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: white;
+}
+
+/* Table styles */
+table {
+    width: 100%;
+}
+
+thead th {
+    background-color: #2d5454;
+    padding: 10px;
+    text-align: left;
+}
+
+tbody td {
+    padding: 10px;
+}
+
+tfoot td {
+    padding: 10px;
+    text-align: right;
+    font-weight: bold;
+}

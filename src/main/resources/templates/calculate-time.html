@@ -2,30 +2,36 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Calculate Time</title>
+    <link rel="stylesheet" href="/calculate.css">
+    <title>Employee Tasks</title>
 </head>
-<body>
-<h1>Calculate Time</h1>
+<h1>Calculator For EmployeeID #<span th:text="${employeeId}" ></span> </h1>
 
+<body>
 <table>
     <thead>
     <tr>
         <th>Employee</th>
+        <th>Time Spent On Tasks</th>
+        <th>Task Name</th>
         <th>Task ID</th>
-        <th>Total Hours</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="entry : ${taskTimeMap}">
-        <td>
-            <span th:text="${entry.key.employee.firstName + ' ' + entry.key.employee.lastName}"></span>
-        </td>
-        <td th:text="${entry.key.taskId}"></td>
-        <td>
-            <span th:text="${entry.value}"></span>
-        </td>
+    <tr th:each="task : ${tasks}">
+        <td th:text="${task.employees}"></td>
+        <td th:text="${task.hours}"></td>
+        <td th:text="${task.taskName}"></td>
+        <td th:text="${task.taskId}"></td>
     </tr>
     </tbody>
+    <tfoot>
+    <tr>
+        <td>Total Time Spent On All Tasks:</td>
+        <td th:text="${totalTimeSpent}"></td>
+    </tr>
+    </tfoot>
 </table>
 </body>
+<button onclick="history.back()">Go Back</button>
 </html>

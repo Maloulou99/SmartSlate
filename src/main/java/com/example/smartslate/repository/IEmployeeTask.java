@@ -9,9 +9,7 @@ import java.util.List;
 public interface IEmployeeTask {
 
 
-    void createEmployeeTask(EmployeeTask employeeTask);
-    EmployeeTask readEmployeeTask(int employeeTaskID);
-    void updateEmployeeTask(EmployeeTask employeeTask);
-    void deleteEmployeeTask(int employeeTaskID);
     List<Task> getEmployeeTasksByUserId(int employeeID);
+    String calculateTotalTimeSpent(List<Task> tasks);
+    String formatTotalTime(double totalTime);
 }

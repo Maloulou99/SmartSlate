@@ -22,80 +22,7 @@ public class EmployeeTaskRepository implements IEmployeeTask {
     String user_pwd;
 
 
-    public void createEmployeeTask(EmployeeTask employeeTask) {
-        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd);
-             PreparedStatement pstmt = con.prepareStatement(
-                     "INSERT INTO employeeTasks (employeeID, taskID, hours) VALUES (?, ?, ?)")) {
-            pstmt.setInt(1, employeeTask.getEmployeeTaskID());
-            pstmt.setInt(2, employeeTask.getTaskEmployeeID());
-            pstmt.setString(3, employeeTask.getHours());
 
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Error while creating employee task: " + e.getMessage());
-        }
-    }
-
-    public EmployeeTask readEmployeeTask(int employeeTaskID) {
-        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd);
-             PreparedStatement pstmt = con.prepareStatement(
-                     "SELECT * FROM employeeTasks WHERE employeeTaskID=?")) {
-            pstmt.setInt(1, employeeTaskID);
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                EmployeeTask employeeTask = new EmployeeTask();
-                employeeTask.setEmployeeTaskID(rs.getInt("employeeTaskID"));
-                employeeTask.setTaskEmployeeID(rs.getInt("taskEmployeeID"));
-                employeeTask.setTaskID(rs.getInt("taskID"));
-                employeeTask.setHours(rs.getString("hours"));
-                return employeeTask;
-            } else {
-                System.out.println("Employee task with employeeTaskID=" + employeeTaskID + " not found in database.");
-                return null;
-            }
-        } catch (SQLException e) {
-            System.out.println("Error while reading employee task: " + e.getMessage());
-            return null;
-        }
-    }
-
-    public void updateEmployeeTask(EmployeeTask employeeTask) {
-        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd);
-             PreparedStatement pstmt = con.prepareStatement(
-                     "UPDATE employeeTasks SET taskEmployeeID=?, taskID=?, hours=? WHERE employeeTaskID=?")) {
-            pstmt.setInt(1, employeeTask.getTaskEmployeeID());
-            pstmt.setInt(2, employeeTask.getTaskID());
-            pstmt.setString(3, employeeTask.getHours());
-            pstmt.setInt(4, employeeTask.getEmployeeTaskID());
-
-            int rowsUpdated = pstmt.executeUpdate();
-            if (rowsUpdated == 0) {
-                System.out.println("Employee task with employeeTaskID=" + employeeTask.getEmployeeTaskID() + " not found in database.");
-            } else {
-                System.out.println("Employee task with employeeTaskID=" + employeeTask.getEmployeeTaskID() + " updated successfully.");
-            }
-        } catch (SQLException e) {
-            System.out.println("Error while updating employee task: " + e.getMessage());
-        }
-    }
-
-    public void deleteEmployeeTask(int employeeTaskID) {
-        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd);
-             PreparedStatement pstmt = con.prepareStatement(
-                     "DELETE FROM employeeTasks WHERE employeeTaskID=?")) {
-            pstmt.setInt(1, employeeTaskID);
-
-            int rowsDeleted = pstmt.executeUpdate();
-            if (rowsDeleted == 0) {
-                System.out.println("Employee task with employeeTaskID=" + employeeTaskID + " not found in database.");
-            } else {
-                System.out.println("Employee task with employeeTaskID=" + employeeTaskID + " deleted successfully.");
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
     public List<Task> getEmployeeTasksByUserId(int employeeID) {
         List<Task> tasks = new ArrayList<>();
 
@@ -114,7 +41,7 @@ public class EmployeeTaskRepository implements IEmployeeTask {
                     int taskID = rs.getInt("taskID");
                     String taskName = rs.getString("taskName");
                     String description = rs.getString("description");
-                    BigDecimal hours = rs.getBigDecimal("hours");
+                    double hours = rs.getDouble("hours");
                     String status = rs.getString("status");
                     String projectName = rs.getString("projectName");
 
@@ -131,17 +58,22 @@ public class EmployeeTaskRepository implements IEmployeeTask {
     }
 
 
-    public BigDecimal calculateEmployeeTotalHours(int employeeID) {
-        List<Task> employeeTasks = getEmployeeTasksByUserId(employeeID);
+    public String formatTotalTime(double totalTime) {
+        int hours = (int) totalTime;
+        int minutes = (int) ((totalTime - hours) * 60);
 
-        BigDecimal totalHours = BigDecimal.ZERO;
-
-        for (Task task : employeeTasks) {
-            totalHours = totalHours.add(task.getHours());
-        }
-
-        return totalHours;
+        return String.format("%02d:%02d", hours, minutes);
     }
 
+    public String calculateTotalTimeSpent(List<Task> tasks) {
+        double totalTimeSpent = 0;
+
+        for (Task task : tasks) {
+            double hours = task.getHours();
+            totalTimeSpent += hours;
+        }
+
+        return formatTotalTime(totalTimeSpent);
+    }
 }
 

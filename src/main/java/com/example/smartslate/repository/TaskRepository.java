@@ -22,7 +22,7 @@ public class TaskRepository implements ITaskRepository {
     String user_pwd;
 
 
-    public int createTask(int userID, String taskName, String description, BigDecimal hours, int projectID, int projectManagerID, String status) {
+    public int createTask(int userID, String taskName, String description, double hours, int projectID, int projectManagerID, String status) {
         String sql = "INSERT INTO tasks (userID, taskName, description, hours, projectID, projectManagerID, status) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -32,7 +32,7 @@ public class TaskRepository implements ITaskRepository {
             statement.setInt(1, userID);
             statement.setString(2, taskName);
             statement.setString(3, description);
-            statement.setBigDecimal(4, hours);
+            statement.setDouble(4, hours);
             statement.setInt(5, projectID);
             statement.setInt(6, projectManagerID);
             statement.setString(7, status);
@@ -63,7 +63,7 @@ public class TaskRepository implements ITaskRepository {
             pstmt.setInt(1, task.getProjectId());
             pstmt.setString(2, task.getTaskName());
             pstmt.setString(3, task.getDescription());
-            pstmt.setBigDecimal(4, task.getHours());
+            pstmt.setDouble(4, task.getHours());
             pstmt.setInt(5, task.getProjectmanagerID());
             pstmt.setString(6, task.getStatus());
             pstmt.setInt(7, task.getTaskId());
@@ -109,7 +109,7 @@ public class TaskRepository implements ITaskRepository {
                 task.setProjectId(rs.getInt("projectID"));
                 task.setTaskName(rs.getString("taskName"));
                 task.setDescription(rs.getString("description"));
-                task.setHours(rs.getBigDecimal("hours"));
+                task.setHours(rs.getDouble("hours"));
                 task.setProjectmanagerID(rs.getInt("userID"));
                 task.setStatus(rs.getString("status"));
                 tasks.add(task);
@@ -121,6 +121,54 @@ public class TaskRepository implements ITaskRepository {
 
         return tasks;
     }
+    public int getUserIdByTaskId(int taskId) {
+        int userId = 0;
+
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "SELECT userID FROM tasks WHERE taskID = ?";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, taskId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                userId = rs.getInt("userID");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return userId;
+    }
+
+    public List<Task> getAllTasks(int userID) {
+        List<Task> tasks = new ArrayList<>();
+
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "SELECT * FROM tasks WHERE userID = ?";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, userID);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Task task = new Task();
+                task.setTaskId(rs.getInt("taskID"));
+                task.setProjectId(rs.getInt("projectID"));
+                task.setTaskName(rs.getString("taskName"));
+                task.setDescription(rs.getString("description"));
+                task.setHours(rs.getDouble("hours"));
+                task.setProjectmanagerID(rs.getInt("userID"));
+                task.setStatus(rs.getString("status"));
+                tasks.add(task);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return tasks;
+    }
+
 
     public List<Task> getTasksByProjectManagerID(int projectManagerID) {
         List<Task> tasks = new ArrayList<>();
@@ -137,7 +185,7 @@ public class TaskRepository implements ITaskRepository {
                 task.setProjectId(rs.getInt("projectID"));
                 task.setTaskName(rs.getString("taskName"));
                 task.setDescription(rs.getString("description"));
-                task.setHours(rs.getBigDecimal("hours"));
+                task.setHours(rs.getDouble("hours"));
                 task.setProjectmanagerID(rs.getInt("userID"));
                 task.setStatus(rs.getString("status"));
                 tasks.add(task);
@@ -165,7 +213,7 @@ public class TaskRepository implements ITaskRepository {
                 task.setProjectId(rs.getInt("projectID"));
                 task.setTaskName(rs.getString("taskName"));
                 task.setDescription(rs.getString("description"));
-                task.setHours(rs.getBigDecimal("hours"));
+                task.setHours(rs.getDouble("hours"));
                 int projectManagerID = rs.getInt("userID");
                 if (!rs.wasNull()) {
                     task.setProjectmanagerID(projectManagerID);
@@ -194,7 +242,7 @@ public class TaskRepository implements ITaskRepository {
                 task.setProjectId(rs.getInt("projectID"));
                 task.setTaskName(rs.getString("taskName"));
                 task.setDescription(rs.getString("description"));
-                task.setHours(rs.getBigDecimal("hours"));
+                task.setHours(rs.getDouble("hours"));
                 int projectManagerID = rs.getInt("userID");
                 task.setStatus(rs.getString("userID"));
                 if (!rs.wasNull()) {
@@ -227,7 +275,7 @@ public class TaskRepository implements ITaskRepository {
                 task.setProjectId(rs.getInt("projectID"));
                 task.setTaskName(rs.getString("taskName"));
                 task.setDescription(rs.getString("description"));
-                task.setHours(rs.getBigDecimal("hours"));
+                task.setHours(rs.getDouble("hours"));
                 task.setProjectmanagerID(rs.getInt("projectManagerID"));
                 task.setUserId(rs.getInt("userID"));
                 task.setStatus(rs.getString("status"));
@@ -313,7 +361,7 @@ public class TaskRepository implements ITaskRepository {
                 int taskId = rs.getInt("taskID");
                 String taskName = rs.getString("taskName");
                 String description = rs.getString("description");
-                BigDecimal hours = rs.getBigDecimal("hours");
+                double hours = rs.getDouble("hours");
                 String status = rs.getString("status");
                 int projectId = rs.getInt("projectID");
                 int projectManagerId = rs.getInt("projectManagerID");

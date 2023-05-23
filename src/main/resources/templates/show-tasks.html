@@ -46,7 +46,7 @@
                 </form>
                 <a th:href="@{/tasks/{taskId}/update(taskId=${task.taskId})}" class="button">Update Task </a>
                 <a th:href="@{/tasks/{taskId}/createSubtask}" class="button">Create Subtask</a>
-                <a th:href="@{/employees/{employeeId}/calculate}" class="button">Calculate Salary and Time</a>
+                <a th:href="@{/employees/{employeeId}/calculate(employeeId=${idByTaskId})}" class="button">Calculate Salary and Time</a>
             </div>
         </td>
     </tr>
@@ -58,7 +58,7 @@
 
 <a th:href="@{'/projects/' + ${projectId} + '/createTask'}">Create another task for this project</a>
 <br><br>
-<form th:action="@{/smartslate/user/{userid}(userid=${session})}" method="get">
+<form th:action="@{/smartslate/user/{userid}(userid=${loggedInUserId})}" method="get">
     <button type="submit">Back to Your Frontpage</button>
 </form>
 

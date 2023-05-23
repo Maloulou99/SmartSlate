@@ -75,7 +75,7 @@ public class TaskController {
         if (userIdObj == null) {
             return "redirect:/login";
         }
-        int userId = userIdObj;
+        int loggedInUserId = userIdObj;
 
         // Get project details
         Project project = iProjectRepository.getProjectById(projectId);
@@ -96,11 +96,17 @@ public class TaskController {
 
         // Hvis selectedEmployeeId ikke er 0, associer medarbejderen med opgaven
         if (selectedEmployeeId != 0) {
-            List<Integer> userIds = Collections.singletonList(selectedEmployeeId);
+            List<User> employees = new ArrayList<>();
+            User selectedEmployee = iUserRepository.getUser(selectedEmployeeId);
+            if (selectedEmployee != null) {
+                employees.add(selectedEmployee);
+            }
+            task.setEmployees(employees);
 
             // Tilføj denne linje for at associer medarbejderen med opgaven
-            iTaskRepository.associateEmployeesWithTask(taskId, userIds);
+            iTaskRepository.associateEmployeesWithTask(taskId, Collections.singletonList(selectedEmployeeId));
         }
+
 
         // Get the newly created task
         Task createdTask = iTaskRepository.getTaskById(taskId);
@@ -114,6 +120,7 @@ public class TaskController {
 
         // Get a list of employees
         List<User> employees = iTaskRepository.getEmployeesWithRoleThreeByUserId(selectedEmployeeId);
+        task.setEmployees(employees);
 
         // Add created task to model
         model.addAttribute("task", createdTask);
@@ -122,6 +129,7 @@ public class TaskController {
         model.addAttribute("selectedEmployeeName", selectedEmployeeName);
         model.addAttribute("tasks", tasks); // Opdateret liste over opgaver
         model.addAttribute("employees", employees);
+        model.addAttribute("loggedInUserId", loggedInUserId);
         return "show-tasks";
     }
 
@@ -136,7 +144,7 @@ public class TaskController {
         task.setProjectmanagerID(projectManagerId);
 
         // Get the current datetime value and set it in the model
-        BigDecimal currentDateTime = task.getHours();
+        double currentDateTime = task.getHours();
         model.addAttribute("currentDateTime", currentDateTime);
 
         List<User> employees = iTaskRepository.getEmployeesWithRoleThree();
@@ -204,26 +212,26 @@ public class TaskController {
         // Set project manager ID for each task
         for (Task task : tasks) {
             task.setProjectmanagerID(projectManagerId);
+            int idByTaskId = iTaskRepository.getUserIdByTaskId(task.getTaskId()); // Hent brugerens ID baseret på opgavens ID
+            task.setUserId(idByTaskId);
+            model.addAttribute("idByTaskId", idByTaskId);
         }
+
         Project project = iProjectRepository.getProjectById(projectId);
-        Map<Integer, List<String>> selectedEmployeeName = new HashMap<>(); // Ny map til medarbejdernavne efter taskID
+        List<List<String>> selectedEmployeeName = new ArrayList<>(); // Liste af medarbejdernavne efter taskID
 
         System.out.println(tasks.size());
-        for (int i = 0; i < tasks.size() ; i++) {
-
+        for (int i = 0; i < tasks.size(); i++) {
             Task task = tasks.get(i);
             List<User> employees = iTaskRepository.getEmployeesWithRoleThreeByUserId(task.getUserId());
             List<String> employeeNames = new ArrayList<>();
             for (User employee : employees) {
                 System.out.println(employee);
                 employeeNames.add(employee.getFirstName() + " " + employee.getLastName());
-
-
             }
-            System.out.println("empl: " + employeeNames );
+            System.out.println("empl: " + employeeNames);
             System.out.println("Task: " + task.getTaskId());
-            selectedEmployeeName.put(task.getTaskId(), employeeNames);
-
+            selectedEmployeeName.add(employeeNames);
         }
 
         model.addAttribute("tasks", tasks);
@@ -231,6 +239,7 @@ public class TaskController {
         model.addAttribute("projectId", projectId);
         model.addAttribute("selectedEmployeeName", selectedEmployeeName);
         model.addAttribute("projectManager", projectManagerId);
+        model.addAttribute("loggedInUserId", loggedInUserId);
         return "show-tasks";
     }
 

@@ -1,10 +1,7 @@
 package com.example.smartslate.controller;
 
 import com.example.smartslate.model.Task;
-import com.example.smartslate.repository.ILoginRepository;
-import com.example.smartslate.repository.IProjectRepository;
-import com.example.smartslate.repository.ITaskRepository;
-import com.example.smartslate.repository.IUserRepository;
+import com.example.smartslate.repository.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,40 +19,35 @@ public class EmployeeTaskController {
     private ITaskRepository iTaskRepository;
     private IUserRepository iUserRepository;
     private ILoginRepository iLoginRepository;
+    private IEmployeeTask iEmployeeTask;
 
-    public EmployeeTaskController(IProjectRepository iProjectRepository, ITaskRepository iTaskRepository, IUserRepository iUserRepository, ILoginRepository iLoginRepository) {
+    public EmployeeTaskController(IProjectRepository iProjectRepository, ITaskRepository iTaskRepository, IUserRepository iUserRepository, ILoginRepository iLoginRepository, IEmployeeTask iEmployeeTask) {
         this.iProjectRepository = iProjectRepository;
         this.iTaskRepository = iTaskRepository;
         this.iUserRepository = iUserRepository;
         this.iLoginRepository = iLoginRepository;
+        this.iEmployeeTask = iEmployeeTask;
     }
+
 
     @GetMapping("/employees/{employeeId}/calculate")
     public String calculateTime(@PathVariable("employeeId") int employeeId, Model model) {
         List<Task> tasks = iTaskRepository.getTasksByEmployeeId(employeeId);
-        int totalTimeSpent = calculateTotalTimeSpent(tasks);
+        for (Task task : tasks) {
+            int taskId = task.getTaskId();
+            int userId = task.getUserId();
+            String taskName = task.getTaskName();
+            int hours = (int) task.getHours();
+            task.setTaskId(taskId);
+            task.setUserID(userId);
+            task.setTaskName(taskName);
+            task.setHours(hours);
+        }
+        String totalTimeSpent = iEmployeeTask.calculateTotalTimeSpent(tasks);
+        model.addAttribute("tasks", tasks);
         model.addAttribute("totalTimeSpent", totalTimeSpent);
         return "calculate-time";
     }
 
-    private int calculateTotalTimeSpent(List<Task> tasks) {
-        int totalTimeSpent = 0;
-
-        for (Task task : tasks) {
-            BigDecimal hours = task.getHours();
-            int hoursAsInt = hours.intValue(); // Konverter BigDecimal til integer
-            totalTimeSpent += hoursAsInt;
-        }
-
-        return totalTimeSpent;
-    }
-
-
-    @GetMapping("/calculate/task")
-    public String showTasks(@RequestParam("userId") int userId, Model model) {
-        List<Task> tasks = iTaskRepository.getAllTasks();
-        model.addAttribute("tasks", tasks);
-        return "calculate-time";
-    }
 
 }
