@@ -29,9 +29,9 @@ public interface IUserRepository {
     User getUserFullNames(int userId);
 
     User getProjectManagersFullNames(int userId);
-    int getEmployeeUserId(int employeeId);
     User getEmployeesFullNames(int userId);
     List<User> getEmployeesByProjectId(int projectId);
     User getProjectManagerByRoleName(String roleName);
     int getProjectManagerByTaskId(int taskId);
+    User getEmployeeUser(int employeeId);
 }

@@ -238,7 +238,7 @@ public class UserRepository implements IUserRepository{
     public int getUserIdByProjectId(int projectId) {
         int userId = 0;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT userID FROM projects WHERE projectID = ?";
+            String SQL = "SELECT userID FROM tasks WHERE projectID = ?";
 
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setInt(1, projectId);
@@ -308,8 +308,8 @@ public class UserRepository implements IUserRepository{
     }
 
 
-    public int getEmployeeUserId(int employeeId) {
-        String query = "SELECT userID FROM users WHERE userID = ?";
+    public User getEmployeeUser(int employeeId) {
+        String query = "SELECT * FROM users WHERE userID = ? AND roleID = 3";
 
         try (Connection connection = DriverManager.getConnection(url, user_id, user_pwd);
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -318,14 +318,27 @@ public class UserRepository implements IUserRepository{
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    return resultSet.getInt("userID");
+                    User employee = new User();
+                    employee.setUserID(resultSet.getInt("userID"));
+                    System.out.println(employee.getUserID());
+                    employee.setUsername(resultSet.getString("username"));
+                    employee.setFirstName(resultSet.getString("firstName"));
+                    employee.setLastName(resultSet.getString("lastName"));
+                    employee.setEmail(resultSet.getString("email"));
+                    employee.setPassword(resultSet.getString("password"));
+                    employee.setPhoneNumber(resultSet.getString("phoneNumber"));
+                    employee.setCreatedAt(resultSet.getDate("createdAt").toLocalDate().atStartOfDay());
+                    employee.setUpdatedAt(resultSet.getDate("updatedAt").toLocalDate().atStartOfDay());
+                    employee.setRoleID(resultSet.getInt("roleID"));
+
+                    return employee;
                 }
             }
         } catch (SQLException e) {
-            System.out.print("No userid found");
+            System.out.print("Error retrieving employee");
         }
 
-        return 0; // Return a default value if no user ID is found
+        return null; // Return null if no employee is found
     }
 
 

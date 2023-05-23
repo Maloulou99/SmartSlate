@@ -1,26 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Task details</title>
+    <meta charset="UTF-8">
+    <title>Calculate Time</title>
 </head>
 <body>
-<h1>Task List</h1>
+<h1>Calculate Time</h1>
 
 <table>
+    <thead>
     <tr>
+        <th>Employee</th>
         <th>Task ID</th>
-        <th>Task Name</th>
-        <th>Time Spent</th>
+        <th>Total Hours</th>
     </tr>
-
-    <tr th:each="task : ${tasks}">
-        <td th:text="${task.taskId}"></td>
-        <td th:text="${task.taskName}"></td>
-        <td th:text="${task.timeSpent}"></td>
+    </thead>
+    <tbody>
+    <tr th:each="entry : ${taskTimeMap}">
+        <td>
+            <span th:text="${entry.key.employee.firstName + ' ' + entry.key.employee.lastName}"></span>
+        </td>
+        <td th:text="${entry.key.taskId}"></td>
+        <td>
+            <span th:text="${entry.value}"></span>
+        </td>
     </tr>
-
-    <a th:href="@{/employees/{employeeId}/calculate(employeeId=${employeeId})}" class="button">Calculate Salary and Time</a>
-
+    </tbody>
 </table>
 </body>
 </html>

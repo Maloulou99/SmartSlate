@@ -5,7 +5,10 @@ import com.example.smartslate.model.Task;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +25,7 @@ public class EmployeeTaskRepository implements IEmployeeTask {
     public void createEmployeeTask(EmployeeTask employeeTask) {
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd);
              PreparedStatement pstmt = con.prepareStatement(
-                     "INSERT INTO employee_tasks (employeeID, taskID, hours) VALUES (?, ?, ?)")) {
+                     "INSERT INTO employeeTasks (employeeID, taskID, hours) VALUES (?, ?, ?)")) {
             pstmt.setInt(1, employeeTask.getEmployeeTaskID());
             pstmt.setInt(2, employeeTask.getTaskEmployeeID());
             pstmt.setString(3, employeeTask.getHours());
@@ -36,7 +39,7 @@ public class EmployeeTaskRepository implements IEmployeeTask {
     public EmployeeTask readEmployeeTask(int employeeTaskID) {
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd);
              PreparedStatement pstmt = con.prepareStatement(
-                     "SELECT * FROM employee_tasks WHERE employeeTaskID=?")) {
+                     "SELECT * FROM employeeTasks WHERE employeeTaskID=?")) {
             pstmt.setInt(1, employeeTaskID);
             ResultSet rs = pstmt.executeQuery();
 
@@ -60,7 +63,7 @@ public class EmployeeTaskRepository implements IEmployeeTask {
     public void updateEmployeeTask(EmployeeTask employeeTask) {
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd);
              PreparedStatement pstmt = con.prepareStatement(
-                     "UPDATE employee_tasks SET taskEmployeeID=?, taskID=?, hours=? WHERE employeeTaskID=?")) {
+                     "UPDATE employeeTasks SET taskEmployeeID=?, taskID=?, hours=? WHERE employeeTaskID=?")) {
             pstmt.setInt(1, employeeTask.getTaskEmployeeID());
             pstmt.setInt(2, employeeTask.getTaskID());
             pstmt.setString(3, employeeTask.getHours());
@@ -80,7 +83,7 @@ public class EmployeeTaskRepository implements IEmployeeTask {
     public void deleteEmployeeTask(int employeeTaskID) {
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd);
              PreparedStatement pstmt = con.prepareStatement(
-                     "DELETE FROM employee_tasks WHERE employeeTaskID=?")) {
+                     "DELETE FROM employeeTasks WHERE employeeTaskID=?")) {
             pstmt.setInt(1, employeeTaskID);
 
             int rowsDeleted = pstmt.executeUpdate();
@@ -93,7 +96,52 @@ public class EmployeeTaskRepository implements IEmployeeTask {
             System.out.println(e);
         }
     }
+    public List<Task> getEmployeeTasksByUserId(int employeeID) {
+        List<Task> tasks = new ArrayList<>();
+
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd);
+             PreparedStatement pstmt = con.prepareStatement(
+                     "SELECT t.taskID, t.taskName, t.description, t.hours, t.status, p.projectName " +
+                             "FROM tasks t " +
+                             "INNER JOIN employeeTasks et ON et.taskID = t.taskID " +
+                             "INNER JOIN users u ON u.userID = et.userID " +
+                             "INNER JOIN projects p ON t.projectID = p.projectID " +
+                             "WHERE u.userID = ?")) {
+            pstmt.setInt(1, employeeID);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    int taskID = rs.getInt("taskID");
+                    String taskName = rs.getString("taskName");
+                    String description = rs.getString("description");
+                    BigDecimal hours = rs.getBigDecimal("hours");
+                    String status = rs.getString("status");
+                    String projectName = rs.getString("projectName");
+
+                    // Create a Task object and add it to the list
+                    Task task = new Task(taskID, taskName, description, hours, status, projectName);
+                    tasks.add(task);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return tasks;
+    }
 
 
+    public BigDecimal calculateEmployeeTotalHours(int employeeID) {
+        List<Task> employeeTasks = getEmployeeTasksByUserId(employeeID);
+
+        BigDecimal totalHours = BigDecimal.ZERO;
+
+        for (Task task : employeeTasks) {
+            totalHours = totalHours.add(task.getHours());
+        }
+
+        return totalHours;
+    }
 
 }
+

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -39,19 +40,18 @@ public class EmployeeTaskController {
 
     private int calculateTotalTimeSpent(List<Task> tasks) {
         int totalTimeSpent = 0;
-        LocalDate currentDate = LocalDate.now();
 
         for (Task task : tasks) {
-            String deadline = task.getDeadline();
-            LocalDate taskDeadline = LocalDate.parse(deadline);
-            long daysUntilDeadline = ChronoUnit.DAYS.between(currentDate, taskDeadline);
-            totalTimeSpent += daysUntilDeadline;
+            BigDecimal hours = task.getHours();
+            int hoursAsInt = hours.intValue(); // Konverter BigDecimal til integer
+            totalTimeSpent += hoursAsInt;
         }
 
         return totalTimeSpent;
     }
 
-    @GetMapping("/tasks")
+
+    @GetMapping("/calculate/task")
     public String showTasks(@RequestParam("userId") int userId, Model model) {
         List<Task> tasks = iTaskRepository.getAllTasks();
         model.addAttribute("tasks", tasks);

@@ -18,13 +18,15 @@ public class LoginController {
     private IUserRepository iUserRepository;
     private IProjectRepository iProjectRepository;
     private ITaskRepository iTaskRepository;
+    private IEmployeeTask iEmployeeTask;
 
 
-    public LoginController(ILoginRepository iLoginRepository, IUserRepository iUserRepository, IProjectRepository iProjectRepository, ITaskRepository iTaskRepository) {
+    public LoginController(ILoginRepository iLoginRepository, IUserRepository iUserRepository, IProjectRepository iProjectRepository, ITaskRepository iTaskRepository, IEmployeeTask iEmployeeTask) {
         this.iLoginRepository = iLoginRepository;
         this.iUserRepository = iUserRepository;
         this.iProjectRepository = iProjectRepository;
         this.iTaskRepository = iTaskRepository;
+        this.iEmployeeTask = iEmployeeTask;
     }
 
     protected boolean isLoggedIn(HttpSession session, int uid) {
@@ -53,6 +55,7 @@ public class LoginController {
                 List<Project> projects = iProjectRepository.getAllProjects();
                 List<User> users = iUserRepository.getAllUsers();
                 List<Task> tasks = iTaskRepository.getAllTasks();
+                List<Project> projectsByUserId = iProjectRepository.getAllProjectsByUserId(user.getUserID());
                 // Admin
                 session.setAttribute("userId", user.getUserID());
                 session.setMaxInactiveInterval(200);
@@ -62,6 +65,7 @@ public class LoginController {
                 model.addAttribute("projects", projects);
                 model.addAttribute("users", users);
                 model.addAttribute("tasks", tasks);
+                model.addAttribute("projectsByUserId", projectsByUserId);
                 return "admin-page";
             } else if (roleID == 2) {
                 List<Project> projects = iProjectRepository.getAllProjectsByUserId(user.getUserID());
@@ -78,6 +82,18 @@ public class LoginController {
                 session.setAttribute("userId", user.getUserID());
                 session.setMaxInactiveInterval(200);
                 model.addAttribute("user", user);
+
+
+                List<Task> employeeTasks = iEmployeeTask.getEmployeeTasksByUserId(user.getUserID());
+
+                if (!employeeTasks.isEmpty()) {
+                    Task task = employeeTasks.get(0);
+                    model.addAttribute("task", task);
+                }
+
+                model.addAttribute("tasks", employeeTasks);
+                model.addAttribute("roleName", iUserRepository.getRoleName(3));
+
                 return "employee-page";
             }
         }

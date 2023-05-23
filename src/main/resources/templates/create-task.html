@@ -20,8 +20,8 @@
       <td><textarea id="description" name="description" required th:text="${task.description}"></textarea></td>
     </tr>
     <tr>
-      <td><label for="deadline">Deadline:</label></td>
-      <td><input type="time" id="deadline" name="deadline" th:value="${task.deadline}" required></td>
+      <td><label for="hours">Hours:</label></td>
+      <td><input type="number" id="hours" name="hours" th:value="${task.hours}" required></td>
     </tr>
     <tr>
       <td><label for="status">Status:</label></td>
@@ -34,23 +34,22 @@
       </td>
     </tr>
     <tr>
+        <tr>
+    <td>
+      <label for="selectedEmployee"></label><select id="selectedEmployee" name="selectedEmployee" required multiple>
+      <option value="" disabled selected>Select Employee(s)</option>
+      <option th:each="employee : ${employees}" th:value="${employee.userID}"
+              th:text="${employee.firstName + ' ' + employee.lastName}">
+      </option>
+    </select>
+    </td>
+        </tr>
+      </table>
 
-      <td>
-        <label for="selectedEmployee"></label><select id="selectedEmployee" name="selectedEmployee" required multiple>
-          <option value="" disabled selected>Select Employee(s)</option>
-          <option th:each="employee : ${employees}" th:value="${employee.userID}"
-                  th:text="${employee.firstName + ' ' + employee.lastName}">
-          </option>
-        </select>
-      </td>
+      <input type="hidden" id="projectId" name="projectId" th:value="${projectId}">
+      <input type="hidden" id="projectManagerId" name="projectManagerId" th:value="${projectManagerId}">
+      <input type="submit" value="Create Task">
 
-    </tr>
-  </table>
-
-  <input type="hidden" id="projectId" name="projectId" th:value="${projectId}">
-  <input type="hidden" id="projectManagerId" name="projectManagerId" th:value="${task.projectmanagerID}">
-
-  <input type="submit" value="Create Task">
 </form>
 
 </body>

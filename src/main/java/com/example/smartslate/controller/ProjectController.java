@@ -50,11 +50,16 @@ public class ProjectController {
         User user = iUserRepository.getUser(userId);
 
         List<Project> userProjects = iProjectRepository.getAllProjectsByUserId(userId);
+        List<Task> tasks = iTaskRepository.getTasksByProjectId(userId);
+
         model.addAttribute("projects", userProjects);
         model.addAttribute("user", user);
         model.addAttribute("userId", userId);
+        model.addAttribute("tasks", tasks);
+
         return "project-information";
     }
+
 
     @PostMapping("/create")
     public String createProject(@ModelAttribute Project project, HttpSession httpSession) {

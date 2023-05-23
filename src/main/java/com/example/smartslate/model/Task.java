@@ -1,7 +1,6 @@
 package com.example.smartslate.model;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,21 +9,22 @@ public class Task {
     private int projectId;
     private String taskName;
     private String description;
-    private String deadline;
+    private BigDecimal hours;
     private Integer projectmanagerID;
     private Integer userID;
     private String status;
     private Project project;
+    private String projectName;
     private int userId; // Fremmednøgle til User-tabellen
     private List<User> employees = new ArrayList<>();
 
 
-    public Task(int taskId, int projectId, String taskName, String description, String deadline, Integer projectmanagerID, Integer userID, String status, Project project, int userId) {
+    public Task(int taskId, int projectId, String taskName, String description, BigDecimal hours, Integer projectmanagerID, Integer userID, String status, Project project, int userId) {
         this.taskId = taskId;
         this.projectId = projectId;
         this.taskName = taskName;
         this.description = description;
-        this.deadline = deadline;
+        this.hours = hours;
         this.projectmanagerID = projectmanagerID;
         this.userID = userID;
         this.status = status;
@@ -39,12 +39,12 @@ public class Task {
 
     }
 
-    public Task(int taskId, String taskName, String description, String deadline, String status, int projectId, Integer projectManagerId, Integer userId) {
+    public Task(int taskId, String taskName, String description, BigDecimal hours, String status, int projectId, Integer projectManagerId, Integer userId) {
         this.taskId = taskId;
         this.projectId = projectId;
         this.taskName = taskName;
         this.description = description;
-        this.deadline = deadline;
+        this.hours = hours;
         this.projectmanagerID = projectManagerId;
         this.userID = userId;
         this.status = status;
@@ -52,8 +52,22 @@ public class Task {
 
     }
 
+    public Task(int taskID, String taskName, String description, BigDecimal hours, String status, String projectName) {
+        this.taskId = taskID;
+        this.taskName = taskName;
+        this.description = description;
+        this.hours = hours;
+        this.status = status;
+        this.projectName = projectName;
+    }
 
+    public String getProjectName() {
+        return projectName;
+    }
 
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
 
     public Integer getUserID() {
         return userID;
@@ -63,10 +77,10 @@ public class Task {
         this.userID = userID;
     }
 
-    public Task(String taskName, String description, String deadline, int projectmanagerID, String status) {
+    public Task(String taskName, String description, BigDecimal hours, int projectmanagerID, String status) {
         this.taskName = taskName;
         this.description = description;
-        this.deadline = deadline;
+        this.hours = hours;
         this.projectmanagerID = projectmanagerID;
         this.status = status;
     }
@@ -119,8 +133,8 @@ public class Task {
         this.description = description;
     }
 
-    public String getDeadline() {
-        return deadline;
+    public BigDecimal getHours() {
+        return hours;
     }
 
     public Integer getProjectmanagerID() {
@@ -148,8 +162,8 @@ public class Task {
         this.userId = userId;
     }
 
-    public void setDeadline(String deadline) {
-        this.deadline = deadline;
+    public void setHours(BigDecimal hours) {
+        this.hours = hours;
     }
 
     public void setUserId(int userId) {

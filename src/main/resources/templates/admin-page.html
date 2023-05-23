@@ -53,18 +53,63 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h4 class="card-title">All User Projects</h4>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group">
-                                <div class="user-profile-projects">
-                                    <label>Your Projects:</label>
-                                    <a th:href="@{/projects/projects/{userId}(userId=${user.userID})}" class="btn btn-primary">View Projects</a>
-                                </div>
-                            </ul>
-                        </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="card-title">All Projects</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <div class="user-profile-projects">
+                                <label>All Projects:</label>
+                                <label>All Projects:</label>
+                                <ul>
+                                    <li th:each="project : ${projects}">
+                                        <span th:text="${project.projectName}"></span>
+                                        <a th:href="@{/projects/{userId}/{projectId}(userId=${userId}, projectId=${project.projectId})}" class="btn btn-primary">View Details</a>
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="card-title">All Users</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <div class="user-profile-users">
+                                <label>All Users:</label>
+                                <ul>
+                                    <li th:each="user : ${users}">
+                                        <span th:text="${user.firstName + ' ' + user.lastName}"></span>
+                                        <a th:href="@{/user/update/{userId}(userId=${user.userID})}" class="btn btn-primary">Update</a>
+                                        <a th:href="@{/deleteuser/{userId}(userId=${user.userID})}" class="btn btn-danger">Delete</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4 class="card-title">All Tasks</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <div class="user-profile-tasks">
+                                <label>All Tasks:</label>
+                                <ul>
+                                    <li th:each="task : ${tasks}">
+                                        <span th:text="${task.taskName}"></span>
+                                        <a th:href="@{'/projects/' + ${projectsByUserId} + '/tasks'}" class="btn btn-primary">Show Task</a>
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </ul>
                     </div>
                 </div>
             </div>

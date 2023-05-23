@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -90,13 +91,15 @@ public class TaskController {
         task.setUserId(selectedEmployeeId);
 
         // Create task in the repository
-        int taskId = iTaskRepository.createTask(userId, task.getTaskName(), task.getDescription(), task.getDeadline(),
+        int taskId = iTaskRepository.createTask(selectedEmployeeId, task.getTaskName(), task.getDescription(), task.getHours(),
                 projectId, projectManagerId, task.getStatus());
 
         // Hvis selectedEmployeeId ikke er 0, associer medarbejderen med opgaven
         if (selectedEmployeeId != 0) {
             List<Integer> userIds = Collections.singletonList(selectedEmployeeId);
-            iTaskRepository.getEmployeesWithRoleThreeByUserId(taskId);
+
+            // Tilføj denne linje for at associer medarbejderen med opgaven
+            iTaskRepository.associateEmployeesWithTask(taskId, userIds);
         }
 
         // Get the newly created task
@@ -106,19 +109,22 @@ public class TaskController {
         User selectedEmployee = iUserRepository.getUser(selectedEmployeeId);
         String selectedEmployeeName = selectedEmployee != null ? selectedEmployee.getFirstName() + " " + selectedEmployee.getLastName() : "";
 
+        // Get a list of tasks for the project
+        List<Task> tasks = iTaskRepository.getTasksByProjectId(projectId);
+
         // Get a list of employees
         List<User> employees = iTaskRepository.getEmployeesWithRoleThreeByUserId(selectedEmployeeId);
 
-        // Add common model attributes
-        getCommonModelAttributes(model, projectId, userId);
         // Add created task to model
         model.addAttribute("task", createdTask);
         model.addAttribute("selectedEmployeeId", selectedEmployeeId);
         model.addAttribute("selectedUserIds", selectedEmployeeId != 0 ? Collections.singletonList(selectedEmployeeId) : null);
         model.addAttribute("selectedEmployeeName", selectedEmployeeName);
+        model.addAttribute("tasks", tasks); // Opdateret liste over opgaver
         model.addAttribute("employees", employees);
         return "show-tasks";
     }
+
 
     @GetMapping("/tasks/{taskId}/update")
     public String showUpdateTaskForm(@PathVariable("taskId") int taskId, Model model) {
@@ -130,7 +136,7 @@ public class TaskController {
         task.setProjectmanagerID(projectManagerId);
 
         // Get the current datetime value and set it in the model
-        String currentDateTime = task.getDeadline();
+        BigDecimal currentDateTime = task.getHours();
         model.addAttribute("currentDateTime", currentDateTime);
 
         List<User> employees = iTaskRepository.getEmployeesWithRoleThree();
@@ -151,7 +157,7 @@ public class TaskController {
         updatedTask.setTaskId(taskId);
         existingTask.setTaskName(updatedTask.getTaskName());
         existingTask.setDescription(updatedTask.getDescription());
-        existingTask.setDeadline(updatedTask.getDeadline());
+        existingTask.setHours(updatedTask.getHours());
         List<User> updatedEmployees = updatedTask.getEmployees();
         existingTask.getEmployees().addAll(updatedEmployees);
 
@@ -183,27 +189,6 @@ public class TaskController {
         return "redirect:" + referer;
     }
 
-    private void getCommonModelAttributes(Model model, int projectId, int userId) {
-        List<Task> tasks = iTaskRepository.getTasksByProjectId(projectId);
-        Project project = iProjectRepository.getProjectById(projectId);
-        Map<Integer, List<String>> employeeNamesByTask = new HashMap<>(); // Ny map til medarbejdernavne efter taskID
-
-        for (Task task : tasks) {
-            List<User> employees = iTaskRepository.getEmployeesWithRoleThreeByUserId(task.getUserId());
-            List<String> employeeNames = new ArrayList<>();
-            for (User employee : employees) {
-                employeeNames.add(employee.getFirstName() + " " + employee.getLastName());
-            }
-            employeeNamesByTask.put(task.getTaskId(), employeeNames);
-        }
-
-        model.addAttribute("tasks", tasks);
-        model.addAttribute("projectName", project.getProjectName());
-        model.addAttribute("projectId", projectId);
-        model.addAttribute("userId", userId);
-        model.addAttribute("employeeNamesByTask", employeeNamesByTask); // Tilføj employeeNamesByTask til model
-    }
-
 
     @GetMapping("/projects/{projectId}/tasks")
     public String getTasksByProjectId(@PathVariable int projectId, Model model, HttpSession session) {
@@ -220,8 +205,31 @@ public class TaskController {
         for (Task task : tasks) {
             task.setProjectmanagerID(projectManagerId);
         }
+        Project project = iProjectRepository.getProjectById(projectId);
+        Map<Integer, List<String>> selectedEmployeeName = new HashMap<>(); // Ny map til medarbejdernavne efter taskID
 
-        getCommonModelAttributes(model, projectId, loggedInUserId);
+        System.out.println(tasks.size());
+        for (int i = 0; i < tasks.size() ; i++) {
+
+            Task task = tasks.get(i);
+            List<User> employees = iTaskRepository.getEmployeesWithRoleThreeByUserId(task.getUserId());
+            List<String> employeeNames = new ArrayList<>();
+            for (User employee : employees) {
+                System.out.println(employee);
+                employeeNames.add(employee.getFirstName() + " " + employee.getLastName());
+
+
+            }
+            System.out.println("empl: " + employeeNames );
+            System.out.println("Task: " + task.getTaskId());
+            selectedEmployeeName.put(task.getTaskId(), employeeNames);
+
+        }
+
+        model.addAttribute("tasks", tasks);
+        model.addAttribute("projectName", project.getProjectName());
+        model.addAttribute("projectId", projectId);
+        model.addAttribute("selectedEmployeeName", selectedEmployeeName);
         model.addAttribute("projectManager", projectManagerId);
         return "show-tasks";
     }
@@ -253,6 +261,5 @@ public class TaskController {
         return "redirect:/smartslate/user/" + userId;
     }
 }
-
 
 

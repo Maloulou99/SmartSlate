@@ -23,15 +23,17 @@
         <td th:text="${task.taskId}"></td>
         <td th:text="${task.taskName}"></td>
         <td th:text="${task.description}"></td>
-        <td th:text="${task.deadline}"></td>
+        <td th:text="${task.hours}"></td>
+
         <td>
-    <span th:if="${selectedUserIds != null}">
-        <span th:each="employeeId : ${selectedUserIds}">
-            <span th:text="${selectedEmployeeName}"></span>
-        </span>
-    </span>
-            <span th:unless="${selectedUserIds != null}">No employees assigned.</span>
+            <span th:if="${selectedEmployeeName != null}">
+                <span th:each="employee : ${selectedEmployeeName}">
+                    <span th:text="${employee}"></span>
+                </span>
+            </span>
+            <span th:unless="${selectedEmployeeName != null}">No employees assigned.</span>
         </td>
+
 
         <td th:text="${task.status}"></td>
         <td>
@@ -56,7 +58,7 @@
 
 <a th:href="@{'/projects/' + ${projectId} + '/createTask'}">Create another task for this project</a>
 <br><br>
-<form th:action="@{/smartslate/user/{userid}(userid=${userId})}" method="get">
+<form th:action="@{/smartslate/user/{userid}(userid=${session})}" method="get">
     <button type="submit">Back to Your Frontpage</button>
 </form>
 

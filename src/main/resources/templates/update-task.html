@@ -9,13 +9,10 @@
   <form th:object="${task}" th:action="@{/tasks/{taskId}/update/{projectId}(taskId=${task.taskId}, projectId=${task.projectId})}" method="post"  >
   <div>
     <input type="hidden" id="projectId" th:field="*{projectId}">
-  </div>
-
-  <div>
     <input type="hidden" id="taskId" th:field="*{taskId}">
-  </div>
-  <div>
     <input type="hidden" id="projectmanagerID" th:field="*{projectmanagerID}">
+    <input type="hidden" id="currentDateTime" th:value="${currentDateTime}">
+
   </div>
 
   <div>
@@ -29,23 +26,24 @@
   </div>
 
   <div>
-    <label for="deadline">Deadline:</label>
-    <input type="time" id="deadline" th:field="*{deadline}">
+    <label for="hours">Hours:</label>
+    <input type="number" id="hours" th:field="*{hours}">
   </div>
 
-  <div>
-    <label for="employeeId">Employee:</label>
-    <select id="employeeId" name="employeeId" required>
-      <option th:each="employee : ${employees}"
-              th:value="${employee.userID}"
-              th:text="${employee.firstName + ' ' + employee.lastName}"
-              th:selected="${employee.userID == task.userID}">
-      </option>
-    </select>
-    <p th:if="${employees.isEmpty()}">No employees available</p>
-  </div>
+    <div>
+      <label for="employeeIds">Employees:</label>
+      <select id="employeeIds" name="employeeIds" multiple required>
+        <option th:each="employee : ${employees}"
+                th:value="${employee.userID}"
+                th:text="${employee.firstName + ' ' + employee.lastName}"
+                th:selected="${task.employees.contains(employee)}">
+        </option>
+      </select>
+      <p th:if="${employees.isEmpty()}">No employees available</p>
+    </div>
 
-  <div>
+
+    <div>
     <label for="status">Status:</label>
     <select id="status" name="status" th:field="*{status}">
       <option value="Planning" th:selected="${task.status == 'Planning'}">Planning</option>
