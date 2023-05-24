@@ -56,26 +56,24 @@ CREATE TABLE tasks
     projectID        INTEGER      NOT NULL,
     taskName         VARCHAR(50)  NOT NULL,
     description      VARCHAR(1000),
-    deadline         VARCHAR(10),
+    hours         	 DECIMAL(10, 2),
     projectManagerID INTEGER,
-    userID           INTEGER, -- Tilføjet kolonne for userID
+    userID           INTEGER,
     status           VARCHAR(20)  NOT NULL,
     PRIMARY KEY (taskID),
     FOREIGN KEY (projectID) REFERENCES projects(projectID),
-    FOREIGN KEY (projectManagerID) REFERENCES users (userID),
-    FOREIGN KEY (userID) REFERENCES users (userID) -- Tilføjet fremmednøgle for userID
+    FOREIGN KEY (userID) REFERENCES users (userID)
 );
 
 CREATE TABLE employeeTasks
 (
     employeeTaskID INTEGER NOT NULL AUTO_INCREMENT,
-    taskEmployeeID INTEGER,
+    userID         INTEGER,
     taskID         INTEGER NOT NULL,
     hours          DECIMAL(10, 2),
     PRIMARY KEY (employeeTaskID),
-    FOREIGN KEY (taskEmployeeID) REFERENCES users(userID) ON DELETE SET NULL,
+    FOREIGN KEY (userID) REFERENCES users(userID) ON DELETE SET NULL,
     FOREIGN KEY (taskID) REFERENCES tasks(taskID)
 ) AUTO_INCREMENT = 1;
-
 
 
