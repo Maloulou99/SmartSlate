@@ -9,7 +9,7 @@ public class Task {
     private int projectId;
     private String taskName;
     private String description;
-    private double hours;
+    private BigDecimal hours;
     private Integer projectmanagerID;
     private Integer userID;
     private String status;
@@ -19,7 +19,7 @@ public class Task {
     private List<User> employees = new ArrayList<>();
 
     private User user;
-    public Task(int taskId, int projectId, String taskName, String description, double hours, Integer projectmanagerID, Integer userID, String status, Project project, int userId) {
+    public Task(int taskId, int projectId, String taskName, String description, BigDecimal hours, Integer projectmanagerID, Integer userID, String status, Project project, int userId) {
         this.taskId = taskId;
         this.projectId = projectId;
         this.taskName = taskName;
@@ -39,7 +39,7 @@ public class Task {
 
     }
 
-    public Task(int taskId, String taskName, String description, double hours, String status, int projectId, Integer projectManagerId, Integer userId) {
+    public Task(int taskId, String taskName, String description, BigDecimal hours, String status, int projectId, Integer projectManagerId, Integer userId) {
         this.taskId = taskId;
         this.projectId = projectId;
         this.taskName = taskName;
@@ -52,7 +52,7 @@ public class Task {
 
     }
 
-    public Task(int taskID, String taskName, String description, double hours, String status, String projectName) {
+    public Task(int taskID, String taskName, String description, BigDecimal hours, String status, String projectName) {
         this.taskId = taskID;
         this.taskName = taskName;
         this.description = description;
@@ -77,7 +77,7 @@ public class Task {
         this.userID = userID;
     }
 
-    public Task(String taskName, String description, double hours, int projectmanagerID, String status) {
+    public Task(String taskName, String description, BigDecimal hours, int projectmanagerID, String status) {
         this.taskName = taskName;
         this.description = description;
         this.hours = hours;
@@ -141,7 +141,7 @@ public class Task {
         this.description = description;
     }
 
-    public double getHours() {
+    public BigDecimal getHours() {
         return hours;
     }
 
@@ -170,7 +170,7 @@ public class Task {
         this.userId = userId;
     }
 
-    public void setHours(double hours) {
+    public void setHours(BigDecimal hours) {
         this.hours = hours;
     }
 
@@ -178,4 +178,6 @@ public class Task {
         this.userId = userId;
     }
 
+    public void setUserId(List<User> employeIds) {
+    }
 }

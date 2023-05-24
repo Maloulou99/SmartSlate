@@ -41,7 +41,7 @@ public class EmployeeTaskRepository implements IEmployeeTask {
                     int taskID = rs.getInt("taskID");
                     String taskName = rs.getString("taskName");
                     String description = rs.getString("description");
-                    double hours = rs.getDouble("hours");
+                    BigDecimal hours = rs.getBigDecimal("hours");
                     String status = rs.getString("status");
                     String projectName = rs.getString("projectName");
 
@@ -58,22 +58,23 @@ public class EmployeeTaskRepository implements IEmployeeTask {
     }
 
 
-    public String formatTotalTime(double totalTime) {
-        int hours = (int) totalTime;
-        int minutes = (int) ((totalTime - hours) * 60);
+    public String formatTotalTime(BigDecimal totalTime) {
+        int hours = totalTime.intValue();
+        int minutes = totalTime.subtract(new BigDecimal(hours)).multiply(new BigDecimal(60)).intValue();
 
         return String.format("%02d:%02d", hours, minutes);
     }
 
     public String calculateTotalTimeSpent(List<Task> tasks) {
-        double totalTimeSpent = 0;
+        BigDecimal totalTimeSpent = BigDecimal.ZERO;
 
         for (Task task : tasks) {
-            double hours = task.getHours();
-            totalTimeSpent += hours;
+            BigDecimal hours = task.getHours();
+            totalTimeSpent = totalTimeSpent.add(hours);
         }
 
         return formatTotalTime(totalTimeSpent);
     }
+
 }
 

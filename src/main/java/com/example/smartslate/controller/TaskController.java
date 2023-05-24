@@ -86,6 +86,9 @@ public class TaskController {
         // Set project manager ID
         int projectManagerId = iProjectRepository.getProjectManagerIdByProjectId(projectId);
         task.setProjectmanagerID(projectManagerId);
+        task.setUserID(projectManagerId);
+
+        iTaskRepository.getEmployeesByTaskId(task.getTaskId());
 
         // Set user ID
         task.setUserId(selectedEmployeeId);
@@ -144,7 +147,7 @@ public class TaskController {
         task.setProjectmanagerID(projectManagerId);
 
         // Get the current datetime value and set it in the model
-        double currentDateTime = task.getHours();
+        BigDecimal currentDateTime = task.getHours();
         model.addAttribute("currentDateTime", currentDateTime);
 
         List<User> employees = iTaskRepository.getEmployeesWithRoleThree();
@@ -212,13 +215,18 @@ public class TaskController {
         // Set project manager ID for each task
         for (Task task : tasks) {
             task.setProjectmanagerID(projectManagerId);
+            List<User> employeIds = iTaskRepository.getEmployeesByTaskId(task.getTaskId());
             int idByTaskId = iTaskRepository.getUserIdByTaskId(task.getTaskId()); // Hent brugerens ID baseret på opgavens ID
             task.setUserId(idByTaskId);
+            task.setUserId(employeIds);
+            iTaskRepository.getTaskByProjectId(projectId);
+
             model.addAttribute("idByTaskId", idByTaskId);
         }
 
         Project project = iProjectRepository.getProjectById(projectId);
         List<List<String>> selectedEmployeeName = new ArrayList<>(); // Liste af medarbejdernavne efter taskID
+
 
         System.out.println(tasks.size());
         for (int i = 0; i < tasks.size(); i++) {

@@ -20,8 +20,8 @@
       <td><textarea id="description" name="description" required th:text="${task.description}"></textarea></td>
     </tr>
     <tr>
-      <td><label for="hours">Hours:</label></td>
-      <td><input type="number" id="hours" name="hours" th:value="${task.hours}" required></td>
+     <td><label for="hours">Hours:</label></td>
+      <td><input type="number" id="hours" th:field="*{hours}"></td>
     </tr>
     <tr>
       <td><label for="status">Status:</label></td>

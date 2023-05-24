@@ -33,33 +33,29 @@
             </span>
             <span th:unless="${selectedEmployeeName != null}">No employees assigned.</span>
         </td>
-
-
         <td th:text="${task.status}"></td>
         <td>
             <div class="task-buttons">
                 <form th:action="@{/projects/{projectId}/tasks/{taskId}/delete(projectId=${projectId}, taskId=${task.taskId})}"
                       method="post">
-                    <button type="submit" onclick="return confirm('Are you sure you want to delete this project?')">
-                        Delete Task
-                    </button>
+                    <button type="submit" onclick="return confirm('Are you sure you want to delete this project?')"
+                            class="button button-delete">Delete Task</button>
                 </form>
-                <a th:href="@{/tasks/{taskId}/update(taskId=${task.taskId})}" class="button">Update Task </a>
-                <a th:href="@{/tasks/{taskId}/createSubtask}" class="button">Create Subtask</a>
-                <a th:href="@{/employees/{employeeId}/calculate(employeeId=${idByTaskId})}" class="button">Calculate Salary and Time</a>
+                <a th:href="@{/tasks/{taskId}/update(taskId=${task.taskId})}" class="button button-update">Update Task</a>
             </div>
         </td>
     </tr>
 </table>
 
 <input type="hidden" name="projectId" th:value="${projectId}"/>
-<input type="hidden" name="projectManagerID" th:value="${projectManager}" />
+<input type="hidden" name="projectManagerID" th:value="${projectManager}"/>
 <input type="hidden" name="selectedEmployeeId" th:value="${selectedEmployeeId}" />
 
-<a th:href="@{'/projects/' + ${projectId} + '/createTask'}">Create another task for this project</a>
-<br><br>
+<a th:href="@{'/projects/' + ${projectId} + '/createTask'}" class="button button-create">Create another task for this project</a>
+<a th:href="@{/employees/{employeeId}/calculate(employeeId=${idByTaskId})}" class="button button-calculate">Calculate Salary and Time</a>
+
 <form th:action="@{/smartslate/user/{userid}(userid=${loggedInUserId})}" method="get">
-    <button type="submit">Back to Your Frontpage</button>
+    <button type="submit" class="button button-back">Back to Your Frontpage</button>
 </form>
 
 </body>

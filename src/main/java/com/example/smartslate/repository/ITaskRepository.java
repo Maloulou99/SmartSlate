@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ITaskRepository {
 
-    public int createTask(int userID, String taskName, String description, double hours, int projectID, int projectManagerID, String status);
+    public int createTask(int userID, String taskName, String description, BigDecimal hours, int projectID, int projectManagerID, String status);
     List<Task> getTasksByProjectId(int projectId);
     void updateTask(Task task);
     List<Task> getAllTasks();

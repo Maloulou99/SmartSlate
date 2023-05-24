@@ -57,7 +57,7 @@ public class ProjectController {
         model.addAttribute("userId", userId);
         model.addAttribute("tasks", tasks);
 
-        return "project-information";
+        return "show-one-project";
     }
 
 

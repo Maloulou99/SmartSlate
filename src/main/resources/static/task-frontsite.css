@@ -1,11 +1,12 @@
-/* generel styling */
+/* Generel styling */
 body {
-    background: rgb(7,0,36);
-    background: linear-gradient(90deg, rgba(7,0,36,1) 0%, rgba(66,204,136,1) 50%, rgba(160,0,255,1) 73%);
+    background: rgb(7, 0, 36);
+    background: linear-gradient(90deg, rgba(7, 0, 36, 1) 0%, rgba(66, 204, 136, 1) 50%, rgba(160, 0, 255, 1) 73%);
     color: white;
 }
 
-h1, h2 {
+h1,
+h2 {
     color: #3b82f6;
 }
 
@@ -15,12 +16,13 @@ table {
     width: 100%;
 }
 
-table th, table td {
+table th,
+table td {
     border: 1px solid #a5b4c4;
     padding: 10px;
 }
 
-/* styling af brugerinformationer */
+/* Styling af brugerinformationer */
 table.user-info {
     margin: 40px 0;
 }
@@ -30,8 +32,8 @@ table.user-info td:first-child {
     width: 150px;
 }
 
-/* styling af knapper */
-a {
+/* Styling af knapper */
+a.button {
     background-color: #3b82f6;
     border: none;
     border-radius: 5px;
@@ -44,25 +46,35 @@ a {
     text-decoration: none;
 }
 
-a:hover {
+a.button:hover {
     background-color: #2563eb;
 }
 
-/* styling af tabel med projekter */
+a.button-primary {
+    background-color: #3b82f6;
+}
+
+a.button-danger {
+    background-color: #ef4444;
+}
+
+/* Styling af tabel med projekter */
 table.project-table th {
     background-color: #3b82f6;
     color: white;
 }
 
-table.project-table td:last-child, table.project-table td:nth-last-child(2) {
+table.project-table td:last-child,
+table.project-table td:nth-last-child(2) {
     text-align: center;
 }
 
-table.project-table td:last-child a, table.project-table td:nth-last-child(2) a {
+table.project-table td:last-child a,
+table.project-table td:nth-last-child(2) a {
     margin: 0;
 }
 
-/* styling af tabel med opgaver */
+/* Styling af tabel med opgaver */
 table.task-table th {
     background-color: #3b82f6;
     color: white;
@@ -70,4 +82,53 @@ table.task-table th {
 
 table.task-table td:last-child {
     text-align: center;
+}
+
+
+/* Styling af brugerinformationer */
+table.user-info {
+    margin: 40px 0;
+}
+
+table.user-info td:first-child {
+    font-weight: bold;
+    width: 150px;
+}
+
+/* Styling af knapper */
+.button {
+    background-color: #3b82f6;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.button:hover {
+    background-color: #2563eb;
+}
+
+.button-delete {
+    background-color: #ef4444;
+}
+
+.button-update {
+    background-color: #3b82f6;
+}
+
+.button-create {
+    background-color: #3b82f6;
+}
+
+.button-calculate {
+    background-color: #3b82f6;
+}
+
+.button-back {
+    background-color: #3b82f6;
 }

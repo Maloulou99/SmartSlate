@@ -37,12 +37,23 @@ public class EmployeeTaskController {
             int taskId = task.getTaskId();
             int userId = task.getUserId();
             String taskName = task.getTaskName();
-            int hours = (int) task.getHours();
+            BigDecimal hours = task.getHours();
             task.setTaskId(taskId);
             task.setUserID(userId);
             task.setTaskName(taskName);
             task.setHours(hours);
         }
+        String totalTimeSpent = iEmployeeTask.calculateTotalTimeSpent(tasks);
+        model.addAttribute("tasks", tasks);
+        model.addAttribute("totalTimeSpent", totalTimeSpent);
+        return "calculate-time";
+    }
+
+
+
+    @GetMapping("/calculate/task")
+    public String showTasks(@RequestParam("userId") int userId, Model model) {
+        List<Task> tasks = iTaskRepository.getAllTasks(userId);
         String totalTimeSpent = iEmployeeTask.calculateTotalTimeSpent(tasks);
         model.addAttribute("tasks", tasks);
         model.addAttribute("totalTimeSpent", totalTimeSpent);
