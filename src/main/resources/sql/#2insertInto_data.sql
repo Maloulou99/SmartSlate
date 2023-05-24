@@ -1,3 +1,7 @@
+
+-- Use database
+USE smartslate_database;
+
 -- Insert roles
 INSERT INTO roles (roleName)
 VALUES ('admin'),
