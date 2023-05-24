@@ -61,15 +61,17 @@
             </li>
         </ul>
     </nav>
-    <nav>
-        <ul>
+<nav>
+    <ul>
+        <th:block th:if="${#lists.isEmpty(tasks)}">
+            <li><a th:href="@{'/projects/' + ${project.projectId} + '/createTask'}">Create Task</a></li>
+        </th:block>
+        <th:block th:unless="${#lists.isEmpty(tasks)}">
             <li><a th:href="@{'/projects/' + ${project.projectId} + '/tasks'}">Show Tasks</a></li>
-        </ul>
-    </nav>
+        </th:block>
+    </ul>
+</nav>
 
-<th:block th:if="${#lists.isEmpty(tasks)}">
-    <a th:href="@{'/projects/' + ${project.projectId} + '/createTask'}">Create Task</a>
-</th:block>
 <nav>
     <ul>
         <li><a th:href="@{/smartslate/user/{userId}(userId=${user.userID})}">Go Back</a></li>

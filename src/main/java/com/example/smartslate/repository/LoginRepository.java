@@ -19,7 +19,7 @@ public class LoginRepository implements ILoginRepository {
     public User findByUsernameOrEmailAndPassword(String usernameOrEmail, String password) {
         User user = null;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "SELECT * FROM users WHERE (Username = ? OR Email = ?) AND Password = ?";
+            String SQL = "SELECT * FROM users WHERE (username = ? OR email = ?) AND password = ?";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setString(1, usernameOrEmail);
             pstmt.setString(2, usernameOrEmail);
@@ -32,9 +32,10 @@ public class LoginRepository implements ILoginRepository {
                     // Admin
                     String adminSQL = "SELECT * FROM roles " +
                             "JOIN users ON roles.roleID = users.roleID " +
-                            "WHERE roles.roleID = ?";
+                            "WHERE roles.roleID = ? and userID = ?";
                     PreparedStatement adminPstmt = con.prepareStatement(adminSQL);
                     adminPstmt.setInt(1, rs.getInt("roleID"));
+                    adminPstmt.setInt(2, rs.getInt("userID"));
                     ResultSet adminRs = adminPstmt.executeQuery();
 
                     if (adminRs.next()) {
@@ -55,9 +56,10 @@ public class LoginRepository implements ILoginRepository {
                     // Employee
                     String employeeSQL = "SELECT * FROM roles " +
                             "JOIN users ON roles.roleID = users.roleID " +
-                            "WHERE roles.roleID = ?";
+                            "WHERE roles.roleID = ? and userID = ?";
                     PreparedStatement employeePstmt = con.prepareStatement(employeeSQL);
                     employeePstmt.setInt(1, rs.getInt("roleID"));
+                    employeePstmt.setInt(2, rs.getInt("userID"));
                     ResultSet employeeRs = employeePstmt.executeQuery();
 
                     if (employeeRs.next()) {
@@ -77,9 +79,10 @@ public class LoginRepository implements ILoginRepository {
                     // Project Manager
                     String managerSQL = "SELECT * FROM roles " +
                             "JOIN users ON roles.roleID = users.roleID " +
-                            "WHERE roles.roleID = ? ";
+                            "WHERE roles.roleID = ? and userID = ?";
                     PreparedStatement managerPstmt = con.prepareStatement(managerSQL);
                     managerPstmt.setInt(1, rs.getInt("roleID"));
+                    managerPstmt.setInt(2, rs.getInt("userID"));
                     ResultSet managerRs = managerPstmt.executeQuery();
 
                     if (managerRs.next()) {

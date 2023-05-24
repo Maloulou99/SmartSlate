@@ -153,13 +153,14 @@ nav a:hover {
 }
 
 .logout-button form button {
-    background-color: #3b82f6;
+    background-color: #3b82f6 !important;
     color: white;
     border: none;
     padding: 10px 20px;
     text-decoration: none;
     cursor: pointer;
 }
+
 
 .logout-button form button:hover {
     background-color: #2563eb;
