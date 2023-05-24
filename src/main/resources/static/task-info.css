@@ -1,0 +1,59 @@
+body {
+    font-family: Arial, sans-serif;
+    color: white;
+    background: rgb(7, 0, 36);
+    background: linear-gradient(90deg, rgba(7, 0, 36, 1) 0%, rgba(66, 204, 136, 1) 50%, rgba(160, 0, 255, 1) 73%);
+}
+
+h1 {
+    color: #3b82f6;
+}
+
+.table-container {
+    display: flex;
+}
+
+.task-table,
+.employee-table {
+    border-collapse: collapse;
+    margin: 0;
+    width: 50%;
+}
+
+.task-table th,
+.task-table td,
+.employee-table th,
+.employee-table td {
+    border: 1px solid #a5b4c4;
+    padding: 10px;
+}
+
+.task-table th {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.employee-table th {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.button {
+    background-color: #3b82f6;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.button:hover {
+    background-color: #2563eb;
+}
+.button-back {
+    background-color: #3b82f6;
+}

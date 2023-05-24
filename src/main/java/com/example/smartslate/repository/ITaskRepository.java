@@ -25,4 +25,7 @@ public interface ITaskRepository {
     List<User> getEmployeesByTaskId(int taskId);
     List<Task> getAllTasks(int projectId);
     int getUserIdByTaskId(int taskId);
+    /*List<List<User>> getListOfUserLists(List<Task> taskList);*/
+    List<List<String>> getListOfUserLists(List<Task> taskList);
+    int getTaskIdByProjectId(int projectId);
 }

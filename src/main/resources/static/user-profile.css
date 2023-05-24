@@ -148,3 +148,19 @@ nav a:hover {
 .smaller-title {
     font-size: 1.0rem;
 }
+.logout-button {
+    margin-top: 20px;
+}
+
+.logout-button form button {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.logout-button form button:hover {
+    background-color: #2563eb;
+}

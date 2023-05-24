@@ -85,6 +85,11 @@
                     <p class="text-muted" th:text="${roleName}"></p>
                   </div>
                 </div>
+                <div class="logout-button">
+                  <form th:action="@{/logout}" method="post">
+                    <button class="button" type="submit">Log out</button>
+                  </form>
+                </div>
               </div>
             </div>
           </div>

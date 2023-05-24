@@ -225,31 +225,35 @@ public class TaskController {
         }
 
         Project project = iProjectRepository.getProjectById(projectId);
-        List<List<String>> selectedEmployeeName = new ArrayList<>(); // Liste af medarbejdernavne efter taskID
-
-
-        System.out.println(tasks.size());
-        for (int i = 0; i < tasks.size(); i++) {
-            Task task = tasks.get(i);
-            List<User> employees = iTaskRepository.getEmployeesWithRoleThreeByUserId(task.getUserId());
-            List<String> employeeNames = new ArrayList<>();
-            for (User employee : employees) {
-                System.out.println(employee);
-                employeeNames.add(employee.getFirstName() + " " + employee.getLastName());
-            }
-            System.out.println("empl: " + employeeNames);
-            System.out.println("Task: " + task.getTaskId());
-            selectedEmployeeName.add(employeeNames);
-        }
 
         model.addAttribute("tasks", tasks);
         model.addAttribute("projectName", project.getProjectName());
         model.addAttribute("projectId", projectId);
-        model.addAttribute("selectedEmployeeName", selectedEmployeeName);
         model.addAttribute("projectManager", projectManagerId);
         model.addAttribute("loggedInUserId", loggedInUserId);
         return "show-tasks";
     }
+
+    @GetMapping("/show/task/employees/{projectId}")
+    public String showTaskInformation(@PathVariable int projectId, Model model, HttpSession session) {
+        Integer loggedInUserIdObj = (Integer) session.getAttribute("userId");
+        if (loggedInUserIdObj == null) {
+            return "redirect:/login";
+        }
+
+        int taskId = iTaskRepository.getTaskIdByProjectId(projectId);
+        List<Task> tasks = iTaskRepository.getTasksByProjectId(projectId);
+        Task task = iTaskRepository.getTaskById(taskId);
+
+        model.addAttribute("task", task);
+        model.addAttribute("tasks", tasks);
+        model.addAttribute("loggedInUserIdObj", loggedInUserIdObj);
+        model.addAttribute("ListOfUserLists", iTaskRepository.getListOfUserLists(tasks));
+        model.addAttribute("projectId", projectId);
+        return "show-task-information";
+    }
+
+
 
 
     //Sender brugeren tilbage på user-frontpage med alle information om projekter
@@ -259,7 +263,7 @@ public class TaskController {
         if (loggedInUserIdObj == null) {
             return "redirect:/login";
         }
-        int loggedInUserId = loggedInUserIdObj;
+        //int loggedInUserId = loggedInUserIdObj;
 
         // Hent tasks for det angivne projectId fra databasen
         List<Task> tasks = iTaskRepository.getTasksByProjectManagerID(projectId);

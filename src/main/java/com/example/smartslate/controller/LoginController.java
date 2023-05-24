@@ -99,9 +99,9 @@ public class LoginController {
         }
         return "redirect:/login";
     }
-    @GetMapping("/logout")
+    @RequestMapping(value = "/logout", method = {RequestMethod.GET, RequestMethod.POST})
     public String logout(HttpSession session) {
-        // invalidate session and return landing page
+        // Ugyldiggør session og returner landingsside
         session.invalidate();
         return "user-login";
     }

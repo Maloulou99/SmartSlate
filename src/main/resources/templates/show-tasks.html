@@ -15,7 +15,6 @@
         <th>Task Name</th>
         <th>Description</th>
         <th>Deadline</th>
-        <th>Employee</th>
         <th>Status</th>
         <th>Actions</th>
     </tr>
@@ -24,15 +23,6 @@
         <td th:text="${task.taskName}"></td>
         <td th:text="${task.description}"></td>
         <td th:text="${task.hours}"></td>
-
-        <td>
-            <span th:if="${selectedEmployeeName != null}">
-                <span th:each="employee : ${selectedEmployeeName}">
-                    <span th:text="${employee}"></span>
-                </span>
-            </span>
-            <span th:unless="${selectedEmployeeName != null}">No employees assigned.</span>
-        </td>
         <td th:text="${task.status}"></td>
         <td>
             <div class="task-buttons">
@@ -44,7 +34,10 @@
                 <a th:href="@{/tasks/{taskId}/update(taskId=${task.taskId})}" class="button button-update">Update Task</a>
             </div>
         </td>
+
     </tr>
+
+
 </table>
 
 <input type="hidden" name="projectId" th:value="${projectId}"/>
@@ -53,7 +46,7 @@
 
 <a th:href="@{'/projects/' + ${projectId} + '/createTask'}" class="button button-create">Create another task for this project</a>
 <a th:href="@{/employees/{employeeId}/calculate(employeeId=${idByTaskId})}" class="button button-calculate">Calculate Salary and Time</a>
-
+<a th:href="@{/show/task/employees/{projectId}(projectId=${projectId})}" class="button button-update">Show Assigned Employees</a>
 <form th:action="@{/smartslate/user/{userid}(userid=${loggedInUserId})}" method="get">
     <button type="submit" class="button button-back">Back to Your Frontpage</button>
 </form>

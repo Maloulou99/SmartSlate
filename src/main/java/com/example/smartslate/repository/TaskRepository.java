@@ -476,4 +476,49 @@ public class TaskRepository implements ITaskRepository {
         return user;
     }
 
+    /*public List<List<User>> getListOfUserLists(List<Task> taskList) {
+        List<List<User>> listOfUserLists = new ArrayList<>();
+        for (Task task : taskList) {
+            listOfUserLists.add(getEmployeesWithRoleThreeByUserId(task.getUserId()));
+        }
+        return listOfUserLists;
+    }*/
+    public List<List<String>> getListOfUserLists(List<Task> taskList) {
+        List<List<String>> listOfUserLists = new ArrayList<>();
+        for (Task task : taskList) {
+            List<User> users = getEmployeesWithRoleThreeByUserId(task.getUserId());
+            List<String> names = new ArrayList<>();
+            for (User user : users) {
+                String fullName = user.getFirstName() + " " + user.getLastName();
+                names.add(fullName);
+            }
+            listOfUserLists.add(names);
+        }
+        return listOfUserLists;
+    }
+
+
+    public int getTaskIdByProjectId(int projectId) {
+        int taskId = -1;
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "SELECT taskId FROM tasks WHERE projectId = ?";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            pstmt.setInt(1, projectId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                taskId = rs.getInt("taskId");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (taskId == -1) {
+            throw new IllegalArgumentException("Ingen opgave fundet for projekt-id: " + projectId);
+        }
+
+        return taskId;
+    }
+
 }

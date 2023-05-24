@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Show Task Information</title>
+    <link rel="stylesheet" href="/task-info.css">
+</head>
+<body>
+<h1>All Tasks with Assigned Employees</h1>
+<div class="table-container">
+    <table class="task-table">
+        <tr>
+            <th>Task ID</th>
+            <th>Task Name</th>
+        </tr>
+
+        <tr th:each="task : ${tasks}">
+            <td th:text="${task.taskId}"></td>
+            <td th:text="${task.taskName}"></td>
+        </tr>
+    </table>
+
+    <table class="employee-table">
+        <tr>
+            <th>Employee Name</th>
+        </tr>
+
+        <tr th:each="list : ${ListOfUserLists}">
+            <td th:text="${list}"></td>
+        </tr>
+    </table>
+</div>
+<form th:action="@{/smartslate/user/{userid}(userid=${loggedInUserIdObj})}" method="get">
+    <button type="submit" class="button button-back" >Back to Your Frontpage</button>
+</form>
+<a class="button" th:href="@{/projects/{projectId}/tasks(projectId=${projectId})}">Go Back</a>
+
+</body>
+</html>
