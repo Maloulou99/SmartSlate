@@ -70,7 +70,7 @@
             </thead>
             <tbody>
             <tr th:each="task : ${tasks}">
-                <td th:text="${task.hours}"></td>
+                <td th:text="${formattedTime}"></td>
                 <td th:text="${task.taskName}"></td>
                 <td th:text="${task.taskId}"></td>
             </tr>

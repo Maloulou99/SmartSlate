@@ -14,7 +14,7 @@
         <th>Task ID</th>
         <th>Task Name</th>
         <th>Description</th>
-        <th>Deadline</th>
+        <th>Total Hours</th>
         <th>Status</th>
         <th>Actions</th>
     </tr>
@@ -22,7 +22,7 @@
         <td th:text="${task.taskId}"></td>
         <td th:text="${task.taskName}"></td>
         <td th:text="${task.description}"></td>
-        <td th:text="${task.hours}"></td>
+        <td th:text="${formattedTime}"></td>
         <td th:text="${task.status}"></td>
         <td>
             <div class="task-buttons">

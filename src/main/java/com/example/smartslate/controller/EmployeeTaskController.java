@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,12 +50,14 @@ public class EmployeeTaskController {
             int taskId = task.getTaskId();
             int userId = task.getUserId();
             String taskName = task.getTaskName();
-            BigDecimal hours = task.getHours();
             task.setTaskId(taskId);
             task.setUserId(userId);
             task.setTaskName(taskName);
+            BigDecimal hours = task.getHours();  // Assuming the getter method for hours is getHours()
+            LocalTime localTime = LocalTime.of(hours.intValue(), 0);
+            String formattedTime = localTime.format(DateTimeFormatter.ofPattern("HH:mm"));
             task.setHours(hours);
-
+            model.addAttribute("formattedTime", formattedTime);
             // Hent medarbejderen baseret på userId og tilføj den til taskens medarbejderliste
             User employee = iUserRepository.getEmployeeUser(userId);
             task.getEmployees().add(employee);

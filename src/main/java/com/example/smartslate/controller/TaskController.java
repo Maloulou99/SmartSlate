@@ -13,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -220,10 +222,13 @@ public class TaskController {
             task.setUserId(idByTaskId);
             task.setUserId(employeIds);
             iTaskRepository.getTaskByProjectId(projectId);
+            BigDecimal hours = task.getHours();  // Assuming the getter method for hours is getHours()
+            LocalTime localTime = LocalTime.of(hours.intValue(), 0);
+            String formattedTime = localTime.format(DateTimeFormatter.ofPattern("HH:mm"));
 
+            model.addAttribute("formattedTime", formattedTime);
             model.addAttribute("idByTaskId", idByTaskId);
         }
-
         Project project = iProjectRepository.getProjectById(projectId);
 
         model.addAttribute("tasks", tasks);

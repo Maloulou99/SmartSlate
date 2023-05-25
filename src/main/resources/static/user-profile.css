@@ -1,10 +1,36 @@
-/* Generel styling */
-body {
-    background: rgb(7,0,36);
-    background: linear-gradient(90deg, rgba(7,0,36,1) 0%, rgba(66,204,136,1) 50%, rgba(160,0,255,1) 73%);
+.custom-background {
+    background: linear-gradient(90deg, rgba(7, 0, 36, 1) 0%, rgba(66, 204, 136, 1) 50%, rgba(160, 0, 255, 1) 73%);
     color: white;
-    ffont-family: Verdana, sans-serif;
+    font-family: Verdana, sans-serif;
 }
+
+.custom-background::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #66ccff; /* Change this to the desired color */
+    z-index: -1;
+}
+
+
+.card {
+    background-color: white;
+    font-family: Verdana, sans-serif;
+}
+
+.card-body {
+    background-color: white;
+    font-family: Verdana, sans-serif;
+}
+
+.project-box {
+    background-color: white;
+    font-family: Verdana, sans-serif;
+}
+
 
 .container {
     padding-top: 4rem;
@@ -194,5 +220,21 @@ nav a:hover {
 
 .logout-button form button:hover {
     background-color: #2563eb;
+    font-family: Verdana, sans-serif;
+}
+
+.delete-button {
+    margin-top: 2rem;
+    font-family: Verdana, sans-serif;
+}
+
+.delete-button a {
+    background-color: #f44336;
+    border-color: #f44336;
+    font-family: Verdana, sans-serif;
+}
+
+.delete-button a:hover {
+    background-color: #d32f2f;
     font-family: Verdana, sans-serif;
 }
