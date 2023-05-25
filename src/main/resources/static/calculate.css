@@ -1,145 +1,64 @@
-/* Reset styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/* Additional styles */
-h2 {
-    font-size: 24px;
-    text-align: center;
-    margin: 30px 0 20px;
-    color: white;
-}
-
-/* Change navigation background color */
-nav a {
-    background-color: mediumpurple;
-    border-color: mediumpurple;
-}
-
-/* Body styles */
 body {
-    font-family: Arial, sans-serif;
+    background: rgb(7, 0, 36);
+    background: linear-gradient(90deg, rgba(7, 0, 36, 1) 0%, rgba(66, 204, 136, 1) 50%, rgba(160, 0, 255, 1) 73%);
+    color: white;
+}
+.button {
+    background-color: #3b82f6;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    display: inline-block;
     font-size: 16px;
-    line-height: 1.5;
-    background: rgb(7,0,36);
-    background: linear-gradient(90deg, rgba(7,0,36,1) 0%, rgba(66,204,136,1) 50%, rgba(160,0,255,1) 73%);
-    color: white;
-}
-
-/* Header styles */
-h1 {
-    font-size: 36px;
-    text-align: start;
-    margin: 50px 0 30px;
-    color: white;
-}
-
-/* Navigation styles */
-
-nav {
-    display: flex;
-    justify-content: center;
-    margin: 0 auto;
-    padding: 10px 0;
-}
-
-nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-nav li {
-    margin: 0 20px;
-}
-
-nav a {
+    margin: 10px;
+    padding: 10px 20px;
+    text-align: center;
     text-decoration: none;
-    color: #fff;
-    font-weight: bold;
-    text-transform: uppercase;
-    padding: 10px 15px;
-    border-radius: 5px;
-    border: 1px solid mediumpurple;
-    background-color: mediumpurple;
-    transition: background-color 0.3s, color 0.3s;
+    font-family: Verdana, sans-serif;
 }
 
-nav a:hover {
-    background-color: purple;
-    color: limegreen;
+.button:hover {
+    background-color: #2563eb;
+    font-family: Verdana, sans-serif;
 }
 
-/* Main content styles */
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 40px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.button-back {
+    background-color: #3b82f6;
+    font-family: Verdana, sans-serif;
 }
 
-.container p {
-    margin-bottom: 20px;
-    font-size: 16px;
-    line-height: 1.6;
+ .container {
+     display: flex;
+     font-family: Verdana, sans-serif;
+ }
+
+.employee-list,
+.task-information {
+    flex: 1;
+    padding: 0 10px;
+    font-family: Verdana, sans-serif;
 }
 
-.img-fluid {
-    margin-top: -60px;
-    width: 200%;
-    height: auto;
-}
-
-
-footer {
-    text-align: center;
-    padding: 20px;
-    background: rgb(7,0,36);
-    background: linear-gradient(90deg, rgba(7,0,36,1) 0%, rgba(66,204,136,1) 50%, rgba(160,0,255,1) 73%);
-    color: #fff;
-    font-size: 14px;
-}
-
-footer p {
-    margin: 0;
-}
-/* Container styles */
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-.container {
-    max-width: 800px;
-    padding: 40px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    background-color: white;
-}
-
-/* Table styles */
-table {
+.employee-list table,
+.task-information table {
     width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-family: Verdana, sans-serif;
 }
 
-thead th {
-    background-color: #2d5454;
+.employee-list h2,
+.task-information h2 {
+    margin-bottom: 10px;
+    font-family: Verdana, sans-serif;
+}
+
+.employee-list th,
+.employee-list td,
+.task-information th,
+.task-information td {
     padding: 10px;
+    border: 1px solid black;
     text-align: left;
-}
-
-tbody td {
-    padding: 10px;
-}
-
-tfoot td {
-    padding: 10px;
-    text-align: right;
-    font-weight: bold;
+    font-family: Verdana, sans-serif;
 }

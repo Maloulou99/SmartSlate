@@ -3,28 +3,34 @@ body {
     background: rgb(7,0,36);
     background: linear-gradient(90deg, rgba(7,0,36,1) 0%, rgba(66,204,136,1) 50%, rgba(160,0,255,1) 73%);
     color: white;
+    ffont-family: Verdana, sans-serif;
 }
 
 .container {
     padding-top: 4rem;
     padding-bottom: 4rem;
+    font-family: Verdana, sans-serif;
 }
 
 .card {
     margin-bottom: 2rem;
+    font-family: Verdana, sans-serif;
 }
 
 .card-header {
     color: #fff;
     padding: 1.25rem;
+    font-family: Verdana, sans-serif;
 }
 
 .card-header h4 {
     margin-bottom: 0;
+    font-family: Verdana, sans-serif;
 }
 
 .card-body {
     padding: 2rem;
+    font-family: Verdana, sans-serif;
 }
 
 .user-profile-img {
@@ -33,61 +39,72 @@ body {
     border-radius: 50%;
     object-fit: cover;
     object-position: center;
+    font-family: Verdana, sans-serif;
 }
 
 .user-profile-name {
     font-size: 1.5rem;
     margin-bottom: 0.5rem;
+    font-family: Verdana, sans-serif;
 }
 
 .user-profile-role {
     font-size: 1rem;
     color: #6c757d;
+    font-family: Verdana, sans-serif;
 }
 
 .user-profile-actions {
     margin-top: 2rem;
+    font-family: Verdana, sans-serif;
 }
 
 .user-profile-actions button {
     margin-right: 0.5rem;
+    font-family: Verdana, sans-serif;
 }
 
 .user-profile-details {
     margin-top: 2rem;
+    font-family: Verdana, sans-serif;
 }
 
 .user-profile-details-item {
     margin-bottom: 1.5rem;
+    font-family: Verdana, sans-serif;
 }
 
 .user-profile-details-item label {
     font-weight: 500;
+    font-family: Verdana, sans-serif;
 }
 
 .user-profile-projects {
     margin-top: 2rem;
+    font-family: Verdana, sans-serif;
 }
 nav a {
     background-color: mediumpurple;
     border-color: mediumpurple;
+    font-family: Verdana, sans-serif;
 }
 nav {
     display: flex;
     justify-content: center;
     margin: 0 auto;
-    /*background: rgb(7,0,36);
-    background: linear-gradient(90deg, rgba(7,0,36,1) 0%, rgba(66,204,136,1) 50%, rgba(160,0,255,1) 73%);*/
     padding: 10px 0;
+    font-family: Verdana, sans-serif;
 }
 nav ul {
     list-style: none;
     margin: 0;
     padding: 0;
+    font-family: Verdana, sans-serif;
 }
 
 nav li {
     margin: 0 20px;
+    font-family: Verdana, sans-serif;
 }
 
 nav a {
@@ -100,11 +117,13 @@ nav a {
     border: 1px solid mediumpurple;
     background-color: mediumpurple;
     transition: background-color 0.3s, color 0.3s;
+    font-family: Verdana, sans-serif;
 }
 
 nav a:hover {
     background-color: purple;
     color: limegreen;
+    font-family: Verdana, sans-serif;
 }
 
 
@@ -112,44 +131,54 @@ nav a:hover {
 @media (max-width: 767.98px) {
     .card {
         margin-bottom: 1.5rem;
+        font-family: Verdana, sans-serif;
     }
 }
 
 .row {
     display: flex;
     flex-wrap: wrap;
+    font-family: Verdana, sans-serif;
 }
 
 .col-lg-4 {
     flex: 0 0 33.333333%;
     max-width: 33.333333%;
+    font-family: Verdana, sans-serif;
 }
 
 .col-lg-8 {
     flex: 0 0 66.666667%;
     max-width: 66.666667%;
+    font-family: Verdana, sans-serif;
 }
 .col-md-12{
     display: block;
+    font-family: Verdana, sans-serif;
 }
 
 .project-box {
     padding: 20px;
     margin-bottom: 20px;
+    font-family: Verdana, sans-serif;
 }
 
 .project-details {
     margin-bottom: 10px;
+    font-family: Verdana, sans-serif;
 }
 
 .project-actions {
     text-align: center;
+    font-family: Verdana, sans-serif;
 }
 .smaller-title {
     font-size: 1.0rem;
+    font-family: Verdana, sans-serif;
 }
 .logout-button {
     margin-top: 20px;
+    font-family: Verdana, sans-serif;
 }
 
 .logout-button form button {
@@ -159,9 +188,11 @@ nav a:hover {
     padding: 10px 20px;
     text-decoration: none;
     cursor: pointer;
+    font-family: Verdana, sans-serif;
 }
 
 
 .logout-button form button:hover {
     background-color: #2563eb;
+    font-family: Verdana, sans-serif;
 }

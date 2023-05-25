@@ -107,28 +107,35 @@ table.user-info td:first-child {
     padding: 10px 20px;
     text-align: center;
     text-decoration: none;
+    font-family: Verdana, sans-serif;
 }
 
 .button:hover {
+    font-family: Verdana, sans-serif;
     background-color: #2563eb;
 }
 
 .button-delete {
+    font-family: Verdana, sans-serif;
     background-color: #ef4444;
 }
 
 .button-update {
+    font-family: Verdana, sans-serif;
     background-color: #3b82f6;
 }
 
 .button-create {
+    font-family: Verdana, sans-serif;
     background-color: #3b82f6;
 }
 
 .button-calculate {
+    font-family: Verdana, sans-serif;
     background-color: #3b82f6;
 }
 
 .button-back {
+    font-family: Verdana, sans-serif;
     background-color: #3b82f6;
 }

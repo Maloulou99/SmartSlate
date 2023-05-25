@@ -45,7 +45,7 @@
 <input type="hidden" name="selectedEmployeeId" th:value="${selectedEmployeeId}" />
 
 <a th:href="@{'/projects/' + ${projectId} + '/createTask'}" class="button button-create">Create another task for this project</a>
-<a th:href="@{/employees/{employeeId}/calculate(employeeId=${idByTaskId})}" class="button button-calculate">Calculate Salary and Time</a>
+<a th:href="@{/employees/{projectId}/calculate(projectId=${projectId})}" class="button button-calculate">Calculate Time</a>
 <a th:href="@{/show/task/employees/{projectId}(projectId=${projectId})}" class="button button-update">Show Assigned Employees</a>
 <form th:action="@{/smartslate/user/{userid}(userid=${loggedInUserId})}" method="get">
     <button type="submit" class="button button-back">Back to Your Frontpage</button>

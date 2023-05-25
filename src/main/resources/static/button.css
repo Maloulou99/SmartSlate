@@ -4,22 +4,24 @@ Generel styling for knapper på vores side, så de følger det samme farvetema.
 nav a {
     background-color: mediumpurple;
     border-color: mediumpurple;
+    font-family: Verdana, sans-serif;
 }
 nav {
     display: flex;
     margin: 5px;
-    /*background: rgb(7,0,36);
-    background: linear-gradient(90deg, rgba(7,0,36,1) 0%, rgba(66,204,136,1) 50%, rgba(160,0,255,1) 73%);*/
     padding: 10px 0;
+    font-family: Verdana, sans-serif;
 }
 nav ul {
     list-style: none;
     margin: 0;
     padding: 0;
+    font-family: Verdana, sans-serif;
 }
 
 nav li {
     margin: 0 20px;
+    font-family: Verdana, sans-serif;
 }
 
 nav a {
@@ -32,9 +34,11 @@ nav a {
     border: 1px solid mediumpurple;
     background-color: mediumpurple;
     transition: background-color 0.3s, color 0.3s;
+    font-family: Verdana, sans-serif;
 }
 
 nav a:hover {
     background-color: purple;
     color: limegreen;
+    font-family: Verdana, sans-serif;
 }

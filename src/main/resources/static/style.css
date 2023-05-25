@@ -11,17 +11,19 @@ h2 {
     text-align: center;
     margin: 30px 0 20px;
     color: white;
+    font-family: Verdana, sans-serif;
 }
 
 /* Change navigation background color */
 nav a {
     background-color: mediumpurple;
     border-color: mediumpurple;
+    font-family: Verdana, sans-serif;
 }
 
 /* Body styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: Verdana, sans-serif;
     font-size: 16px;
     line-height: 1.5;
     background: rgb(7,0,36);
@@ -34,6 +36,7 @@ h1 {
     text-align: center;
     margin: 50px 0 30px;
     color: white;
+    font-family: Verdana, sans-serif;
 }
 
 /* Navigation styles */
@@ -42,19 +45,20 @@ nav {
     display: flex;
     justify-content: center;
     margin: 0 auto;
-    /*background: rgb(7,0,36);
-    background: linear-gradient(90deg, rgba(7,0,36,1) 0%, rgba(66,204,136,1) 50%, rgba(160,0,255,1) 73%);*/
     padding: 10px 0;
+    font-family: Verdana, sans-serif;
 }
 
 nav ul {
     list-style: none;
     margin: 0;
     padding: 0;
+    font-family: Verdana, sans-serif;
 }
 
 nav li {
     margin: 0 20px;
+    font-family: Verdana, sans-serif;
 }
 
 nav a {
@@ -67,11 +71,13 @@ nav a {
     border: 1px solid mediumpurple;
     background-color: mediumpurple;
     transition: background-color 0.3s, color 0.3s;
+    font-family: Verdana, sans-serif;
 }
 
 nav a:hover {
     background-color: purple;
     color: limegreen;
+    font-family: Verdana, sans-serif;
 }
 
 /* Main content styles */
@@ -81,6 +87,7 @@ nav a:hover {
     padding: 40px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-family: Verdana, sans-serif;
 }
 
 .container p {
@@ -88,12 +95,14 @@ nav a:hover {
     font-size: 16px;
     color: white;
     line-height: 1.6;
+    font-family: Verdana, sans-serif;
 }
 
 .img-fluid {
     margin-top: -60px;
     width: 200%;
     height: auto;
+    font-family: Verdana, sans-serif;
 }
 
 /* Footer styles */
@@ -104,8 +113,10 @@ footer {
     background: linear-gradient(90deg, rgba(7,0,36,1) 0%, rgba(66,204,136,1) 50%, rgba(160,0,255,1) 73%);
     color: #fff;
     font-size: 14px;
+    font-family: Verdana, sans-serif;
 }
 
 footer p {
     margin: 0;
+    font-family: Verdana, sans-serif;
 }

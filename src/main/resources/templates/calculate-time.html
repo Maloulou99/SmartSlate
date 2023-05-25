@@ -2,36 +2,92 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/calculate.css">
     <title>Employee Tasks</title>
-</head>
-<h1>Calculator For EmployeeID #<span th:text="${employeeId}" ></span> </h1>
+    <link rel="stylesheet" href="/calculate.css">
+    <style>
+        /* CSS styles for table layout */
+        .container {
+            display: flex;
+        }
 
+        .employee-list,
+        .task-information {
+            flex: 1;
+            padding: 0 10px;
+        }
+
+        .employee-list table,
+        .task-information table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .employee-list h2,
+        .task-information h2 {
+            margin-bottom: 10px;
+        }
+
+        .employee-list th,
+        .employee-list td,
+        .task-information th,
+        .task-information td {
+            padding: 10px;
+            border: 1px solid black;
+            text-align: left;
+        }
+    </style>
+</head>
 <body>
-<table>
-    <thead>
-    <tr>
-        <th>Employee</th>
-        <th>Time Spent On Tasks</th>
-        <th>Task Name</th>
-        <th>Task ID</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="task : ${tasks}">
-        <td th:text="${task.employees}"></td>
-        <td th:text="${task.hours}"></td>
-        <td th:text="${task.taskName}"></td>
-        <td th:text="${task.taskId}"></td>
-    </tr>
-    </tbody>
-    <tfoot>
-    <tr>
-        <td>Total Time Spent On All Tasks:</td>
-        <td th:text="${totalTimeSpent}"></td>
-    </tr>
-    </tfoot>
-</table>
+<h1>Calculator For All Employees On Your Tasks</h1>
+
+<div class="container">
+    <div class="employee-list">
+        <h2>Employee List</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Employee</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="employee : ${employees}">
+                <td th:text="${employee}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="task-information">
+        <h2>Task Information</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Time Spent On Tasks</th>
+                <th>Task Name</th>
+                <th>Task ID</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="task : ${tasks}">
+                <td th:text="${task.hours}"></td>
+                <td th:text="${task.taskName}"></td>
+                <td th:text="${task.taskId}"></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td>Total Time Spent On All Tasks:</td>
+                <td th:text="${totalTimeSpent}"></td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<form th:action="@{/smartslate/user/{userid}(userid=${loggedInUserIdObj})}" method="get">
+    <button type="submit" class="button button-back" >Back to Your Frontpage</button>
+</form>
+<a class="button" th:href="@{/projects/{projectId}/tasks(projectId=${projectId})}">Go Back</a>
+
 </body>
-<button onclick="history.back()">Go Back</button>
 </html>

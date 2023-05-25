@@ -1,15 +1,18 @@
 /* styling af brugerinformationer */
 table.user-info {
     margin: 40px 0;
+    font-family: Verdana, sans-serif;
 }
 
 table.user-info td:first-child {
     font-weight: bold;
     width: 150px;
+    font-family: Verdana, sans-serif;
 }
 
 /* styling af knapper */
 a.button {
+    font-family: Verdana, sans-serif;
     background-color: #3b82f6;
     border: none;
     border-radius: 5px;
@@ -24,50 +27,61 @@ a.button {
 
 a.button:last-child {
     margin-right: 0;
+    font-family: Verdana, sans-serif;
 }
 
 a.button:hover {
     background-color: #2563eb;
+    font-family: Verdana, sans-serif;
 }
 
 /* styling af tabel med projekter */
 table.project-table th {
     background-color: #3b82f6;
     color: white;
+    font-family: Verdana, sans-serif;
 }
 
 table.project-table td:last-child, table.project-table td:nth-last-child(2) {
     text-align: center;
+    font-family: Verdana, sans-serif;
 }
 
 table.project-table td:last-child a, table.project-table td:nth-last-child(2) a {
     margin: 0;
+    font-family: Verdana, sans-serif;
 }
 
 /* styling af tabel med opgaver */
 table.task-table th {
     background-color: #3b82f6;
     color: white;
+    font-family: Verdana, sans-serif;
 }
 
 table.task-table td:last-child {
     text-align: center;
+    font-family: Verdana, sans-serif;
 }
 
 .task-buttons {
     display: flex;
     justify-content: flex-end;
     margin-top: 10px;
+    font-family: Verdana, sans-serif;
 }
 
 .task-buttons a {
     margin-right: 10px;
+    font-family: Verdana, sans-serif;
 }
 
 .task-buttons a:last-child {
     margin-right: 0;
+    font-family: Verdana, sans-serif;
 }
 
 .task-buttons a.button {
     padding: 10px 20px;
+    font-family: Verdana, sans-serif;
 }

@@ -476,13 +476,7 @@ public class TaskRepository implements ITaskRepository {
         return user;
     }
 
-    /*public List<List<User>> getListOfUserLists(List<Task> taskList) {
-        List<List<User>> listOfUserLists = new ArrayList<>();
-        for (Task task : taskList) {
-            listOfUserLists.add(getEmployeesWithRoleThreeByUserId(task.getUserId()));
-        }
-        return listOfUserLists;
-    }*/
+
     public List<List<String>> getListOfUserLists(List<Task> taskList) {
         List<List<String>> listOfUserLists = new ArrayList<>();
         for (Task task : taskList) {

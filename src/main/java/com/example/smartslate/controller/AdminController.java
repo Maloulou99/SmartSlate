@@ -36,12 +36,6 @@ public class AdminController {
         return "admin-page";
     }
 
-    @GetMapping("/create/user")
-    public String createUser(Model model) {
-        User user = new User();
-        model.addAttribute("user", user);
-        return "create-user";
-    }
 
     @GetMapping("/user/{userId}")
     public String getUser(@PathVariable int userId, Model model) {
@@ -58,21 +52,6 @@ public class AdminController {
         return "admin-page";
     }
 
-    @PostMapping("/adduser")
-    public String addUser(@ModelAttribute User newUser, Model model) {
-        int userId = iUserRepository.createUser(newUser);
-        newUser.setUserID(userId);
-        model.addAttribute("user", newUser);
-        model.addAttribute("createdAt", newUser.getCreatedAt());
-        model.addAttribute("username", newUser.getUsername());
-        model.addAttribute("firstName", newUser.getFirstName());
-        model.addAttribute("lastName", newUser.getLastName());
-        model.addAttribute("email", newUser.getEmail());
-        model.addAttribute("password", newUser.getPassword());
-        model.addAttribute("phoneNumber", newUser.getPhoneNumber());
-        model.addAttribute("role", iUserRepository.getRoleName(newUser.getRoleID())); // get role name instead of role id
-        return "user-created";
-    }
 
     @GetMapping("/user/update/{userId}")
     public String updateUserForm(@PathVariable int userId, Model model, HttpSession httpSession) {
