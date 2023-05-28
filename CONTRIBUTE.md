@@ -1,25 +1,25 @@
-# Contribute
+# Contributing
+Thank you for your interest in contributing to SmartSlate! ❤️ 
+Before getting started, please refer to the README.md file for detailed information on the project. You can find it at the following link:
 
-First off all, thank you for taking the time to contribute to SmartSlate! ❤️
-We recommend checking out the README.md file first. You can find it here:
+# SmartSlate README.md
 
-https://github.com/Maloulou99/SmartSlate/blob/main/README.md
+To contribute to SmartSlate, please follow these steps:
 
-Down below, there will be steps to follow if you should want to contribute to SmartSlate
+1. Clone the project repository to your local machine.
+2. Create a new branch from the "master" branch. Choose a descriptive name for your branch.
+3. Make your changes, additions, or improvements to the codebase.
+4. Commit your final version with clear and concise commit messages.
+5. Open a pull request for your branch, indicating the purpose and scope of your changes.
 
-## How do I contribute to SmartSlate?
+To contribute to SmartSlate, you'll need the following:
 
-- Clone the project
-- Create and name a branch from Master branch
-- Commit your final version
-- Open a pull request for your branch
+- An Integrated Development Environment (IDE) such as Visual Studio Code, which provides a comprehensive set of tools for programming.
+- MySQL and MySQL Workbench installed on your machine. Set up a localhost server to run the database.
+- Ensure that your application.properties file contains the correct credentials (username and password) for the database.
+- Run the database using the provided MySQL script.
+- Finally, run the project on your localhost to test your changes.
 
-## What do I need to do to be able to contribute to SmartSlate?
+We appreciate your contributions to SmartSlate. Thank you for helping us improve the project!
 
-- An IDE (an integrated development enviroment which is a type of software application that provides you with resources and facilities for computer programming) - Visual Studio Code is a great FREE tool to use.
-- MySQL and MySQL workbench, remember to setup a localhost server
-- Make sure your application.properties file has the correct information (username & password)
-- Run the database (MySQL script) 
-- Run the project on your localhost
-
-That's it for now!
+Feel free to adjust the revision according to your preferences and specific requirements.
