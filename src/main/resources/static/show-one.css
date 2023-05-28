@@ -4,18 +4,48 @@ body {
     background: rgb(7, 0, 36);
     background: linear-gradient(90deg, rgba(7, 0, 36, 1) 0%, rgba(66, 204, 136, 1) 50%, rgba(160, 0, 255, 1) 73%);
 }
-body {
+
+body, table {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
+    height: 100vh;
+    margin: 0;
+}
+
+h2 {
     text-align: center;
-    font-family: Verdana, sans-serif;
 }
 
 table {
+    border-collapse: collapse;
     margin-top: 20px;
-    font-family: Verdana, sans-serif;
+    width: 80%;
+    max-width: 600px;
 }
 
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid white;
+}
+
+
+nav {
+    margin-top: 20px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}

@@ -53,7 +53,7 @@ public class EmployeeTaskController {
             task.setTaskId(taskId);
             task.setUserId(userId);
             task.setTaskName(taskName);
-            BigDecimal hours = task.getHours();  // Assuming the getter method for hours is getHours()
+            BigDecimal hours = task.getHours();
             LocalTime localTime = LocalTime.of(hours.intValue(), 0);
             String formattedTime = localTime.format(DateTimeFormatter.ofPattern("HH:mm"));
             task.setHours(hours);
