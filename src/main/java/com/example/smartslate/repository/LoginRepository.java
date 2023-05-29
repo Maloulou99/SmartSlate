@@ -16,7 +16,7 @@ public class LoginRepository implements ILoginRepository {
     String user_pwd;
 
 
-    public User findByUsernameOrEmailAndPassword(String usernameOrEmail, String password) {
+    public User findByUsernameAndPassword(String usernameOrEmail, String password) {
         User user = null;
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
             String SQL = "SELECT * FROM users WHERE (username = ? OR email = ?) AND password = ?";

@@ -4,7 +4,7 @@ import com.example.smartslate.model.Subtask;
 
 import java.util.List;
 
-public interface ISubTask {
+public interface ISubTaskRepository {
 
      void createSubTask(Subtask subtask);
      Subtask getSubtaskById(int subtaskID);

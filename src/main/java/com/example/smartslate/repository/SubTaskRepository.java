@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class SubTaskRepository implements ISubTask {
+public class SubTaskRepository implements ISubTaskRepository {
     @Value("${spring.datasource.url}")
     String url;
     @Value("${spring.datasource.username}")

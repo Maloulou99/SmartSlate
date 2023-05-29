@@ -18,15 +18,15 @@ public class LoginController {
     private IUserRepository iUserRepository;
     private IProjectRepository iProjectRepository;
     private ITaskRepository iTaskRepository;
-    private IEmployeeTask iEmployeeTask;
+    private IEmployeeTaskRepository iEmployeeTaskRepository;
 
 
-    public LoginController(ILoginRepository iLoginRepository, IUserRepository iUserRepository, IProjectRepository iProjectRepository, ITaskRepository iTaskRepository, IEmployeeTask iEmployeeTask) {
+    public LoginController(ILoginRepository iLoginRepository, IUserRepository iUserRepository, IProjectRepository iProjectRepository, ITaskRepository iTaskRepository, IEmployeeTaskRepository iEmployeeTaskRepository) {
         this.iLoginRepository = iLoginRepository;
         this.iUserRepository = iUserRepository;
         this.iProjectRepository = iProjectRepository;
         this.iTaskRepository = iTaskRepository;
-        this.iEmployeeTask = iEmployeeTask;
+        this.iEmployeeTaskRepository = iEmployeeTaskRepository;
     }
 
     protected boolean isLoggedIn(HttpSession session, int uid) {
@@ -47,7 +47,7 @@ public class LoginController {
 
     @PostMapping("/login")
     public String processLoginForm(@RequestParam("usernameOrEmail") String username, @RequestParam("password") String password, HttpSession session, Model model) {
-        User user = iLoginRepository.findByUsernameOrEmailAndPassword(username, password);
+        User user = iLoginRepository.findByUsernameAndPassword(username, password);
 
         if (user != null) {
             int roleID = user.getRoleID();
@@ -84,7 +84,7 @@ public class LoginController {
                 model.addAttribute("user", user);
 
 
-                List<Task> employeeTasks = iEmployeeTask.getEmployeeTasksByUserId(user.getUserID());
+                List<Task> employeeTasks = iEmployeeTaskRepository.getEmployeeTasksByUserId(user.getUserID());
 
                 if (!employeeTasks.isEmpty()) {
                     Task task = employeeTasks.get(0);

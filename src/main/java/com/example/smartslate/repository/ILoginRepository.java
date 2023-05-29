@@ -4,5 +4,5 @@ import com.example.smartslate.model.User;
 
 public interface ILoginRepository {
 
-    User findByUsernameOrEmailAndPassword(String usernameOrEmail, String password);
+    User findByUsernameAndPassword(String usernameOrEmail, String password);
 }

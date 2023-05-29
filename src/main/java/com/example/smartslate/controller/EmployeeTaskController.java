@@ -1,21 +1,16 @@
 package com.example.smartslate.controller;
 
-import com.example.smartslate.model.Project;
 import com.example.smartslate.model.Task;
 import com.example.smartslate.model.User;
 import com.example.smartslate.repository.*;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 
 @RequestMapping("/")
@@ -26,14 +21,14 @@ public class EmployeeTaskController {
     private ITaskRepository iTaskRepository;
     private IUserRepository iUserRepository;
     private ILoginRepository iLoginRepository;
-    private IEmployeeTask iEmployeeTask;
+    private IEmployeeTaskRepository iEmployeeTaskRepository;
 
-    public EmployeeTaskController(IProjectRepository iProjectRepository, ITaskRepository iTaskRepository, IUserRepository iUserRepository, ILoginRepository iLoginRepository, IEmployeeTask iEmployeeTask) {
+    public EmployeeTaskController(IProjectRepository iProjectRepository, ITaskRepository iTaskRepository, IUserRepository iUserRepository, ILoginRepository iLoginRepository, IEmployeeTaskRepository iEmployeeTaskRepository) {
         this.iProjectRepository = iProjectRepository;
         this.iTaskRepository = iTaskRepository;
         this.iUserRepository = iUserRepository;
         this.iLoginRepository = iLoginRepository;
-        this.iEmployeeTask = iEmployeeTask;
+        this.iEmployeeTaskRepository = iEmployeeTaskRepository;
     }
 
 
@@ -65,7 +60,7 @@ public class EmployeeTaskController {
             model.addAttribute("task", task);
         }
 
-        String totalTimeSpent = iEmployeeTask.calculateTotalTimeSpent(tasks);
+        String totalTimeSpent = iEmployeeTaskRepository.calculateTotalTimeSpent(tasks);
 
         model.addAttribute("tasks", tasks);
         model.addAttribute("totalTimeSpent", totalTimeSpent);
@@ -80,7 +75,7 @@ public class EmployeeTaskController {
     @GetMapping("/calculate/task")
     public String showTasks(@RequestParam("userId") int userId, Model model) {
         List<Task> tasks = iTaskRepository.getAllTasks(userId);
-        String totalTimeSpent = iEmployeeTask.calculateTotalTimeSpent(tasks);
+        String totalTimeSpent = iEmployeeTaskRepository.calculateTotalTimeSpent(tasks);
         model.addAttribute("tasks", tasks);
         model.addAttribute("totalTimeSpent", totalTimeSpent);
         model.addAttribute("listOfUsers", iTaskRepository.getListOfUserLists(tasks));
