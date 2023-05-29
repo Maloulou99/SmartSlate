@@ -22,11 +22,11 @@ Remember to keep your private! That means no one but you should know about it, e
 1. Create a project
 - When a project is created, you need to name it, set the dates and set a budget. Just follow the forms and you'll be good.
 
-3. Update a project
+2. Update a project
 - If you for some reason end up entering the wrong information or need to move the deadline for the project, you can update it! The update function basically needs the same information that you'd give when creating a user in SmartSlate. You can do it anytime and as many times as you want.
 
-5. Delete a project
+3. Delete a project
 - If you want to delete a project, simply find the project (you can look after the unique project ID or simply by the project name) and use the 'Delete Project' button. Confirm via the little pop-up tab. **YOU CAN'T RECLAIM ANY DELETED PROJECTS!**
 
-6. Tasks 
+4. Tasks 
 - A task will automatically connect to its respective project after it's been created. It basically works the same way as a project would, except for the fact that you can't create a task without an exisiting project.
