@@ -1,0 +1,57 @@
+name: Continuous Integration
+
+# On pull requests, rebase against default branch and push to it
+
+on:
+  pull_request:
+    branches:
+      - main
+      - master
+
+env:
+  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+  ORIGIN: origin
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  ci-pr:
+    runs-on: ubuntu-latest
+    steps:
+    
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Tell git who we are
+        run: |
+          set -ex
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@github.com"
+          git config --global advice.skippedCherryPicks false
+          git branch
+
+      - name: Get default target branch name
+        id: repo
+        run: |
+          set -ex
+          echo "target_branch=$( gh repo view --json defaultBranchRef --jq .defaultBranchRef.name )" >> "$GITHUB_ENV"
+          
+      - name: Rebased against default branch
+        run: |
+          set -ex
+          git rebase ${ORIGIN}/${{ env.target_branch }}
+          
+                
+      - name: Do the build
+        run: |
+          echo This is where you run the build
+
+      - name: Merge and delete branch, close PR
+        run: |
+          set -ex
+          gh pr merge --auto --rebase --delete-branch --subject "Automated merge by ${{ github.job }}"
