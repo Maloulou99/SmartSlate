@@ -71,7 +71,6 @@ public class EmployeeTaskController {
 
 
 
-
     @GetMapping("/calculate/task")
     public String showTasks(@RequestParam("userId") int userId, Model model) {
         List<Task> tasks = iTaskRepository.getAllTasks(userId);

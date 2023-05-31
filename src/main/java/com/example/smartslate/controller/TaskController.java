@@ -91,6 +91,8 @@ public class TaskController {
         task.setUserID(projectManagerId);
 
         iTaskRepository.getEmployeesByTaskId(task.getTaskId());
+        // Set hours for the task
+        task.setHours(task.getHours());
 
         // Set user ID
         task.setUserId(selectedEmployeeId);
@@ -170,7 +172,10 @@ public class TaskController {
         updatedTask.setTaskId(taskId);
         existingTask.setTaskName(updatedTask.getTaskName());
         existingTask.setDescription(updatedTask.getDescription());
+
+        // Set hours directly from the updatedTask
         existingTask.setHours(updatedTask.getHours());
+
         List<User> updatedEmployees = updatedTask.getEmployees();
         existingTask.getEmployees().addAll(updatedEmployees);
 
@@ -178,7 +183,6 @@ public class TaskController {
 
         iTaskRepository.updateTask(existingTask);
 
-        // Redirect to task details page
         return "redirect:/projects/" + projectId + "/tasks";
     }
 
@@ -223,10 +227,12 @@ public class TaskController {
             task.setUserId(employeIds);
             iTaskRepository.getTaskByProjectId(projectId);
             BigDecimal hours = task.getHours();  // Assuming the getter method for hours is getHours()
-            LocalTime localTime = LocalTime.of(hours.intValue(), 0);
+            int hoursValue = hours.intValue() % 24; // Få værdien af hours modulo 24 for at sikre, at det er inden for det gyldige interval 0-23
+            LocalTime localTime = LocalTime.of(hoursValue, 0);
             String formattedTime = localTime.format(DateTimeFormatter.ofPattern("HH:mm"));
 
-            model.addAttribute("formattedTime", formattedTime);
+
+            model.addAttribute("task.hours", formattedTime);
             model.addAttribute("idByTaskId", idByTaskId);
         }
         Project project = iProjectRepository.getProjectById(projectId);

@@ -60,7 +60,6 @@ public class ProjectController {
         return "show-one-project";
     }
 
-
     @PostMapping("/create")
     public String createProject(@ModelAttribute Project project, HttpSession httpSession) {
         int user = (int) httpSession.getAttribute("userId");
@@ -129,9 +128,4 @@ public class ProjectController {
         model.addAttribute("user", user);
         return "show-one-project";
     }
-
-
-
-
-
 }
