@@ -10,8 +10,9 @@ public interface ITaskRepository {
 
     public int createTask(int userID, String taskName, String description, BigDecimal hours, int projectID, int projectManagerID, String status);
     List<Task> getTasksByProjectId(int projectId);
-    void updateTask(Task task);
+    List<User> getEmployeesWithRoleThreeUpdate();
     List<Task> getAllTasks();
+     void updateTask(Task task, int userId);
     List<Task> getTasksByProjectManagerID(int projectManagerID);
     Task getTaskById(int taskId);
     Task getTaskByProjectId(int projectId);

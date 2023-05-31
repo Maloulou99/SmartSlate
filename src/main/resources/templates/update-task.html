@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="/project-task.css">
   <title>Update task</title>
 </head>
 <body>
-  <form th:object="${task}" th:action="@{/tasks/{taskId}/update/{projectId}(taskId=${task.taskId}, projectId=${task.projectId})}" method="post"  >
+<form th:object="${task}" th:action="@{/tasks/{taskId}/update/{projectId}(taskId=${task.taskId}, projectId=${task.projectId})}" method="post">
   <div>
     <input type="hidden" id="projectId" th:field="*{projectId}">
     <input type="hidden" id="taskId" th:field="*{taskId}">
     <input type="hidden" id="projectmanagerID" th:field="*{projectmanagerID}">
     <input type="hidden" id="currentDateTime" th:value="${currentDateTime}">
-
+    <input type="hidden" id="userID" name="userID" th:value="${task.userID}" />
   </div>
 
   <div>
@@ -27,23 +27,22 @@
 
   <div>
     <label for="hours">Hours:</label>
-    <input type="number" id="hours" th:field="*{hours}">
+    <input type="text" id="hours" th:field="*{hours}" th:value="${task.hours}">
   </div>
 
-    <div>
-      <label for="employeeIds">Employees:</label>
-      <select id="employeeIds" name="employeeIds" multiple required>
-        <option th:each="employee : ${employees}"
-                th:value="${employee.userID}"
-                th:text="${employee.firstName + ' ' + employee.lastName}"
-                th:selected="${task.employees.contains(employee)}">
-        </option>
-      </select>
-      <p th:if="${employees.isEmpty()}">No employees available</p>
-    </div>
+  <div>
+    <label for="employeeIds">Employees:</label>
+    <select id="employeeIds" name="employeeIds" multiple required>
+      <option th:each="employee : ${employees}" th:value="${employee.userID}"
+              th:text="${employee.firstName + ' ' + employee.lastName}"
+              th:selected="${task.userID == employee.userID} ? 'selected' : ''">
+      </option>
+    </select>
+  </div>
 
 
-    <div>
+
+  <div>
     <label for="status">Status:</label>
     <select id="status" name="status" th:field="*{status}">
       <option value="Planning" th:selected="${task.status == 'Planning'}">Planning</option>

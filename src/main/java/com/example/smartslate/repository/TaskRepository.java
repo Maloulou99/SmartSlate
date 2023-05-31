@@ -56,9 +56,10 @@ public class TaskRepository implements ITaskRepository {
 
 
 
-    public void updateTask(Task task) {
+    public void updateTask(Task task, int userId) {
         try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
-            String SQL = "UPDATE tasks SET projectID = ?, taskName = ?, description = ?, hours = ?, projectManagerID = ?, status = ? WHERE taskID = ?";
+            // Fortsæt med opdatering af opgaven
+            String SQL = "UPDATE tasks SET projectID = ?, taskName = ?, description = ?, hours = ?, projectManagerID = ?, status = ?, userID = ? WHERE taskID = ?";
             PreparedStatement pstmt = con.prepareStatement(SQL);
             pstmt.setInt(1, task.getProjectId());
             pstmt.setString(2, task.getTaskName());
@@ -66,13 +67,13 @@ public class TaskRepository implements ITaskRepository {
             pstmt.setBigDecimal(4, task.getHours());
             pstmt.setInt(5, task.getProjectmanagerID());
             pstmt.setString(6, task.getStatus());
-            pstmt.setInt(7, task.getTaskId());
+            pstmt.setInt(7, userId);
+            pstmt.setInt(8, task.getTaskId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-
 
 
     // Delete one task from a project
@@ -277,7 +278,7 @@ public class TaskRepository implements ITaskRepository {
                 task.setDescription(rs.getString("description"));
                 task.setHours(rs.getBigDecimal("hours"));
                 task.setProjectmanagerID(rs.getInt("projectManagerID"));
-                task.setUserId(rs.getInt("userID"));
+                task.setUserID(rs.getInt("userID"));
                 task.setStatus(rs.getString("status"));
                 Project project = new Project();
                 project.setProjectId(rs.getInt("projectID"));
@@ -479,7 +480,7 @@ public class TaskRepository implements ITaskRepository {
     public List<List<String>> getListOfUserLists(List<Task> taskList) {
         List<List<String>> listOfUserLists = new ArrayList<>();
         for (Task task : taskList) {
-            List<User> users = getEmployeesWithRoleThreeByUserId(task.getUserId());
+            List<User> users = getEmployeesWithRoleThreeByUserId(task.getUserID());
             List<String> names = new ArrayList<>();
             for (User user : users) {
                 String fullName = user.getFirstName() + " " + user.getLastName();
@@ -512,6 +513,38 @@ public class TaskRepository implements ITaskRepository {
         }
 
         return taskId;
+    }
+
+    public List<User> getEmployeesWithRoleThreeUpdate() {
+        List<User> employees = new ArrayList<>();
+
+        try (Connection con = DriverManager.getConnection(url, user_id, user_pwd)) {
+            String SQL = "SELECT DISTINCT u.* " +
+                    "FROM users u " +
+                    "WHERE u.roleID = 3;";
+            PreparedStatement pstmt = con.prepareStatement(SQL);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                int employeeId = rs.getInt("userID");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                String email = rs.getString("email");
+                String firstName = rs.getString("firstName");
+                String lastName = rs.getString("lastName");
+                String phoneNumber = rs.getString("phoneNumber");
+                LocalDateTime createdAt = rs.getTimestamp("createdAt").toLocalDateTime();
+                LocalDateTime updatedAt = rs.getTimestamp("updatedAt").toLocalDateTime();
+                int roleId = rs.getInt("roleID");
+
+                User employee = new User(employeeId, username, password, email, firstName, lastName, phoneNumber, createdAt, updatedAt, roleId);
+                employees.add(employee);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return employees;
     }
 
 }

@@ -43,10 +43,10 @@ public class EmployeeTaskController {
 
         for (Task task : tasks) {
             int taskId = task.getTaskId();
-            int userId = task.getUserId();
+            int userId = task.getUserID();
             String taskName = task.getTaskName();
             task.setTaskId(taskId);
-            task.setUserId(userId);
+            task.setUserID(userId);
             task.setTaskName(taskName);
             BigDecimal hours = task.getHours();
             LocalTime localTime = LocalTime.of(hours.intValue(), 0);

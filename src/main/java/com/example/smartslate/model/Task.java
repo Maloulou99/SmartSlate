@@ -15,11 +15,10 @@ public class Task {
     private String status;
     private Project project;
     private String projectName;
-    private int userId; // Fremmednøgle til User-tabellen
     private List<User> employees = new ArrayList<>();
 
     private User user;
-    public Task(int taskId, int projectId, String taskName, String description, BigDecimal hours, Integer projectmanagerID, Integer userID, String status, Project project, int userId) {
+    public Task(int taskId, int projectId, String taskName, String description, BigDecimal hours, Integer projectmanagerID, Integer userID, String status, Project project) {
         this.taskId = taskId;
         this.projectId = projectId;
         this.taskName = taskName;
@@ -29,7 +28,6 @@ public class Task {
         this.userID = userID;
         this.status = status;
         this.project = project;
-        this.userId = userId;
     }
     public Task(List<User> employees){
         this.employees = employees;
@@ -39,17 +37,14 @@ public class Task {
 
     }
 
-    public Task(int taskId, String taskName, String description, BigDecimal hours, String status, int projectId, Integer projectManagerId, Integer userId) {
+    public Task(int taskId, String taskName, String description, BigDecimal hours, String status, int projectId, Integer projectManagerId) {
         this.taskId = taskId;
         this.projectId = projectId;
         this.taskName = taskName;
         this.description = description;
         this.hours = hours;
         this.projectmanagerID = projectManagerId;
-        this.userID = userId;
         this.status = status;
-        this.userId = userId;
-
     }
 
     public Task(int taskID, String taskName, String description, BigDecimal hours, String status, String projectName) {
@@ -59,6 +54,16 @@ public class Task {
         this.hours = hours;
         this.status = status;
         this.projectName = projectName;
+    }
+
+    public Task(int taskId, String taskName, String description, BigDecimal hours, String status, int projectId, int projectManagerId, int userId) {
+        this.taskName = taskName;
+        this.description = description;
+        this.hours = hours;
+        this.status = status;
+        this.projectId = projectId;
+        this.projectmanagerID = projectManagerId;
+        this.userID = userId;
     }
 
 
@@ -163,22 +168,11 @@ public class Task {
         this.status = status;
     }
 
-    public Integer getUserId() {
-        return userId;
-    }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
 
     public void setHours(BigDecimal hours) {
         this.hours = hours;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
 
-    public void setUserId(List<User> employeIds) {
-    }
 }

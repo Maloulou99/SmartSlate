@@ -13,6 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -67,6 +70,7 @@ public class TaskController {
 
         return "create-task";
     }
+
     @PostMapping("/projects/{projectId}/createTask")
     public String createTask(@PathVariable int projectId,
                              @ModelAttribute Task task,
@@ -92,10 +96,11 @@ public class TaskController {
 
         iTaskRepository.getEmployeesByTaskId(task.getTaskId());
         // Set hours for the task
-        task.setHours(task.getHours());
-
-        // Set user ID
-        task.setUserId(selectedEmployeeId);
+        BigDecimal hours = task.getHours();
+        LocalTime localTime = LocalTime.of(hours.intValue(), 0);
+        String formattedTime = localTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+        task.setHours(hours);
+        model.addAttribute("formattedTime", formattedTime);
 
         // Create task in the repository
         int taskId = iTaskRepository.createTask(selectedEmployeeId, task.getTaskName(), task.getDescription(), task.getHours(),
@@ -140,14 +145,19 @@ public class TaskController {
         return "show-tasks";
     }
 
-
     @GetMapping("/tasks/{taskId}/update")
-    public String showUpdateTaskForm(@PathVariable("taskId") int taskId, Model model) {
+    public String showUpdateTaskForm(@PathVariable("taskId") int taskId, Model model, HttpSession session) {
+        Integer userIdObj = (Integer) session.getAttribute("userId");
+        if (userIdObj == null) {
+            return "redirect:/login";
+        }
+        int loggedInUserId = userIdObj;
+
         Task task = iTaskRepository.getTaskById(taskId);
         model.addAttribute("task", task);
 
         // Set project manager ID
-        int projectManagerId = iUserRepository.getProjectManagerByTaskId(taskId);
+        int projectManagerId = iTaskRepository.getUserIdByTaskId(taskId);
         task.setProjectmanagerID(projectManagerId);
 
         // Get the current datetime value and set it in the model
@@ -155,36 +165,64 @@ public class TaskController {
         model.addAttribute("currentDateTime", currentDateTime);
 
         List<User> employees = iTaskRepository.getEmployeesWithRoleThree();
+
+        String selectedEmployeeName = "";
+        if (task.getUserID() != null) {
+            for (User employee : employees) {
+                if (employee.getUserID() == task.getUserID()) {
+                    selectedEmployeeName = employee.getFirstName() + " " + employee.getLastName();
+                    break;
+                }
+            }
+        }
+        model.addAttribute("selectedEmployeeName", selectedEmployeeName);
+
         model.addAttribute("employees", employees);
         model.addAttribute("projectManagerId", projectManagerId);
+        model.addAttribute("loggedInUserId", loggedInUserId);
 
         return "update-task";
     }
 
     @PostMapping("/tasks/{taskId}/update/{projectId}")
-    public String updateTask(@ModelAttribute("task") Task updatedTask, @PathVariable("taskId") int taskId, @PathVariable("projectId") int projectId) {
+    public String updateTask(@ModelAttribute("task") Task updatedTask,
+                             @PathVariable("taskId") int taskId,
+                             @PathVariable("projectId") int projectId,
+                             @RequestParam("employeeIds") int[] employeeIds,
+                             Model model,
+                             HttpSession session) {
 
+        Integer userIdObj = (Integer) session.getAttribute("userId");
+        if (userIdObj == null) {
+            return "redirect:/login";
+        }
+        int loggedInUserId = userIdObj;
+
+        // Get the existing task from the repository
         Task existingTask = iTaskRepository.getTaskById(taskId);
 
-        // Set the updated values
-        int projectManagerId = iUserRepository.getProjectManagerByTaskId(taskId);
-        updatedTask.setProjectmanagerID(projectManagerId);
-        updatedTask.setTaskId(taskId);
-        existingTask.setTaskName(updatedTask.getTaskName());
-        existingTask.setDescription(updatedTask.getDescription());
+        if (existingTask != null) {
+            // Set the updated values
+            int projectManagerId = iUserRepository.getProjectManagerByTaskId(taskId);
+            existingTask.setProjectmanagerID(projectManagerId);
+            existingTask.setTaskName(updatedTask.getTaskName());
+            existingTask.setDescription(updatedTask.getDescription());
+            existingTask.setHours(updatedTask.getHours());
+            existingTask.setStatus(updatedTask.getStatus());
 
-        // Set hours directly from the updatedTask
-        existingTask.setHours(updatedTask.getHours());
+            // Set the UserID
+            if (employeeIds != null && employeeIds.length > 0) {
+                existingTask.setUserID(employeeIds[0]);
+            }
 
-        List<User> updatedEmployees = updatedTask.getEmployees();
-        existingTask.getEmployees().addAll(updatedEmployees);
-
-        existingTask.setStatus(updatedTask.getStatus());
-
-        iTaskRepository.updateTask(existingTask);
+            // Update the task in the repository
+            iTaskRepository.updateTask(existingTask, existingTask.getUserID());
+        }
 
         return "redirect:/projects/" + projectId + "/tasks";
     }
+
+
 
     // Delete task
     @PostMapping("/projects/{projectId}/tasks/{taskId}/delete")
@@ -223,14 +261,14 @@ public class TaskController {
             task.setProjectmanagerID(projectManagerId);
             List<User> employeIds = iTaskRepository.getEmployeesByTaskId(task.getTaskId());
             int idByTaskId = iTaskRepository.getUserIdByTaskId(task.getTaskId()); // Hent brugerens ID baseret på opgavens ID
-            task.setUserId(idByTaskId);
-            task.setUserId(employeIds);
+            task.setUserID(idByTaskId);
+            task.setEmployees(employeIds);
             iTaskRepository.getTaskByProjectId(projectId);
-            BigDecimal hours = task.getHours();  // Assuming the getter method for hours is getHours()
-            int hoursValue = hours.intValue() % 24; // Få værdien af hours modulo 24 for at sikre, at det er inden for det gyldige interval 0-23
-            LocalTime localTime = LocalTime.of(hoursValue, 0);
+            BigDecimal hours = task.getHours();
+            LocalTime localTime = LocalTime.of(hours.intValue(), 0);
             String formattedTime = localTime.format(DateTimeFormatter.ofPattern("HH:mm"));
-
+            task.setHours(hours);
+            model.addAttribute("formattedTime", formattedTime);
 
             model.addAttribute("task.hours", formattedTime);
             model.addAttribute("idByTaskId", idByTaskId);
@@ -244,6 +282,8 @@ public class TaskController {
         model.addAttribute("loggedInUserId", loggedInUserId);
         return "show-tasks";
     }
+
+
 
     @GetMapping("/show/task/employees/{projectId}")
     public String showTaskInformation(@PathVariable int projectId, Model model, HttpSession session) {

@@ -26,7 +26,7 @@ CMD set -eux; \
 # docker build  -t SmartSlate .
 
 # Run like this:
-# docker run -it --rm --name SmartSlate --pid=host -p 8080:8080 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=Maloulou99 SmartSlate
+# docker run -it --rm --name 2 --pid=host -p 8080:8080 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=Maloulou99 SmartSlate
 #
 #   - `docker run`: This command is used to run a container from an image.
 #   - `-it`: This switch allocates a pseudo-TTY and opens an interactive terminal within the container.

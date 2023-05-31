@@ -1,3 +1,7 @@
+-- noinspection SqlNoDataSourceInspectionForFile
+
+-- noinspection SqlDialectInspectionForFile
+
 -- Create database if not exists
 CREATE DATABASE IF NOT EXISTS smartslate_database;
 
