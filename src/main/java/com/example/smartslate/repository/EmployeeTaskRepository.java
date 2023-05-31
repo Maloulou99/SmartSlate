@@ -62,7 +62,7 @@ public class EmployeeTaskRepository implements IEmployeeTaskRepository {
         return String.format("%02d:%02d", hours, minutes);
     }
 
-    public String calculateTotalTimeSpent(List<Task> tasks) {
+    public int calculateTotalTimeSpent(List<Task> tasks) {
         BigDecimal totalTimeSpent = BigDecimal.ZERO;
 
         for (Task task : tasks) {
@@ -70,8 +70,9 @@ public class EmployeeTaskRepository implements IEmployeeTaskRepository {
             totalTimeSpent = totalTimeSpent.add(hours);
         }
 
-        return formatTotalTime(totalTimeSpent);
+        return totalTimeSpent.intValue();
     }
+
 
 }
 

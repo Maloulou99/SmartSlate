@@ -60,7 +60,7 @@ public class EmployeeTaskController {
             model.addAttribute("task", task);
         }
 
-        String totalTimeSpent = iEmployeeTaskRepository.calculateTotalTimeSpent(tasks);
+        int totalTimeSpent = iEmployeeTaskRepository.calculateTotalTimeSpent(tasks);
 
         model.addAttribute("tasks", tasks);
         model.addAttribute("totalTimeSpent", totalTimeSpent);
@@ -75,7 +75,7 @@ public class EmployeeTaskController {
     @GetMapping("/calculate/task")
     public String showTasks(@RequestParam("userId") int userId, Model model) {
         List<Task> tasks = iTaskRepository.getAllTasks(userId);
-        String totalTimeSpent = iEmployeeTaskRepository.calculateTotalTimeSpent(tasks);
+        int totalTimeSpent = iEmployeeTaskRepository.calculateTotalTimeSpent(tasks);
         model.addAttribute("tasks", tasks);
         model.addAttribute("totalTimeSpent", totalTimeSpent);
         model.addAttribute("listOfUsers", iTaskRepository.getListOfUserLists(tasks));

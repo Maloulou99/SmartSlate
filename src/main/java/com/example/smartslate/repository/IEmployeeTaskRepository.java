@@ -10,6 +10,6 @@ public interface IEmployeeTaskRepository {
 
 
     List<Task> getEmployeeTasksByUserId(int employeeID);
-    String calculateTotalTimeSpent(List<Task> tasks);
+    int calculateTotalTimeSpent(List<Task> tasks);
     String formatTotalTime(BigDecimal totalTime);
 }
